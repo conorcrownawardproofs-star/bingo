@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Bingo Card</title>
+  <style>
+    :root {
+      --dabber-color: #04ff00;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: clamp(15px, 3vh, 30px);
+      /* Dark Metallic Silver Background */
+      background: 
+        radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.85) 85%),
+        linear-gradient(135deg, #111215 0%, #22252a 25%, #0d0e10 50%, #2a2e35 75%, #08090a 100%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 4px);
+      background-blend-mode: overlay, normal, normal;
+      background-attachment: fixed;
+      color: #ffffff;
+      position: relative;
+    }
+
+    /* Top Left Date */
+    .top-date {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.45);
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    /* Main App Layout */
+    .app-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(20px, 4vw, 40px);
+      width: 100%;
+      max-width: 850px;
+      margin-top: 20px;
+    }
+
+    /* Responsive Bingo Card with Frosted Glassmorphism */
+    .bingo-card {
+      width: clamp(280px, 80vw, 420px);
+      background: rgba(0, 155, 227, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: clamp(12px, 3.5vw, 22px);
+      padding: clamp(10px, 2.8vw, 20px);
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(0, 155, 227, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      user-select: none;
+      flex-shrink: 0;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Visual Indicator during Edit Mode */
+    .bingo-card.editing-mode {
+      border: 2px solid #facc15;
+      box-shadow: 0 0 25px rgba(250, 204, 21, 0.6);
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      text-align: center;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      font-weight: 900;
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      letter-spacing: clamp(1px, 0.8vw, 4px);
+      margin-bottom: clamp(6px, 1.5vw, 12px);
+      font-family: 'Arial Black', 'Trebuchet MS', 'Arial', sans-serif;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: clamp(2px, 0.6vw, 4px);
+      background-color: rgba(0, 155, 227, 0.9);
+      border: clamp(2px, 0.6vw, 4px) solid transparent;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .cell {
+      background-color: #ffffff;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.1rem, 4vw, 2rem);
+      font-weight: 800;
+      color: #000000;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.2s ease, box-shadow 0.2s ease;
+      overflow: hidden;
+      padding: 2px;
+      text-align: center;
+    }
+
+    .cell.free {
+      color: #009be3;
+      font-size: clamp(0.75rem, 2.6vw, 1.25rem);
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    /* Target Indicator */
+    .cell.target {
+      box-shadow: inset 0 0 0 clamp(3px, 0.9vw, 4.5px) #ff007f;
+      z-index: 2;
+    }
+
+    /* Editable Input styling for Edit Mode */
+    .cell input.edit-input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      color: #0d1117;
+      outline: none;
+      text-transform: uppercase;
+      padding: 0;
+      margin: 0;
+    }
+
+    .cell input.edit-input:focus {
+      background: rgba(250, 204, 21, 0.25);
+    }
+
+    /* Translucent Dabber Marks */
+    body[data-dabber="circle"] .cell.marked::after {
+      content: '';
+      position: absolute;
+      width: 70%;
+      height: 70%;
+      background-color: var(--dabber-color);
+      opacity: 0.55;
+      border-radius: 50%;
+      box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
+      pointer-events: none;
+    }
+
+    body[data-dabber="star"] .cell.marked::after {
+      content: '★';
+      position: absolute;
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      color: var(--dabber-color);
+      opacity: 0.65;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    body[data-dabber="stamp"] .cell.marked::after {
+      content: '';
+      position: absolute;
+      width: 65%;
+      height: 65%;
+      background-color: var(--dabber-color);
+      opacity: 0.45;
+      border: 3px solid var(--dabber-color);
+      border-radius: 4px;
+      transform: rotate(-12deg);
+      box-shadow: 0 0 6px var(--dabber-color);
+      pointer-events: none;
+    }
+
+    body[data-dabber="heart"] .cell.marked::after {
+      content: '♥';
+      position: absolute;
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      color: var(--dabber-color);
+      opacity: 0.65;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    body[data-dabber="diamond"] .cell.marked::after {
+      content: '◆';
+      position: absolute;
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      color: var(--dabber-color);
+      opacity: 0.65;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    body[data-dabber="crosshair"] .cell.marked::after {
+      content: '🎯';
+      position: absolute;
+      font-size: clamp(1.4rem, 5vw, 2.2rem);
+      opacity: 0.65;
+      line-height: 1;
+      filter: drop-shadow(0 0 3px var(--dabber-color));
+      pointer-events: none;
+    }
+
+    /* Side Control Panel */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 230px;
+      align-items: stretch;
+      background: rgba(20, 22, 28, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Selector Row */
+    .selector-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .selector-row select.btn-select {
+      flex: 1;
+    }
+
+    /* Compact Color Picker Input */
+    input[type="color"].btn-color-compact {
+      -webkit-appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      cursor: pointer;
+      background: none;
+      padding: 0;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      transition: all 0.2s ease;
+    }
+
+    input[type="color"].btn-color-compact:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    input[type="color"].btn-color-compact::-webkit-color-swatch-wrapper {
+      padding: 3px;
+    }
+
+    input[type="color"].btn-color-compact::-webkit-color-swatch {
+      border: none;
+      border-radius: 6px;
+    }
+
+    /* Uniform Control Styling */
+    button, label.btn-file, select.btn-select {
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 14px;
+      font-size: 0.85rem !important;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    button:hover, label.btn-file:hover, select.btn-select:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    }
+
+    button:active, label.btn-file:active, select.btn-select:active {
+      transform: translateY(0);
+    }
+
+    /* Color Gradients */
+    .btn-mode { 
+      background: linear-gradient(135deg, #a855f7 0%, #6b21a8 100%); 
+    }
+    .btn-mode.active { 
+      background: linear-gradient(135deg, #ff007f 0%, #9f1239 100%);
+      box-shadow: 0 0 14px rgba(255, 0, 127, 0.6);
+    }
+
+    .btn-edit {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+    .btn-edit.active {
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.6);
+    }
+
+    .btn-export { 
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%); 
+    }
+    .btn-import { 
+      background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%); 
+      color: #1a1a1a;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-image {
+      background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+    }
+
+    .btn-reset { 
+      background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); 
+    }
+
+    select.btn-select {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      appearance: none;
+      -webkit-appearance: none;
+      text-align-last: center;
+    }
+
+    select.btn-select option {
+      background-color: #1e293b;
+      color: #ffffff;
+    }
+
+    /* Fixed Low-Opacity Victory Button */
+    .btn-victory {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: auto;
+      background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-size: 0.85rem !important;
+      border-radius: 50px;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      z-index: 10;
+      opacity: 0.75;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-victory:hover {
+      opacity: 1;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .status-msg {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #00f0ff;
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+      height: 20px;
+      text-align: center;
+    }
+
+    /* Overlay & Victory Modal */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .winner-card {
+      background: linear-gradient(135deg, #1e1b4b, #311042);
+      border: 2px solid #ff007f;
+      padding: 40px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 0 50px rgba(255, 0, 127, 0.5);
+      transform: scale(0.8);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .overlay.show .winner-card {
+      transform: scale(1);
+    }
+
+    .winner-title {
+      font-family: 'Arial Black', sans-serif;
+      font-size: 3.5rem;
+      background: linear-gradient(180deg, #fff 0%, #ff007f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 10px 0;
+    }
+
+    .winner-desc {
+      font-size: 1.2rem;
+      color: #e2e8f0;
+      margin-bottom: 24px;
+    }
+
+    #confettiCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    @media (max-width: 680px) {
+      .app-container {
+        flex-direction: column;
+      }
+      .controls {
+        width: clamp(280px, 80vw, 420px);
+      }
+      .top-date {
+        top: 12px;
+        left: 16px;
+      }
+    }
+  </style>
+</head>
+<body data-dabber="circle">
+
+  <div class="top-date" id="currentDate"></div>
+
+  <div class="app-container">
+    <div class="bingo-card" id="bingoCardElement">
+      <div class="header">
+        <span>B</span><span>I</span><span>N</span><span>G</span><span>O</span>
+      </div>
+      <div class="grid" id="bingoGrid">
+        <!-- Cells generated via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="controls">
+      <button class="btn-mode" id="toggleToolBtn" onclick="toggleMode()">Mode: Mark Spot</button>
+      <button class="btn-edit" id="toggleEditBtn" onclick="toggleEditCard()">Edit Card Layout</button>
+      
+      <!-- Pattern + Color Selector Row -->
+      <div class="selector-row">
+        <select class="btn-select" id="dabberSelect" onchange="changeDabber(this.value)">
+          <option value="circle">Circle</option>
+          <option value="star">Star</option>
+          <option value="stamp">Stamp</option>
+          <option value="heart">Heart</option>
+          <option value="diamond">Diamond</option>
+          <option value="crosshair">Target</option>
+        </select>
+        <input type="color" id="dabberColorPicker" class="btn-color-compact" value="#04ff00" onchange="changeDabberColor(this.value)" title="Choose Dabber Color">
+      </div>
+
+      <button class="btn-export" onclick="exportToFile()">Save File</button>
+      <label class="btn-file btn-import">
+        Open File
+        <input type="file" id="fileInput" accept=".bingo,.json" onchange="importFromFile(event)">
+      </label>
+      <button class="btn-image" onclick="exportToImage()">Export PNG</button>
+      <button class="btn-reset" onclick="resetCard()">Reset Card</button>
+    </div>
+  </div>
+
+  <div class="status-msg" id="statusMsg"></div>
+
+  <!-- Victory Button -->
+  <button class="btn-victory" onclick="triggerVictory(true)">🏆 Victory</button>
+
+  <!-- Winner Overlay -->
+  <div class="overlay" id="victoryOverlay">
+    <canvas id="confettiCanvas"></canvas>
+    <div class="winner-card">
+      <h1 class="winner-title">VICTORY!</h1>
+      <p class="winner-desc" id="victoryDesc">Target pattern complete!</p>
+      <button class="btn-export" onclick="closeVictory()">Continue Playing</button>
+    </div>
+  </div>
+
+  <script>
+    // Default Fallback Layout (Standard 1-75 Classic Grid)
+    const DEFAULT_CARD_LAYOUT = [
+      { id: "1", text: "2", marked: false, target: false },
+      { id: "2", text: "27", marked: false, target: false },
+      { id: "3", text: "36", marked: false, target: false },
+      { id: "4", text: "50", marked: false, target: false },
+      { id: "5", text: "74", marked: false, target: false },
+
+      { id: "6", text: "3", marked: false, target: false },
+      { id: "7", text: "26", marked: false, target: false },
+      { id: "8", text: "37", marked: false, target: false },
+      { id: "9", text: "46", marked: false, target: false },
+      { id: "10", text: "75", marked: false, target: false },
+
+      { id: "11", text: "14", marked: false, target: false },
+      { id: "12", text: "28", marked: false, target: false },
+      { id: "13", text: "FREE", marked: true, target: false, free: true },
+      { id: "14", text: "58", marked: false, target: false },
+      { id: "15", text: "71", marked: false, target: false },
+
+      { id: "16", text: "10", marked: false, target: false },
+      { id: "17", text: "24", marked: false, target: false },
+      { id: "18", text: "43", marked: false, target: false },
+      { id: "19", text: "53", marked: false, target: false },
+      { id: "20", text: "65", marked: false, target: false },
+
+      { id: "21", text: "6", marked: false, target: false },
+      { id: "22", text: "22", marked: false, target: false },
+      { id: "23", text: "45", marked: false, target: false },
+      { id: "24", text: "59", marked: false, target: false },
+      { id: "25", text: "61", marked: false, target: false }
+    ];
+
+    let currentMode = 'mark'; // 'mark' | 'target'
+    let isEditingCard = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateEl = document.getElementById('currentDate');
+      const now = new Date();
+      dateEl.innerText = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+      renderGrid(DEFAULT_CARD_LAYOUT);
+      loadFromLocalStorage();
+    });
+
+    /* Renders Grid Cells dynamically from state */
+    function renderGrid(cellDataArray) {
+      const gridContainer = document.getElementById('bingoGrid');
+      gridContainer.innerHTML = '';
+
+      cellDataArray.forEach((item) => {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.id = item.id;
+
+        if (item.text.trim().toUpperCase() === 'FREE') {
+          cell.classList.add('free');
+        }
+        if (item.marked) cell.classList.add('marked');
+        if (item.target) cell.classList.add('target');
+
+        cell.innerText = item.text;
+
+        // Interaction Handler
+        cell.addEventListener('click', (e) => {
+          if (isEditingCard) return; // Disable clicks in edit mode
+
+          if (currentMode === 'mark') {
+            cell.classList.toggle('marked');
+          } else {
+            cell.classList.toggle('target');
+          }
+          saveToLocalStorage();
+          checkAutoVictory();
+        });
+
+        cell.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          if (isEditingCard) return;
+          cell.classList.toggle('target');
+          saveToLocalStorage();
+          checkAutoVictory();
+        });
+
+        gridContainer.appendChild(cell);
+      });
+    }
+
+    /* Toggle Editing State */
+    function toggleEditCard() {
+      const btn = document.getElementById('toggleEditBtn');
+      const bingoCard = document.getElementById('bingoCardElement');
+      const cells = document.querySelectorAll('.cell');
+
+      isEditingCard = !isEditingCard;
+
+      if (isEditingCard) {
+        btn.innerText = 'Save Layout';
+        btn.classList.add('active');
+        bingoCard.classList.add('editing-mode');
+        showStatus('Editing Mode: Type cell values below');
+
+        cells.forEach(cell => {
+          const currentText = cell.innerText.trim();
+          cell.innerText = '';
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'edit-input';
+          input.value = currentText;
+
+          // Auto-select text on click
+          input.addEventListener('focus', () => input.select());
+          cell.appendChild(input);
+        });
+      } else {
+        btn.innerText = 'Edit Card Layout';
+        btn.classList.remove('active');
+        bingoCard.classList.remove('editing-mode');
+
+        cells.forEach(cell => {
+          const input = cell.querySelector('input.edit-input');
+          if (input) {
+            const val = input.value.trim() || '';
+            cell.innerText = val;
+            if (val.toUpperCase() === 'FREE') cell.classList.add('free');
+            else cell.classList.remove('free');
+          }
+        });
+
+        saveToLocalStorage();
+        showStatus('Layout updated & saved!');
+      }
+    }
+
+    function toggleMode() {
+      if (isEditingCard) toggleEditCard(); // Auto close edit mode if active
+
+      const btn = document.getElementById('toggleToolBtn');
+      if (currentMode === 'mark') {
+        currentMode = 'target';
+        btn.innerText = 'Mode: Set Target';
+        btn.classList.add('active');
+      } else {
+        currentMode = 'mark';
+        btn.innerText = 'Mode: Mark Spot';
+        btn.classList.remove('active');
+      }
+    }
+
+    function changeDabber(style) {
+      document.body.setAttribute('data-dabber', style);
+      localStorage.setItem('bingoDabberStyle', style);
+    }
+
+    function changeDabberColor(colorHex) {
+      document.documentElement.style.setProperty('--dabber-color', colorHex);
+      localStorage.setItem('bingoDabberColor', colorHex);
+    }
+
+    function checkAutoVictory() {
+      const targets = document.querySelectorAll('.cell.target');
+      if (targets.length === 0) return;
+
+      const allTargetsMarked = Array.from(targets).every(cell => cell.classList.contains('marked'));
+      if (allTargetsMarked) {
+        triggerVictory(false);
+      }
+    }
+
+    function getCardData() {
+      const state = [];
+      document.querySelectorAll('.cell').forEach(cell => {
+        let cellText = '';
+        if (isEditingCard) {
+          const input = cell.querySelector('input.edit-input');
+          cellText = input ? input.value.trim() : cell.innerText.trim();
+        } else {
+          cellText = cell.innerText.trim();
+        }
+
+        state.push({
+          id: cell.dataset.id,
+          text: cellText,
+          marked: cell.classList.contains('marked'),
+          target: cell.classList.contains('target')
+        });
+      });
+
+      return {
+        version: "2.0",
+        dabber: document.body.getAttribute('data-dabber') || 'circle',
+        dabberColor: getComputedStyle(document.documentElement).getPropertyValue('--dabber-color').trim() || '#04ff00',
+        timestamp: new Date().toISOString(),
+        cells: state
+      };
+    }
+
+    function applyCardData(data) {
+      if (!data || !Array.isArray(data.cells)) return false;
+      
+      if (data.dabber) {
+        changeDabber(data.dabber);
+        document.getElementById('dabberSelect').value = data.dabber;
+      }
+
+      if (data.dabberColor) {
+        changeDabberColor(data.dabberColor);
+        document.getElementById('dabberColorPicker').value = data.dabberColor;
+      }
+
+      renderGrid(data.cells);
+      saveToLocalStorage();
+      return true;
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem('bingoCardAutoSave', JSON.stringify(getCardData()));
+    }
+
+    function loadFromLocalStorage() {
+      const savedDabber = localStorage.getItem('bingoDabberStyle');
+      if (savedDabber) {
+        changeDabber(savedDabber);
+        document.getElementById('dabberSelect').value = savedDabber;
+      }
+
+      const savedColor = localStorage.getItem('bingoDabberColor');
+      if (savedColor) {
+        changeDabberColor(savedColor);
+        document.getElementById('dabberColorPicker').value = savedColor;
+      }
+
+      const saved = localStorage.getItem('bingoCardAutoSave');
+      if (saved) {
+        try {
+          applyCardData(JSON.parse(saved));
+        } catch (e) {
+          console.error("Failed to load auto-save state", e);
+        }
+      }
+    }
+
+    async function exportToFile() {
+      if (isEditingCard) toggleEditCard(); // Commit edit changes prior to export
+
+      const cardData = getCardData();
+      const jsonString = JSON.stringify(cardData, null, 2);
+      const defaultFilename = `bingo-layout-${new Date().toISOString().slice(0, 10)}.bingo`;
+
+      if ('showSaveFilePicker' in window) {
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: defaultFilename,
+            types: [{
+              description: 'Bingo Layout File',
+              accept: { 'application/json': ['.bingo', '.json'] },
+            }],
+          });
+          const writable = await handle.createWritable();
+          await writable.write(jsonString);
+          await writable.close();
+          showStatus('Layout saved successfully!');
+          return;
+        } catch (err) {
+          if (err.name === 'AbortError') return;
+        }
+      }
+
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = defaultFilename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+
+      showStatus(`Saved: ${defaultFilename}`);
+    }
+
+    function importFromFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (applyCardData(data)) {
+            showStatus(`Loaded "${file.name}"!`);
+          } else {
+            showStatus('Error: Invalid file format.');
+          }
+        } catch (err) {
+          showStatus('Error reading file.');
+        }
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    /* Export Card as PNG Image */
+    function exportToImage() {
+      if (isEditingCard) toggleEditCard();
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const size = 600;
+      canvas.width = size;
+      canvas.height = size + 80;
+
+      // Card Background
+      ctx.fillStyle = '#009be3';
+      ctx.roundRect(0, 0, canvas.width, canvas.height, 20);
+      ctx.fill();
+
+      // Card Header Title
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 48px "Arial Black", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('B  I  N  G  O', size / 2, 60);
+
+      // Grid Rendering
+      const padding = 20;
+      const gridTop = 90;
+      const cellSize = (size - padding * 2) / 5;
+      const currentDabber = document.body.getAttribute('data-dabber');
+      const customColor = getComputedStyle(document.documentElement).getPropertyValue('--dabber-color').trim() || '#04ff00';
+
+      document.querySelectorAll('.cell').forEach((cell, idx) => {
+        const col = idx % 5;
+        const row = Math.floor(idx / 5);
+        const x = padding + col * cellSize;
+        const y = gridTop + row * cellSize;
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x + 2, y + 2, cellSize - 4, cellSize - 4);
+
+        ctx.fillStyle = cell.classList.contains('free') ? '#009be3' : '#000000';
+        ctx.font = '800 24px sans-serif';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(cell.innerText.trim(), x + cellSize / 2, y + cellSize / 2);
+
+        if (cell.classList.contains('target')) {
+          ctx.strokeStyle = '#ff007f';
+          ctx.lineWidth = 5;
+          ctx.strokeRect(x + 4, y + 4, cellSize - 8, cellSize - 8);
+        }
+
+        if (cell.classList.contains('marked')) {
+          ctx.fillStyle = customColor;
+          ctx.strokeStyle = customColor;
+
+          if (['star', 'heart', 'diamond', 'crosshair'].includes(currentDabber)) {
+            ctx.globalAlpha = 0.65;
+            ctx.font = currentDabber === 'crosshair' ? '36px sans-serif' : '40px sans-serif';
+            const char = currentDabber === 'star' ? '★' : currentDabber === 'heart' ? '♥' : currentDabber === 'diamond' ? '◆' : '🎯';
+            ctx.fillText(char, x + cellSize / 2, y + cellSize / 2);
+            ctx.globalAlpha = 1.0;
+          } else if (currentDabber === 'stamp') {
+            ctx.globalAlpha = 0.45;
+            ctx.lineWidth = 3;
+            ctx.strokeRect(x + cellSize * 0.2, y + cellSize * 0.2, cellSize * 0.6, cellSize * 0.6);
+            ctx.globalAlpha = 1.0;
+          } else {
+            ctx.globalAlpha = 0.55;
+            ctx.beginPath();
+            ctx.arc(x + cellSize / 2, y + cellSize / 2, cellSize * 0.3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+          }
+        }
+      });
+
+      const link = document.createElement('a');
+      link.download = `bingo-card-${new Date().toISOString().slice(0, 10)}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showStatus('Exported PNG image!');
+    }
+
+    function resetCard() {
+      if (isEditingCard) toggleEditCard();
+
+      renderGrid(DEFAULT_CARD_LAYOUT);
+      saveToLocalStorage();
+      showStatus('Reset to default layout.');
+    }
+
+    function showStatus(msg) {
+      const el = document.getElementById('statusMsg');
+      el.innerText = msg;
+      setTimeout(() => { el.innerText = ''; }, 3000);
+    }
+
+    function triggerVictory(manualClick = false) {
+      const targets = document.querySelectorAll('.cell.target');
+      const descEl = document.getElementById('victoryDesc');
+
+      if (targets.length === 0) {
+        descEl.innerText = "Bonus Victory Unlocked!";
+      } else {
+        const unmarkedTargets = Array.from(targets).filter(cell => !cell.classList.contains('marked'));
+        if (unmarkedTargets.length === 0) {
+          descEl.innerText = "Target pattern completed!";
+        } else if (manualClick) {
+          descEl.innerText = `Victory claimed! (${unmarkedTargets.length} target spot(s) remaining)`;
+        } else {
+          return;
+        }
+      }
+
+      document.getElementById('victoryOverlay').classList.add('show');
+      startConfetti();
+    }
+
+    function closeVictory() {
+      document.getElementById('victoryOverlay').classList.remove('show');
+      stopConfetti();
+    }
+
+    let confettiAnimationId = null;
+    let particles = [];
+
+    function startConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#ff007f', '#00f0ff', '#facc15', '#10b981', '#a855f7'];
+      particles = Array.from({ length: 120 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        size: Math.random() * 8 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speedY: Math.random() * 3 + 2,
+        speedX: Math.random() * 2 - 1,
+        angle: Math.random() * 360
+      }));
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.y += p.speedY;
+          p.x += p.speedX;
+          p.angle += 2;
+          if (p.y > canvas.height) p.y = -10;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.angle * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.restore();
+        });
+        confettiAnimationId = requestAnimationFrame(render);
+      }
+      render();
+    }
+
+    function stopConfetti() {
+      if (confettiAnimationId) {
+        cancelAnimationFrame(confettiAnimationId);
+      }
+    }
+  </script>
+
+</body>
+</html>
