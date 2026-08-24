@@ -341,8 +341,15 @@
       border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
-    .btn-image {
+    .btn-layouts {
       background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+      appearance: none;
+      -webkit-appearance: none;
+      text-align-last: center;
+    }
+    .btn-layouts option {
+      background-color: #1e293b;
+      color: #ffffff;
     }
 
     .btn-reset { 
@@ -492,6 +499,12 @@
       <button class="btn-mode" id="toggleToolBtn" onclick="toggleMode()">Mode: Mark Spot</button>
       <button class="btn-edit" id="toggleEditBtn" onclick="toggleEditCard()">Edit Card Layout</button>
       
+      <!-- Default Layout Selector -->
+      <select class="btn-layouts" id="layoutSelect" onchange="loadPresetLayout(this.value)">
+        <option value="" disabled selected>Default Layouts</option>
+        <option value="CONOR">CONOR</option>
+      </select>
+
       <!-- Pattern + Color Selector Row -->
       <div class="selector-row">
         <select class="btn-select" id="dabberSelect" onchange="changeDabber(this.value)">
@@ -510,7 +523,6 @@
         Open File
         <input type="file" id="fileInput" accept=".bingo,.json" onchange="importFromFile(event)">
       </label>
-      <button class="btn-image" onclick="exportToImage()">Export PNG</button>
       <button class="btn-reset" onclick="resetCard()">Reset Card</button>
     </div>
   </div>
@@ -531,38 +543,40 @@
   </div>
 
   <script>
-    // Default Fallback Layout (Standard 1-75 Classic Grid)
-    const DEFAULT_CARD_LAYOUT = [
-      { id: "1", text: "2", marked: false, target: false },
-      { id: "2", text: "27", marked: false, target: false },
-      { id: "3", text: "36", marked: false, target: false },
-      { id: "4", text: "50", marked: false, target: false },
-      { id: "5", text: "74", marked: false, target: false },
+    // Hardcoded Preset Card Layouts
+    const PRESET_LAYOUTS = {
+      CONOR: [
+        { id: "1", text: "2", marked: false, target: false },
+        { id: "2", text: "27", marked: false, target: false },
+        { id: "3", text: "36", marked: false, target: false },
+        { id: "4", text: "50", marked: false, target: false },
+        { id: "5", text: "74", marked: false, target: false },
 
-      { id: "6", text: "3", marked: false, target: false },
-      { id: "7", text: "26", marked: false, target: false },
-      { id: "8", text: "37", marked: false, target: false },
-      { id: "9", text: "46", marked: false, target: false },
-      { id: "10", text: "75", marked: false, target: false },
+        { id: "6", text: "3", marked: false, target: false },
+        { id: "7", text: "26", marked: false, target: false },
+        { id: "8", text: "37", marked: false, target: false },
+        { id: "9", text: "46", marked: false, target: false },
+        { id: "10", text: "75", marked: false, target: false },
 
-      { id: "11", text: "14", marked: false, target: false },
-      { id: "12", text: "28", marked: false, target: false },
-      { id: "13", text: "FREE", marked: true, target: false, free: true },
-      { id: "14", text: "58", marked: false, target: false },
-      { id: "15", text: "71", marked: false, target: false },
+        { id: "11", text: "14", marked: false, target: false },
+        { id: "12", text: "28", marked: false, target: false },
+        { id: "13", text: "FREE", marked: true, target: false, free: true },
+        { id: "14", text: "58", marked: false, target: false },
+        { id: "15", text: "71", marked: false, target: false },
 
-      { id: "16", text: "10", marked: false, target: false },
-      { id: "17", text: "24", marked: false, target: false },
-      { id: "18", text: "43", marked: false, target: false },
-      { id: "19", text: "53", marked: false, target: false },
-      { id: "20", text: "65", marked: false, target: false },
+        { id: "16", text: "10", marked: false, target: false },
+        { id: "17", text: "24", marked: false, target: false },
+        { id: "18", text: "43", marked: false, target: false },
+        { id: "19", text: "53", marked: false, target: false },
+        { id: "20", text: "65", marked: false, target: false },
 
-      { id: "21", text: "6", marked: false, target: false },
-      { id: "22", text: "22", marked: false, target: false },
-      { id: "23", text: "45", marked: false, target: false },
-      { id: "24", text: "59", marked: false, target: false },
-      { id: "25", text: "61", marked: false, target: false }
-    ];
+        { id: "21", text: "6", marked: false, target: false },
+        { id: "22", text: "22", marked: false, target: false },
+        { id: "23", text: "45", marked: false, target: false },
+        { id: "24", text: "59", marked: false, target: false },
+        { id: "25", text: "61", marked: false, target: false }
+      ]
+    };
 
     let currentMode = 'mark'; // 'mark' | 'target'
     let isEditingCard = false;
@@ -572,7 +586,7 @@
       const now = new Date();
       dateEl.innerText = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-      renderGrid(DEFAULT_CARD_LAYOUT);
+      renderGrid(PRESET_LAYOUTS.CONOR);
       loadFromLocalStorage();
     });
 
@@ -596,7 +610,7 @@
 
         // Interaction Handler
         cell.addEventListener('click', (e) => {
-          if (isEditingCard) return; // Disable clicks in edit mode
+          if (isEditingCard) return;
 
           if (currentMode === 'mark') {
             cell.classList.toggle('marked');
@@ -617,6 +631,29 @@
 
         gridContainer.appendChild(cell);
       });
+    }
+
+    /* Load Preset Hardcoded Layout */
+    function loadPresetLayout(key) {
+      if (!PRESET_LAYOUTS[key]) return;
+
+      if (isEditingCard) toggleEditCard(); // Close edit mode if open
+
+      // Reset markers and load hardcoded setup
+      const cleanPreset = PRESET_LAYOUTS[key].map(cell => ({
+        ...cell,
+        marked: cell.text.toUpperCase() === 'FREE',
+        target: false
+      }));
+
+      renderGrid(cleanPreset);
+      saveToLocalStorage();
+      showStatus(`Loaded "${key}" Layout!`);
+
+      // Reset selector display title back
+      setTimeout(() => {
+        document.getElementById('layoutSelect').selectedIndex = 0;
+      }, 1000);
     }
 
     /* Toggle Editing State */
@@ -641,7 +678,6 @@
           input.className = 'edit-input';
           input.value = currentText;
 
-          // Auto-select text on click
           input.addEventListener('focus', () => input.select());
           cell.appendChild(input);
         });
@@ -666,7 +702,7 @@
     }
 
     function toggleMode() {
-      if (isEditingCard) toggleEditCard(); // Auto close edit mode if active
+      if (isEditingCard) toggleEditCard();
 
       const btn = document.getElementById('toggleToolBtn');
       if (currentMode === 'mark') {
@@ -774,7 +810,7 @@
     }
 
     async function exportToFile() {
-      if (isEditingCard) toggleEditCard(); // Commit edit changes prior to export
+      if (isEditingCard) toggleEditCard();
 
       const cardData = getCardData();
       const jsonString = JSON.stringify(cardData, null, 2);
@@ -832,92 +868,12 @@
       reader.readAsText(file);
     }
 
-    /* Export Card as PNG Image */
-    function exportToImage() {
-      if (isEditingCard) toggleEditCard();
-
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      const size = 600;
-      canvas.width = size;
-      canvas.height = size + 80;
-
-      // Card Background
-      ctx.fillStyle = '#009be3';
-      ctx.roundRect(0, 0, canvas.width, canvas.height, 20);
-      ctx.fill();
-
-      // Card Header Title
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 48px "Arial Black", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('B  I  N  G  O', size / 2, 60);
-
-      // Grid Rendering
-      const padding = 20;
-      const gridTop = 90;
-      const cellSize = (size - padding * 2) / 5;
-      const currentDabber = document.body.getAttribute('data-dabber');
-      const customColor = getComputedStyle(document.documentElement).getPropertyValue('--dabber-color').trim() || '#04ff00';
-
-      document.querySelectorAll('.cell').forEach((cell, idx) => {
-        const col = idx % 5;
-        const row = Math.floor(idx / 5);
-        const x = padding + col * cellSize;
-        const y = gridTop + row * cellSize;
-
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(x + 2, y + 2, cellSize - 4, cellSize - 4);
-
-        ctx.fillStyle = cell.classList.contains('free') ? '#009be3' : '#000000';
-        ctx.font = '800 24px sans-serif';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(cell.innerText.trim(), x + cellSize / 2, y + cellSize / 2);
-
-        if (cell.classList.contains('target')) {
-          ctx.strokeStyle = '#ff007f';
-          ctx.lineWidth = 5;
-          ctx.strokeRect(x + 4, y + 4, cellSize - 8, cellSize - 8);
-        }
-
-        if (cell.classList.contains('marked')) {
-          ctx.fillStyle = customColor;
-          ctx.strokeStyle = customColor;
-
-          if (['star', 'heart', 'diamond', 'crosshair'].includes(currentDabber)) {
-            ctx.globalAlpha = 0.65;
-            ctx.font = currentDabber === 'crosshair' ? '36px sans-serif' : '40px sans-serif';
-            const char = currentDabber === 'star' ? '★' : currentDabber === 'heart' ? '♥' : currentDabber === 'diamond' ? '◆' : '🎯';
-            ctx.fillText(char, x + cellSize / 2, y + cellSize / 2);
-            ctx.globalAlpha = 1.0;
-          } else if (currentDabber === 'stamp') {
-            ctx.globalAlpha = 0.45;
-            ctx.lineWidth = 3;
-            ctx.strokeRect(x + cellSize * 0.2, y + cellSize * 0.2, cellSize * 0.6, cellSize * 0.6);
-            ctx.globalAlpha = 1.0;
-          } else {
-            ctx.globalAlpha = 0.55;
-            ctx.beginPath();
-            ctx.arc(x + cellSize / 2, y + cellSize / 2, cellSize * 0.3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.globalAlpha = 1.0;
-          }
-        }
-      });
-
-      const link = document.createElement('a');
-      link.download = `bingo-card-${new Date().toISOString().slice(0, 10)}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      showStatus('Exported PNG image!');
-    }
-
     function resetCard() {
       if (isEditingCard) toggleEditCard();
 
-      renderGrid(DEFAULT_CARD_LAYOUT);
+      renderGrid(PRESET_LAYOUTS.CONOR);
       saveToLocalStorage();
-      showStatus('Reset to default layout.');
+      showStatus('Reset to default CONOR layout.');
     }
 
     function showStatus(msg) {
