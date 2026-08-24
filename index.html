@@ -259,7 +259,7 @@
       -webkit-appearance: none;
       border: 1px solid rgba(255, 255, 255, 0.3);
       width: 38px;
-      height: 38px;
+      height: 42px;
       border-radius: 10px;
       cursor: pointer;
       background: none;
@@ -284,10 +284,11 @@
     }
 
     /* Uniform Control Styling */
-    button, label.btn-file, select.btn-select {
-      color: white;
+    button, label.btn-file, select.btn-select, select.btn-layouts {
+      color: #ffffff !important;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 10px 14px;
+      height: 42px;
+      padding: 0 14px;
       font-size: 0.85rem !important;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-weight: bold;
@@ -303,15 +304,16 @@
       width: 100%;
       text-align: center;
       box-sizing: border-box;
+      outline: none;
     }
 
-    button:hover, label.btn-file:hover, select.btn-select:hover {
+    button:hover, label.btn-file:hover, select.btn-select:hover, select.btn-layouts:hover {
       opacity: 0.92;
       transform: translateY(-2px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.6);
     }
 
-    button:active, label.btn-file:active, select.btn-select:active {
+    button:active, label.btn-file:active, select.btn-select:active, select.btn-layouts:active {
       transform: translateY(0);
     }
 
@@ -337,17 +339,23 @@
     }
     .btn-import { 
       background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%); 
-      color: #1a1a1a;
+      color: #1a1a1a !important;
       border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
-    .btn-layouts {
+    /* Layout Dropdown Styling Matching Cyan Theme */
+    select.btn-layouts {
       background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
       appearance: none;
       -webkit-appearance: none;
       text-align-last: center;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 18px;
+      padding-right: 28px;
     }
-    .btn-layouts option {
+    select.btn-layouts option {
       background-color: #1e293b;
       color: #ffffff;
     }
@@ -361,6 +369,11 @@
       appearance: none;
       -webkit-appearance: none;
       text-align-last: center;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 18px;
+      padding-right: 28px;
     }
 
     select.btn-select option {
@@ -374,8 +387,9 @@
       bottom: 24px;
       right: 24px;
       width: auto;
+      height: auto;
       background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
-      color: #ffffff;
+      color: #ffffff !important;
       padding: 10px 18px;
       font-size: 0.85rem !important;
       border-radius: 50px;
