@@ -66,6 +66,13 @@
       --card-shadow-color: rgba(225, 29, 72, 0.5);
     }
 
+    /* Dynamic Sakura Blossom Theme */
+    body.theme-sakura {
+      --bg-gradient: linear-gradient(135deg, #2a1b2d 0%, #3a2238 40%, #1a101f 100%);
+      --card-bg: rgba(255, 182, 193, 0.25);
+      --card-shadow-color: rgba(255, 182, 193, 0.5);
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -85,6 +92,23 @@
       color: #ffffff;
       position: relative;
       transition: background 0.5s ease;
+      overflow-x: hidden;
+    }
+
+    /* Background Animation Canvas for Sakura */
+    #sakuraCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      display: none;
+    }
+
+    body.theme-sakura #sakuraCanvas {
+      display: block;
     }
 
     /* Top Left Date */
@@ -98,6 +122,7 @@
       color: rgba(255, 255, 255, 0.45);
       text-transform: uppercase;
       user-select: none;
+      z-index: 2;
     }
 
     /* Top Right Theme Button */
@@ -136,6 +161,7 @@
       letter-spacing: 0.8px;
       color: rgba(255, 255, 255, 0.35);
       user-select: none;
+      z-index: 2;
     }
 
     /* Initial Circular Preloader Screen */
@@ -183,6 +209,7 @@
       width: 100%;
       max-width: 850px;
       margin-top: 20px;
+      z-index: 2;
     }
 
     /* Responsive Bingo Card with Dynamic Background */
@@ -543,6 +570,7 @@
       text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
       height: 20px;
       text-align: center;
+      z-index: 2;
     }
 
     /* Overlay & Victory Modal */
@@ -631,6 +659,9 @@
 </head>
 <body data-dabber="stamp">
 
+  <!-- Sakura Falling Petals Animation Canvas -->
+  <canvas id="sakuraCanvas"></canvas>
+
   <!-- Preloader Screen -->
   <div class="loader-overlay" id="preloader">
     <div class="spinner"></div>
@@ -707,9 +738,10 @@
   </div>
 
   <script>
-    // Theme Presets List
+    // Theme Presets List (Includes Animated Sakura Blossom Theme)
     const THEMES = [
       { id: '', name: 'Dark' },
+      { id: 'theme-sakura', name: 'Sakura Blossom 🌸' },
       { id: 'theme-retro', name: '80s Retro' },
       { id: 'theme-pink', name: 'Pink Girly' },
       { id: 'theme-green', name: 'Green Metallic' },
@@ -771,6 +803,7 @@
 
       renderGrid(PRESET_LAYOUTS.CONOR);
       loadFromLocalStorage();
+      initSakuraAnimation();
     });
 
     /* Theme Cycler Function */
@@ -793,6 +826,13 @@
 
       document.getElementById('themeBtn').innerText = `🎨 Theme: ${themeObj.name}`;
       localStorage.setItem('bingoTheme', themeObj.id);
+
+      // Toggle Sakura Animation Loop
+      if (themeObj.id === 'theme-sakura') {
+        startSakura();
+      } else {
+        stopSakura();
+      }
     }
 
     /* Renders Grid Cells dynamically from state */
@@ -1168,6 +1208,100 @@
     function stopConfetti() {
       if (confettiAnimationId) {
         cancelAnimationFrame(confettiAnimationId);
+      }
+    }
+
+    /* Sakura Petals Animation System */
+    let sakuraCanvas, sakuraCtx;
+    let sakuraPetals = [];
+    let sakuraAnimationId = null;
+
+    function initSakuraAnimation() {
+      sakuraCanvas = document.getElementById('sakuraCanvas');
+      sakuraCtx = sakuraCanvas.getContext('2d');
+      resizeSakuraCanvas();
+
+      window.addEventListener('resize', resizeSakuraCanvas);
+    }
+
+    function resizeSakuraCanvas() {
+      if (sakuraCanvas) {
+        sakuraCanvas.width = window.innerWidth;
+        sakuraCanvas.height = window.innerHeight;
+      }
+    }
+
+    function createSakuraPetals() {
+      sakuraPetals = [];
+      const colors = ['#ffb7c5', '#ff9ebb', '#ffe4e1', '#f3a4b5'];
+      for (let i = 0; i < 45; i++) {
+        sakuraPetals.push({
+          x: Math.random() * sakuraCanvas.width,
+          y: Math.random() * sakuraCanvas.height,
+          size: Math.random() * 7 + 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          speedY: Math.random() * 1.2 + 0.6,
+          speedX: Math.random() * 0.8 + 0.2,
+          angle: Math.random() * 360,
+          spin: (Math.random() - 0.5) * 1.5,
+          oscillation: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function drawPetal(ctx, p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.angle * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = 0.75;
+
+      ctx.beginPath();
+      ctx.moveTo(0, -p.size);
+      ctx.bezierCurveTo(p.size / 2, -p.size, p.size, -p.size / 3, p.size / 2, p.size);
+      ctx.bezierCurveTo(0, p.size / 2, -p.size / 2, p.size / 2, -p.size / 2, p.size);
+      ctx.bezierCurveTo(-p.size, -p.size / 3, -p.size / 2, -p.size, 0, -p.size);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function animateSakura() {
+      sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
+
+      sakuraPetals.forEach(p => {
+        p.y += p.speedY;
+        p.oscillation += 0.02;
+        p.x += p.speedX + Math.sin(p.oscillation) * 0.8;
+        p.angle += p.spin;
+
+        if (p.y > sakuraCanvas.height + 20) {
+          p.y = -20;
+          p.x = Math.random() * sakuraCanvas.width;
+        }
+        if (p.x > sakuraCanvas.width + 20) {
+          p.x = -20;
+        }
+
+        drawPetal(sakuraCtx, p);
+      });
+
+      sakuraAnimationId = requestAnimationFrame(animateSakura);
+    }
+
+    function startSakura() {
+      if (!sakuraAnimationId) {
+        createSakuraPetals();
+        animateSakura();
+      }
+    }
+
+    function stopSakura() {
+      if (sakuraAnimationId) {
+        cancelAnimationFrame(sakuraAnimationId);
+        sakuraAnimationId = null;
+        if (sakuraCtx) {
+          sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
+        }
       }
     }
   </script>
