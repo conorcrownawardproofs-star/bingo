@@ -825,7 +825,7 @@
       // Remove existing theme classes
       THEMES.forEach(t => { if (t.id) document.body.classList.remove(t.id); });
 
-      // Apply new theme
+      // Apply new theme class
       if (themeObj.id) {
         document.body.classList.add(themeObj.id);
       }
@@ -833,16 +833,15 @@
       document.getElementById('themeBtn').innerText = `🎨 Theme: ${themeObj.name}`;
       localStorage.setItem('bingoTheme', themeObj.id);
 
-      // Manage Background Dynamic Animations
+      // Explicitly stop all dynamic background animations first
+      stopSakura();
+      stopRetro();
+
+      // Trigger animations only for explicit matching themes
       if (themeObj.id === 'theme-sakura') {
-        stopRetro();
         startSakura();
       } else if (themeObj.id === 'theme-retro') {
-        stopSakura();
         startRetro();
-      } else {
-        stopSakura();
-        stopRetro();
       }
     }
 
@@ -1220,7 +1219,7 @@
       }
     }
 
-    /* Reliable Sakura Petals Animation System */
+    /* Sakura Petals Animation System */
     let sakuraCanvas, sakuraCtx;
     let sakuraPetals = [];
     let sakuraAnimationId = null;
@@ -1277,6 +1276,7 @@
     }
 
     function animateSakura() {
+      if (!sakuraCtx || !sakuraCanvas) return;
       sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
 
       sakuraPetals.forEach(p => {
@@ -1311,9 +1311,9 @@
       if (sakuraAnimationId) {
         cancelAnimationFrame(sakuraAnimationId);
         sakuraAnimationId = null;
-        if (sakuraCtx && sakuraCanvas) {
-          sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
-        }
+      }
+      if (sakuraCtx && sakuraCanvas) {
+        sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
       }
     }
 
@@ -1385,6 +1385,7 @@
     }
 
     function animateRetro() {
+      if (!retroCtx || !retroCanvas) return;
       const w = retroCanvas.width;
       const h = retroCanvas.height;
       const horizon = h * 0.52;
@@ -1458,9 +1459,9 @@
       if (retroAnimationId) {
         cancelAnimationFrame(retroAnimationId);
         retroAnimationId = null;
-        if (retroCtx && retroCanvas) {
-          retroCtx.clearRect(0, 0, retroCanvas.width, retroCanvas.height);
-        }
+      }
+      if (retroCtx && retroCanvas) {
+        retroCtx.clearRect(0, 0, retroCanvas.width, retroCanvas.height);
       }
     }
   </script>
