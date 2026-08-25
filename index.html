@@ -19,10 +19,7 @@
 
     /* 80s Retro Theme */
     body.theme-retro {
-      --bg-gradient: 
-        linear-gradient(180deg, #090014 0%, #220038 50%, #4a0066 100%),
-        repeating-linear-gradient(90deg, rgba(255, 0, 127, 0.15) 0px, rgba(255, 0, 127, 0.15) 1px, transparent 1px, transparent 40px),
-        repeating-linear-gradient(0deg, rgba(0, 240, 255, 0.15) 0px, rgba(0, 240, 255, 0.15) 1px, transparent 1px, transparent 40px);
+      --bg-gradient: linear-gradient(180deg, #090014 0%, #1a002c 60%, #38004d 100%);
       --card-bg: rgba(255, 0, 127, 0.85);
       --card-shadow-color: rgba(255, 0, 127, 0.6);
     }
@@ -95,8 +92,8 @@
       overflow-x: hidden;
     }
 
-    /* Background Animation Canvas for Sakura */
-    #sakuraCanvas {
+    /* Background Animation Canvas Element */
+    .bg-canvas {
       position: fixed;
       top: 0;
       left: 0;
@@ -108,6 +105,10 @@
     }
 
     body.theme-sakura #sakuraCanvas {
+      display: block;
+    }
+
+    body.theme-retro #retroCanvas {
       display: block;
     }
 
@@ -660,7 +661,10 @@
 <body data-dabber="stamp">
 
   <!-- Sakura Falling Petals Animation Canvas -->
-  <canvas id="sakuraCanvas"></canvas>
+  <canvas id="sakuraCanvas" class="bg-canvas"></canvas>
+
+  <!-- 80s Retro Synthwave Grid Canvas -->
+  <canvas id="retroCanvas" class="bg-canvas"></canvas>
 
   <!-- Preloader Screen -->
   <div class="loader-overlay" id="preloader">
@@ -682,7 +686,7 @@
       </div>
     </div>
 
-    <!-- Controls Panel (Reordered) -->
+    <!-- Controls Panel -->
     <div class="controls">
       <!-- 1. Default Layouts Dropdown -->
       <select class="btn-layouts" id="layoutSelect" onchange="loadPresetLayout(this.value)">
@@ -690,7 +694,7 @@
         <option value="CONOR">CONOR</option>
       </select>
 
-      <!-- 2. Pattern + Color Selector Row (Stamp Default) -->
+      <!-- 2. Pattern + Color Selector Row -->
       <div class="selector-row">
         <select class="btn-select" id="dabberSelect" onchange="changeDabber(this.value)">
           <option value="stamp" selected>Stamp</option>
@@ -738,11 +742,11 @@
   </div>
 
   <script>
-    // Theme Presets List (Includes Animated Sakura Blossom Theme)
+    // Theme Presets List (Dark Theme is main default)
     const THEMES = [
       { id: '', name: 'Dark' },
       { id: 'theme-sakura', name: 'Sakura Blossom 🌸' },
-      { id: 'theme-retro', name: '80s Retro' },
+      { id: 'theme-retro', name: '80s Retro ⚡' },
       { id: 'theme-pink', name: 'Pink Girly' },
       { id: 'theme-green', name: 'Green Metallic' },
       { id: 'theme-blue', name: 'Blue Metallic' },
@@ -801,9 +805,11 @@
       const now = new Date();
       dateEl.innerText = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
+      initSakuraAnimation();
+      initRetroAnimation();
+
       renderGrid(PRESET_LAYOUTS.CONOR);
       loadFromLocalStorage();
-      initSakuraAnimation();
     });
 
     /* Theme Cycler Function */
@@ -827,11 +833,16 @@
       document.getElementById('themeBtn').innerText = `🎨 Theme: ${themeObj.name}`;
       localStorage.setItem('bingoTheme', themeObj.id);
 
-      // Toggle Sakura Animation Loop
+      // Manage Background Dynamic Animations
       if (themeObj.id === 'theme-sakura') {
+        stopRetro();
         startSakura();
+      } else if (themeObj.id === 'theme-retro') {
+        stopSakura();
+        startRetro();
       } else {
         stopSakura();
+        stopRetro();
       }
     }
 
@@ -853,7 +864,7 @@
 
         cell.innerText = item.text;
 
-        // Interaction Handler
+        // Interaction Handlers
         cell.addEventListener('click', (e) => {
           if (isEditingCard) return;
 
@@ -884,7 +895,6 @@
 
       if (isEditingCard) toggleEditCard(); // Close edit mode if open
 
-      // Reset markers and load hardcoded setup
       const cleanPreset = PRESET_LAYOUTS[key].map(cell => ({
         ...cell,
         marked: cell.text.toUpperCase() === 'FREE',
@@ -895,7 +905,6 @@
       saveToLocalStorage();
       showStatus(`Loaded "${key}" Layout!`);
 
-      // Reset selector display title back
       setTimeout(() => {
         document.getElementById('layoutSelect').selectedIndex = 0;
       }, 1000);
@@ -1025,6 +1034,8 @@
 
       if (data.theme !== undefined) {
         applyTheme(data.theme);
+      } else {
+        applyTheme('');
       }
 
       renderGrid(data.cells);
@@ -1038,9 +1049,7 @@
 
     function loadFromLocalStorage() {
       const savedTheme = localStorage.getItem('bingoTheme');
-      if (savedTheme !== null) {
-        applyTheme(savedTheme);
-      }
+      applyTheme(savedTheme !== null ? savedTheme : '');
 
       const savedDabber = localStorage.getItem('bingoDabberStyle');
       if (savedDabber) {
@@ -1211,7 +1220,7 @@
       }
     }
 
-    /* Sakura Petals Animation System */
+    /* Reliable Sakura Petals Animation System */
     let sakuraCanvas, sakuraCtx;
     let sakuraPetals = [];
     let sakuraAnimationId = null;
@@ -1220,7 +1229,6 @@
       sakuraCanvas = document.getElementById('sakuraCanvas');
       sakuraCtx = sakuraCanvas.getContext('2d');
       resizeSakuraCanvas();
-
       window.addEventListener('resize', resizeSakuraCanvas);
     }
 
@@ -1233,14 +1241,17 @@
 
     function createSakuraPetals() {
       sakuraPetals = [];
-      const colors = ['#ffb7c5', '#ff9ebb', '#ffe4e1', '#f3a4b5'];
-      for (let i = 0; i < 45; i++) {
+      const colors = ['#ffb7c5', '#ff9ebb', '#ffe4e1', '#f3a4b5', '#ffd1dc'];
+      const w = sakuraCanvas.width || window.innerWidth;
+      const h = sakuraCanvas.height || window.innerHeight;
+
+      for (let i = 0; i < 55; i++) {
         sakuraPetals.push({
-          x: Math.random() * sakuraCanvas.width,
-          y: Math.random() * sakuraCanvas.height,
-          size: Math.random() * 7 + 6,
+          x: Math.random() * w,
+          y: Math.random() * h,
+          size: Math.random() * 7 + 5,
           color: colors[Math.floor(Math.random() * colors.length)],
-          speedY: Math.random() * 1.2 + 0.6,
+          speedY: Math.random() * 1.5 + 0.8,
           speedX: Math.random() * 0.8 + 0.2,
           angle: Math.random() * 360,
           spin: (Math.random() - 0.5) * 1.5,
@@ -1254,7 +1265,7 @@
       ctx.translate(p.x, p.y);
       ctx.rotate((p.angle * Math.PI) / 180);
       ctx.fillStyle = p.color;
-      ctx.globalAlpha = 0.75;
+      ctx.globalAlpha = 0.8;
 
       ctx.beginPath();
       ctx.moveTo(0, -p.size);
@@ -1271,7 +1282,7 @@
       sakuraPetals.forEach(p => {
         p.y += p.speedY;
         p.oscillation += 0.02;
-        p.x += p.speedX + Math.sin(p.oscillation) * 0.8;
+        p.x += p.speedX + Math.sin(p.oscillation) * 0.7;
         p.angle += p.spin;
 
         if (p.y > sakuraCanvas.height + 20) {
@@ -1290,6 +1301,7 @@
 
     function startSakura() {
       if (!sakuraAnimationId) {
+        resizeSakuraCanvas();
         createSakuraPetals();
         animateSakura();
       }
@@ -1299,8 +1311,116 @@
       if (sakuraAnimationId) {
         cancelAnimationFrame(sakuraAnimationId);
         sakuraAnimationId = null;
-        if (sakuraCtx) {
+        if (sakuraCtx && sakuraCanvas) {
           sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
+        }
+      }
+    }
+
+    /* 80s Retro Grid & Synthwave Stars Canvas Animation */
+    let retroCanvas, retroCtx;
+    let retroAnimationId = null;
+    let gridOffset = 0;
+    let retroStars = [];
+
+    function initRetroAnimation() {
+      retroCanvas = document.getElementById('retroCanvas');
+      retroCtx = retroCanvas.getContext('2d');
+      resizeRetroCanvas();
+      window.addEventListener('resize', resizeRetroCanvas);
+    }
+
+    function resizeRetroCanvas() {
+      if (retroCanvas) {
+        retroCanvas.width = window.innerWidth;
+        retroCanvas.height = window.innerHeight;
+      }
+    }
+
+    function createRetroStars() {
+      retroStars = [];
+      const colors = ['#00f0ff', '#ff007f', '#a855f7', '#ffffff'];
+      for (let i = 0; i < 70; i++) {
+        retroStars.push({
+          x: Math.random() * retroCanvas.width,
+          y: Math.random() * (retroCanvas.height * 0.55),
+          size: Math.random() * 2 + 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: Math.random()
+        });
+      }
+    }
+
+    function animateRetro() {
+      const w = retroCanvas.width;
+      const h = retroCanvas.height;
+      const horizon = h * 0.55;
+
+      retroCtx.clearRect(0, 0, w, h);
+
+      // Render Floating Synthwave Stars
+      retroStars.forEach(s => {
+        s.alpha += (Math.random() - 0.5) * 0.05;
+        if (s.alpha < 0.2) s.alpha = 0.2;
+        if (s.alpha > 1) s.alpha = 1;
+
+        retroCtx.save();
+        retroCtx.globalAlpha = s.alpha;
+        retroCtx.fillStyle = s.color;
+        retroCtx.fillRect(s.x, s.y, s.size, s.size);
+        retroCtx.restore();
+      });
+
+      // Animated 3D Perspective Grid
+      gridOffset = (gridOffset + 0.8) % 30;
+
+      retroCtx.save();
+      retroCtx.strokeStyle = 'rgba(0, 240, 255, 0.45)';
+      retroCtx.lineWidth = 1.5;
+      retroCtx.shadowBlur = 8;
+      retroCtx.shadowColor = '#00f0ff';
+
+      // Horizontal Lines (Moving downward to create forward motion)
+      for (let y = horizon; y < h; y += 18) {
+        let perspectiveY = y + gridOffset;
+        if (perspectiveY < h) {
+          retroCtx.beginPath();
+          retroCtx.moveTo(0, perspectiveY);
+          retroCtx.lineTo(w, perspectiveY);
+          retroCtx.stroke();
+        }
+      }
+
+      // Vertical Perspective Lines
+      const fovCenter = w / 2;
+      const linesCount = 28;
+      for (let i = -linesCount; i <= linesCount; i++) {
+        const xVal = fovCenter + i * (w / 18);
+        retroCtx.beginPath();
+        retroCtx.moveTo(fovCenter, horizon);
+        retroCtx.lineTo(xVal, h);
+        retroCtx.stroke();
+      }
+
+      retroCtx.restore();
+
+      retroAnimationId = requestAnimationFrame(animateRetro);
+    }
+
+    function startRetro() {
+      if (!retroAnimationId) {
+        resizeRetroCanvas();
+        createRetroStars();
+        animateRetro();
+      }
+    }
+
+    function stopRetro() {
+      if (retroAnimationId) {
+        cancelAnimationFrame(retroAnimationId);
+        retroAnimationId = null;
+        if (retroCtx && retroCanvas) {
+          retroCtx.clearRect(0, 0, retroCanvas.width, retroCanvas.height);
         }
       }
     }
