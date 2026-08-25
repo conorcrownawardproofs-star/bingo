@@ -1317,7 +1317,7 @@
       }
     }
 
-    /* 80s Retro Grid & Synthwave Stars Canvas Animation */
+    /* 80s Retro Moving Grid & Sun Canvas Animation */
     let retroCanvas, retroCtx;
     let retroAnimationId = null;
     let gridOffset = 0;
@@ -1337,68 +1337,107 @@
       }
     }
 
-    function createRetroStars() {
+    function createRetroStars(horizon) {
       retroStars = [];
-      const colors = ['#00f0ff', '#ff007f', '#a855f7', '#ffffff'];
-      for (let i = 0; i < 70; i++) {
+      const colors = ['#00f0ff', '#ff007f', '#ffffff', '#e2e8f0'];
+      for (let i = 0; i < 110; i++) {
         retroStars.push({
           x: Math.random() * retroCanvas.width,
-          y: Math.random() * (retroCanvas.height * 0.55),
-          size: Math.random() * 2 + 1,
+          y: Math.random() * horizon,
+          size: Math.random() * 2 + 0.5,
           color: colors[Math.floor(Math.random() * colors.length)],
-          alpha: Math.random()
+          alpha: Math.random(),
+          speed: Math.random() * 0.02 + 0.005
         });
       }
+    }
+
+    function drawRetroSun(w, h, horizon) {
+      const sunRadius = Math.min(w, h) * 0.2;
+      const sunX = w / 2;
+      const sunY = horizon - 5;
+
+      const sunGradient = retroCtx.createLinearGradient(sunX, sunY - sunRadius, sunX, sunY + sunRadius);
+      sunGradient.addColorStop(0, '#facc15');
+      sunGradient.addColorStop(0.5, '#ff007f');
+      sunGradient.addColorStop(1, '#6b21a8');
+
+      retroCtx.save();
+      
+      retroCtx.shadowBlur = 50;
+      retroCtx.shadowColor = '#ff007f';
+
+      retroCtx.beginPath();
+      retroCtx.arc(sunX, sunY, sunRadius, 0, Math.PI * 2);
+      retroCtx.fillStyle = sunGradient;
+      retroCtx.fill();
+
+      retroCtx.shadowBlur = 0;
+      const lineCount = 9;
+      for (let i = 0; i < lineCount; i++) {
+        const lineThickness = (i + 1) * 1.8;
+        const lineY = sunY + (i * (sunRadius / lineCount)) + 2;
+
+        retroCtx.clearRect(sunX - sunRadius - 20, lineY, (sunRadius + 20) * 2, lineThickness);
+      }
+
+      retroCtx.restore();
     }
 
     function animateRetro() {
       const w = retroCanvas.width;
       const h = retroCanvas.height;
-      const horizon = h * 0.55;
+      const horizon = h * 0.52;
 
       retroCtx.clearRect(0, 0, w, h);
 
       // Render Floating Synthwave Stars
-      retroStars.forEach(s => {
-        s.alpha += (Math.random() - 0.5) * 0.05;
-        if (s.alpha < 0.2) s.alpha = 0.2;
-        if (s.alpha > 1) s.alpha = 1;
+      retroStars.forEach(star => {
+        star.alpha += star.speed;
+        if (star.alpha > 1 || star.alpha < 0.2) star.speed = -star.speed;
 
         retroCtx.save();
-        retroCtx.globalAlpha = s.alpha;
-        retroCtx.fillStyle = s.color;
-        retroCtx.fillRect(s.x, s.y, s.size, s.size);
+        retroCtx.globalAlpha = Math.max(0, Math.min(1, star.alpha));
+        retroCtx.fillStyle = star.color;
+        retroCtx.fillRect(star.x, star.y, star.size, star.size);
         retroCtx.restore();
       });
 
-      // Animated 3D Perspective Grid
-      gridOffset = (gridOffset + 0.8) % 30;
+      // Render Neon Sun
+      drawRetroSun(w, h, horizon);
 
+      // Render Forward Accelerating Grid
       retroCtx.save();
-      retroCtx.strokeStyle = 'rgba(0, 240, 255, 0.45)';
-      retroCtx.lineWidth = 1.5;
-      retroCtx.shadowBlur = 8;
+      retroCtx.strokeStyle = '#00f0ff';
+      retroCtx.lineWidth = 2;
+      retroCtx.shadowBlur = 12;
       retroCtx.shadowColor = '#00f0ff';
 
-      // Horizontal Lines (Moving downward to create forward motion)
-      for (let y = horizon; y < h; y += 18) {
-        let perspectiveY = y + gridOffset;
-        if (perspectiveY < h) {
+      const speed = 0.015;
+      gridOffset = (gridOffset + speed) % 1;
+
+      const maxLines = 24;
+      for (let i = 0; i < maxLines; i++) {
+        const lineProgress = (i + gridOffset) / maxLines;
+        const exponentialY = Math.pow(lineProgress, 3);
+        const lineY = horizon + exponentialY * (h - horizon);
+
+        if (lineY >= horizon && lineY <= h) {
           retroCtx.beginPath();
-          retroCtx.moveTo(0, perspectiveY);
-          retroCtx.lineTo(w, perspectiveY);
+          retroCtx.moveTo(0, lineY);
+          retroCtx.lineTo(w, lineY);
           retroCtx.stroke();
         }
       }
 
-      // Vertical Perspective Lines
-      const fovCenter = w / 2;
-      const linesCount = 28;
-      for (let i = -linesCount; i <= linesCount; i++) {
-        const xVal = fovCenter + i * (w / 18);
+      const centerX = w / 2;
+      const lineSpread = 36;
+      for (let x = -lineSpread; x <= lineSpread; x++) {
+        const endX = centerX + x * (w / 12);
+
         retroCtx.beginPath();
-        retroCtx.moveTo(fovCenter, horizon);
-        retroCtx.lineTo(xVal, h);
+        retroCtx.moveTo(centerX, horizon);
+        retroCtx.lineTo(endX, h);
         retroCtx.stroke();
       }
 
@@ -1410,7 +1449,7 @@
     function startRetro() {
       if (!retroAnimationId) {
         resizeRetroCanvas();
-        createRetroStars();
+        createRetroStars(retroCanvas.height * 0.52);
         animateRetro();
       }
     }
