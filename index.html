@@ -1407,7 +1407,7 @@
       // Render Neon Sun
       drawRetroSun(w, h, horizon);
 
-      // Render Forward Accelerating Grid
+      // Render Moving Flat Full-Width Grid
       retroCtx.save();
       retroCtx.strokeStyle = '#00f0ff';
       retroCtx.lineWidth = 2;
@@ -1417,11 +1417,11 @@
       const speed = 0.015;
       gridOffset = (gridOffset + speed) % 1;
 
-      const maxLines = 24;
+      // Moving Horizontal Lines
+      const maxLines = 16;
       for (let i = 0; i < maxLines; i++) {
         const lineProgress = (i + gridOffset) / maxLines;
-        const exponentialY = Math.pow(lineProgress, 3);
-        const lineY = horizon + exponentialY * (h - horizon);
+        const lineY = horizon + lineProgress * (h - horizon);
 
         if (lineY >= horizon && lineY <= h) {
           retroCtx.beginPath();
@@ -1431,14 +1431,12 @@
         }
       }
 
-      const centerX = w / 2;
-      const lineSpread = 36;
-      for (let x = -lineSpread; x <= lineSpread; x++) {
-        const endX = centerX + x * (w / 12);
-
+      // Straight Parallel Vertical Lines across screen width
+      const spacing = 45;
+      for (let x = 0; x <= w; x += spacing) {
         retroCtx.beginPath();
-        retroCtx.moveTo(centerX, horizon);
-        retroCtx.lineTo(endX, h);
+        retroCtx.moveTo(x, horizon);
+        retroCtx.lineTo(x, h);
         retroCtx.stroke();
       }
 
