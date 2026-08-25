@@ -23,10 +23,10 @@
       --grid-color: #ff00aa;
     }
 
-    /* 80s Retro Theme (Now Vaporwave) */
+    /* Modern Vaporwave Theme */
     body.theme-retro {
       --bg-gradient: var(--arizona-cyan);
-      --card-bg: rgba(255, 0, 127, 0.85);
+      --card-bg: rgba(255, 0, 127, 0.25); /* Adjusted transparency here */
       --card-shadow-color: rgba(255, 0, 127, 0.6);
     }
 
@@ -180,11 +180,21 @@
         100% { background-position: 0px 50px; }
     }
 
+    /* Branch Sway Animations */
+    @keyframes swayLeft {
+        0%, 100% { transform: scale(0.75) rotate(0deg); }
+        50% { transform: scale(0.75) rotate(1.5deg); }
+    }
+
+    @keyframes swayRight {
+        0%, 100% { transform: scale(0.75) rotate(0deg); }
+        50% { transform: scale(0.75) rotate(-1.5deg); }
+    }
+
     #vaporwaveBg .branch {
         position: absolute;
         z-index: 3;
         pointer-events: none;
-        transform: scale(0.75); 
     }
     
     #vaporwaveBg .branch-left {
@@ -192,6 +202,7 @@
         left: -40px;
         width: 500px;
         transform-origin: top left;
+        animation: swayLeft 5s ease-in-out infinite;
     }
 
     #vaporwaveBg .branch-right {
@@ -199,6 +210,7 @@
         right: -40px;
         width: 500px;
         transform-origin: top right;
+        animation: swayRight 6s ease-in-out infinite;
     }
 
     #vaporwavePetals {
@@ -960,7 +972,7 @@
     const THEMES = [
       { id: '', name: 'Dark' },
       { id: 'theme-sakura', name: 'Sakura Blossom 🌸' },
-      { id: 'theme-retro', name: '80s Retro ⚡' },
+      { id: 'theme-retro', name: 'Modern Vaporwave 🌴' },
       { id: 'theme-pink', name: 'Pink Girly' },
       { id: 'theme-green', name: 'Green Metallic' },
       { id: 'theme-blue', name: 'Blue Metallic' },
