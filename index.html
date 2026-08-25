@@ -23,20 +23,49 @@
       --grid-color: #ff00aa;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: clamp(15px, 3vh, 30px);
+      background: var(--bg-gradient);
+      background-size: 100% 100%;
+      background-blend-mode: overlay, normal, normal;
+      background-attachment: fixed;
+      color: #ffffff;
+      position: relative;
+      transition: background 0.5s ease;
+      overflow-x: hidden;
+    }
+
     /* Modern Vaporwave Theme */
     body.theme-retro {
       --bg-gradient: var(--arizona-cyan);
-      --card-bg: rgba(255, 0, 127, 0.25); /* Adjusted transparency here */
+      --card-bg: rgba(255, 0, 127, 0.25); 
       --card-shadow-color: rgba(255, 0, 127, 0.6);
     }
 
-    /* Pink Girly Theme */
+    /* Pink Girly Theme with Idle Animation */
+    @keyframes pinkIdle {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     body.theme-pink {
-      --bg-gradient: 
-        radial-gradient(circle at 50% 50%, #ffe4e6 0%, #f472b6 60%, #db2777 100%),
-        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 40%);
-      --card-bg: rgba(244, 114, 182, 0.9);
-      --card-shadow-color: rgba(219, 39, 119, 0.4);
+      --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #f472b6, #db2777, #fda4af);
+      background-size: 300% 300%;
+      animation: pinkIdle 15s ease-in-out infinite;
+      --card-bg: rgba(244, 114, 182, 0.85);
+      --card-shadow-color: rgba(219, 39, 119, 0.5);
     }
 
     /* Green Metallic Theme */
@@ -59,43 +88,22 @@
       --card-shadow-color: rgba(37, 99, 235, 0.4);
     }
 
-    /* Blood Red Metallic Theme */
+    /* Interactive Blood Red / Metallic Theme */
     body.theme-red {
       --bg-gradient: 
-        radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.9) 85%),
-        linear-gradient(135deg, #2a0808 0%, #450a0a 25%, #180303 50%, #7f1d1d 75%, #0f0202 100%),
-        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 4px);
-      --card-bg: rgba(225, 29, 72, 0.85);
-      --card-shadow-color: rgba(225, 29, 72, 0.5);
+        radial-gradient(800px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), rgba(220, 38, 38, 0.4) 0%, transparent 60%),
+        linear-gradient(135deg, #0a0a0a 0%, #171717 25%, #991b1b 50%, #d1d5db 75%, #050505 100%),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 8px);
+      --card-bg: rgba(20, 20, 20, 0.85); 
+      --card-shadow-color: rgba(220, 38, 38, 0.7);
+      transition: none; /* Removed transition for instant mouse tracking */
     }
 
-    /* Dynamic Sakura Blossom Theme */
+    /* Dynamic Sakura Blossom Theme - Saturated */
     body.theme-sakura {
-      --bg-gradient: linear-gradient(135deg, #2a1b2d 0%, #3a2238 40%, #1a101f 100%);
+      --bg-gradient: linear-gradient(135deg, #5c1e4b 0%, #9e2a5b 30%, #d84b78 55%, #7a2a6b 80%, #3a114a 100%);
       --card-bg: rgba(255, 182, 193, 0.25);
       --card-shadow-color: rgba(255, 182, 193, 0.5);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: clamp(15px, 3vh, 30px);
-      background: var(--bg-gradient);
-      background-blend-mode: overlay, normal, normal;
-      background-attachment: fixed;
-      color: #ffffff;
-      position: relative;
-      transition: background 0.5s ease;
-      overflow-x: hidden;
     }
 
     /* Background Animation Canvas Element */
@@ -110,13 +118,8 @@
       display: none;
     }
 
-    body.theme-sakura #sakuraCanvas {
-      display: block;
-    }
-
-    body.theme-retro #vaporwaveBg {
-      display: block;
-    }
+    body.theme-sakura #sakuraCanvas { display: block; }
+    body.theme-retro #vaporwaveBg { display: block; }
 
     /* Vaporwave Custom CSS */
     #vaporwaveBg .svg-defs {
@@ -342,7 +345,6 @@
       transition: background 0.5s ease, box-shadow 0.5s ease, border-color 0.3s ease;
     }
 
-    /* Visual Indicator during Edit Mode */
     .bingo-card.editing-mode {
       border: 2px solid #facc15;
       box-shadow: 0 0 25px rgba(250, 204, 21, 0.6);
@@ -395,13 +397,11 @@
       letter-spacing: 0.5px;
     }
 
-    /* Target Indicator */
     .cell.target {
       box-shadow: inset 0 0 0 clamp(3px, 0.9vw, 4.5px) #ff007f;
       z-index: 2;
     }
 
-    /* Editable Input styling for Edit Mode */
     .cell input.edit-input {
       width: 100%;
       height: 100%;
@@ -508,7 +508,6 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
 
-    /* Selector Row */
     .selector-row {
       display: flex;
       gap: 8px;
@@ -520,7 +519,6 @@
       flex: 1;
     }
 
-    /* Compact Color Picker Input */
     input[type="color"].btn-color-compact {
       -webkit-appearance: none;
       border: 1px solid rgba(255, 255, 255, 0.3);
@@ -549,7 +547,6 @@
       border-radius: 6px;
     }
 
-    /* Uniform Control Styling */
     button, label.btn-file, select.btn-select, select.btn-layouts {
       color: #ffffff !important;
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -583,26 +580,19 @@
       transform: translateY(0);
     }
 
-    /* Color Gradients */
-    .btn-mode { 
-      background: linear-gradient(135deg, #a855f7 0%, #6b21a8 100%); 
-    }
+    .btn-mode { background: linear-gradient(135deg, #a855f7 0%, #6b21a8 100%); }
     .btn-mode.active { 
       background: linear-gradient(135deg, #ff007f 0%, #9f1239 100%);
       box-shadow: 0 0 14px rgba(255, 0, 127, 0.6);
     }
 
-    .btn-edit {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    }
+    .btn-edit { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
     .btn-edit.active {
       background: linear-gradient(135deg, #10b981 0%, #047857 100%);
       box-shadow: 0 0 14px rgba(16, 185, 129, 0.6);
     }
 
-    .btn-export { 
-      background: linear-gradient(135deg, #10b981 0%, #047857 100%); 
-    }
+    .btn-export { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
     .btn-import { 
       background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%); 
       color: #1a1a1a !important;
@@ -625,9 +615,7 @@
       color: #ffffff;
     }
 
-    .btn-reset { 
-      background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); 
-    }
+    .btn-reset { background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); }
 
     select.btn-select {
       background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
@@ -640,13 +628,11 @@
       background-size: 18px;
       padding-right: 28px;
     }
-
     select.btn-select option {
       background-color: #1e293b;
       color: #ffffff;
     }
 
-    /* Fixed Low-Opacity Victory Button */
     .btn-victory {
       position: fixed;
       bottom: 24px;
@@ -664,14 +650,9 @@
       opacity: 0.75;
       transition: opacity 0.3s ease, transform 0.2s ease;
     }
+    .btn-victory:hover { opacity: 1; }
 
-    .btn-victory:hover {
-      opacity: 1;
-    }
-
-    #fileInput {
-      display: none;
-    }
+    #fileInput { display: none; }
 
     .status-msg {
       margin-top: 16px;
@@ -701,12 +682,10 @@
       pointer-events: none;
       transition: opacity 0.4s ease;
     }
-
     .overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-
     .winner-card {
       background: linear-gradient(135deg, #1e1b4b, #311042);
       border: 2px solid #ff007f;
@@ -717,11 +696,7 @@
       transform: scale(0.8);
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-
-    .overlay.show .winner-card {
-      transform: scale(1);
-    }
-
+    .overlay.show .winner-card { transform: scale(1); }
     .winner-title {
       font-family: 'Arial Black', sans-serif;
       font-size: 3.5rem;
@@ -730,13 +705,11 @@
       -webkit-text-fill-color: transparent;
       margin: 0 0 10px 0;
     }
-
     .winner-desc {
       font-size: 1.2rem;
       color: #e2e8f0;
       margin-bottom: 24px;
     }
-
     #confettiCanvas {
       position: absolute;
       top: 0;
@@ -747,24 +720,11 @@
     }
 
     @media (max-width: 680px) {
-      .app-container {
-        flex-direction: column;
-      }
-      .controls {
-        width: clamp(280px, 80vw, 420px);
-      }
-      .top-date {
-        top: 12px;
-        left: 16px;
-      }
-      .btn-theme-toggle {
-        top: 12px;
-        right: 16px;
-      }
-      .bottom-credit {
-        bottom: 12px;
-        left: 16px;
-      }
+      .app-container { flex-direction: column; }
+      .controls { width: clamp(280px, 80vw, 420px); }
+      .top-date { top: 12px; left: 16px; }
+      .btn-theme-toggle { top: 12px; right: 16px; }
+      .bottom-credit { bottom: 12px; left: 16px; }
     }
   </style>
 </head>
@@ -773,9 +733,8 @@
   <!-- Sakura Falling Petals Animation Canvas -->
   <canvas id="sakuraCanvas" class="bg-canvas"></canvas>
 
-  <!-- Arizona Vaporwave Background (Replaces 80s Retro Grid) -->
+  <!-- Arizona Vaporwave Background -->
   <div id="vaporwaveBg" class="bg-canvas">
-      <!-- SVG Definitions & Filters -->
       <svg class="svg-defs">
           <filter id="heatwave" x="-20%" y="-20%" width="140%" height="140%">
               <feTurbulence type="fractalNoise" baseFrequency="0.005 0.05" numOctaves="2" result="noise">
@@ -784,7 +743,6 @@
               <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
           </filter>
 
-          <!-- Flower & Plant Assets -->
           <defs>
               <linearGradient id="sakura-grad" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" stop-color="#ffffff"/>
@@ -820,7 +778,6 @@
       <div class="sun"></div>
       <div class="grid-container"><div class="grid"></div></div>
 
-      <!-- Detailed Left Branch -->
       <svg class="branch branch-left" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
           <g stroke="#1f1a1b" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path d="M -20,-20 C 50,40 100,20 180,80 C 250,130 280,110 400,190" stroke-width="18" />
@@ -853,7 +810,6 @@
           <use href="#bud" transform="translate(150, 110) scale(0.9) rotate(110)" />
       </svg>
 
-      <!-- Detailed Right Branch -->
       <svg class="branch branch-right" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
           <g stroke="#1f1a1b" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path d="M 520,-20 C 420,40 380,20 280,80 C 200,130 150,120 80,160" stroke-width="18" />
@@ -899,7 +855,6 @@
 
   <div class="top-date" id="currentDate"></div>
 
-  <!-- Top Right Theme Switcher Button -->
   <button class="btn-theme-toggle" id="themeBtn" onclick="cycleTheme()">🎨 Theme: Dark</button>
 
   <div class="app-container">
@@ -914,13 +869,11 @@
 
     <!-- Controls Panel -->
     <div class="controls">
-      <!-- 1. Default Layouts Dropdown -->
       <select class="btn-layouts" id="layoutSelect" onchange="loadPresetLayout(this.value)">
         <option value="" disabled selected>Default Layouts</option>
         <option value="CONOR">CONOR</option>
       </select>
 
-      <!-- 2. Pattern + Color Selector Row -->
       <div class="selector-row">
         <select class="btn-select" id="dabberSelect" onchange="changeDabber(this.value)">
           <option value="stamp" selected>Stamp</option>
@@ -933,13 +886,8 @@
         <input type="color" id="dabberColorPicker" class="btn-color-compact" value="#04ff00" onchange="changeDabberColor(this.value)" title="Choose Dabber Color">
       </div>
 
-      <!-- 3. Mode Toggle -->
       <button class="btn-mode" id="toggleToolBtn" onclick="toggleMode()">Mode: Mark Spot</button>
-
-      <!-- 4. Edit Card Layout -->
       <button class="btn-edit" id="toggleEditBtn" onclick="toggleEditCard()">Edit Card Layout</button>
-      
-      <!-- 5. File Actions & Reset -->
       <button class="btn-export" onclick="exportToFile()">Save File</button>
       <label class="btn-file btn-import">
         Open File
@@ -951,13 +899,10 @@
 
   <div class="status-msg" id="statusMsg"></div>
 
-  <!-- Bottom Left Tagline -->
   <div class="bottom-credit">Made by CM, free time, August 2026.</div>
 
-  <!-- Victory Button -->
   <button class="btn-victory" onclick="triggerVictory(true)">🏆 Victory</button>
 
-  <!-- Winner Overlay -->
   <div class="overlay" id="victoryOverlay">
     <canvas id="confettiCanvas"></canvas>
     <div class="winner-card">
@@ -968,7 +913,6 @@
   </div>
 
   <script>
-    // Theme Presets List (Dark Theme is main default)
     const THEMES = [
       { id: '', name: 'Dark' },
       { id: 'theme-sakura', name: 'Sakura Blossom 🌸' },
@@ -980,7 +924,6 @@
     ];
     let currentThemeIndex = 0;
 
-    // Hardcoded Preset Card Layouts
     const PRESET_LAYOUTS = {
       CONOR: [
         { id: "1", text: "2", marked: false, target: false },
@@ -988,25 +931,21 @@
         { id: "3", text: "36", marked: false, target: false },
         { id: "4", text: "50", marked: false, target: false },
         { id: "5", text: "74", marked: false, target: false },
-
         { id: "6", text: "3", marked: false, target: false },
         { id: "7", text: "26", marked: false, target: false },
         { id: "8", text: "37", marked: false, target: false },
         { id: "9", text: "46", marked: false, target: false },
         { id: "10", text: "75", marked: false, target: false },
-
         { id: "11", text: "14", marked: false, target: false },
         { id: "12", text: "28", marked: false, target: false },
         { id: "13", text: "FREE", marked: true, target: false, free: true },
         { id: "14", text: "58", marked: false, target: false },
         { id: "15", text: "71", marked: false, target: false },
-
         { id: "16", text: "10", marked: false, target: false },
         { id: "17", text: "24", marked: false, target: false },
         { id: "18", text: "43", marked: false, target: false },
         { id: "19", text: "53", marked: false, target: false },
         { id: "20", text: "65", marked: false, target: false },
-
         { id: "21", text: "6", marked: false, target: false },
         { id: "22", text: "22", marked: false, target: false },
         { id: "23", text: "45", marked: false, target: false },
@@ -1015,10 +954,17 @@
       ]
     };
 
-    let currentMode = 'mark'; // 'mark' | 'target'
+    let currentMode = 'mark'; 
     let isEditingCard = false;
 
-    // Fade out preloader on load
+    // Interactive Mouse Coordinates for Red Theme
+    document.addEventListener('mousemove', (e) => {
+      if (document.body.classList.contains('theme-red')) {
+        document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
+        document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
+      }
+    });
+
     window.addEventListener('load', () => {
       setTimeout(() => {
         const preloader = document.getElementById('preloader');
@@ -1038,7 +984,6 @@
       loadFromLocalStorage();
     });
 
-    /* Theme Cycler Function */
     function cycleTheme() {
       currentThemeIndex = (currentThemeIndex + 1) % THEMES.length;
       applyTheme(THEMES[currentThemeIndex].id);
@@ -1048,22 +993,24 @@
       const themeObj = THEMES.find(t => t.id === themeId) || THEMES[0];
       currentThemeIndex = THEMES.indexOf(themeObj);
 
-      // Remove existing theme classes
       THEMES.forEach(t => { if (t.id) document.body.classList.remove(t.id); });
 
-      // Apply new theme class
       if (themeObj.id) {
         document.body.classList.add(themeObj.id);
+      }
+
+      // Default the mouse coordinates for the red theme in case mouse hasn't moved
+      if (themeObj.id === 'theme-red') {
+          document.body.style.setProperty('--mouse-x', `${window.innerWidth / 2}px`);
+          document.body.style.setProperty('--mouse-y', `${window.innerHeight / 2}px`);
       }
 
       document.getElementById('themeBtn').innerText = `🎨 Theme: ${themeObj.name}`;
       localStorage.setItem('bingoTheme', themeObj.id);
 
-      // Explicitly stop all dynamic background animations first
       stopSakura();
       stopRetro();
 
-      // Trigger animations only for explicit matching themes
       if (themeObj.id === 'theme-sakura') {
         startSakura();
       } else if (themeObj.id === 'theme-retro') {
@@ -1071,7 +1018,6 @@
       }
     }
 
-    /* Renders Grid Cells dynamically from state */
     function renderGrid(cellDataArray) {
       const gridContainer = document.getElementById('bingoGrid');
       gridContainer.innerHTML = '';
@@ -1089,10 +1035,8 @@
 
         cell.innerText = item.text;
 
-        // Interaction Handlers
         cell.addEventListener('click', (e) => {
           if (isEditingCard) return;
-
           if (currentMode === 'mark') {
             cell.classList.toggle('marked');
           } else {
@@ -1114,11 +1058,9 @@
       });
     }
 
-    /* Load Preset Hardcoded Layout */
     function loadPresetLayout(key) {
       if (!PRESET_LAYOUTS[key]) return;
-
-      if (isEditingCard) toggleEditCard(); // Close edit mode if open
+      if (isEditingCard) toggleEditCard(); 
 
       const cleanPreset = PRESET_LAYOUTS[key].map(cell => ({
         ...cell,
@@ -1135,7 +1077,6 @@
       }, 1000);
     }
 
-    /* Toggle Editing State */
     function toggleEditCard() {
       const btn = document.getElementById('toggleEditBtn');
       const bingoCard = document.getElementById('bingoCardElement');
@@ -1445,7 +1386,6 @@
       }
     }
 
-    /* Sakura Petals Animation System */
     let sakuraCanvas, sakuraCtx;
     let sakuraPetals = [];
     let sakuraAnimationId = null;
@@ -1543,7 +1483,6 @@
       }
     }
 
-    /* Arizona Vaporwave System & Animations */
     let retroCanvas, retroCtx;
     let retroAnimationId = null;
     let vaporwavePetals = [];
