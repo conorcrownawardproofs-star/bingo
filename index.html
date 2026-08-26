@@ -758,6 +758,39 @@
       border-color: rgba(61, 64, 91, 0.2);
     }
 
+    /* ============ Times Square Rain: neon on wet asphalt ============ */
+    body.theme-timessquare {
+      --tune-accent: #ff3c6e;
+      --bg-gradient:
+        radial-gradient(ellipse at 50% 62%, rgba(255, 120, 90, 0.22) 0%, transparent 58%),
+        linear-gradient(180deg, #0a0a14 0%, #191428 45%, #2a1a2e 72%, #08080e 100%);
+      --card-bg: linear-gradient(148deg, rgba(28, 22, 46, 0.86) 0%, rgba(12, 10, 22, 0.9) 55%, rgba(40, 18, 40, 0.86) 100%);
+      --card-shadow-color: rgba(255, 60, 110, 0.5);
+      --btn-layouts: linear-gradient(135deg, #46beff 0%, #14496e 100%);
+      --btn-select: linear-gradient(135deg, #ff3c6e 0%, #8c1236 100%);
+      --btn-mode: linear-gradient(135deg, #3a3450 0%, #17141f 100%);
+      --btn-mode-active: linear-gradient(135deg, #ffc83c 0%, #b06a12 100%);
+      --btn-edit: linear-gradient(135deg, #be6eff 0%, #5b2a8f 100%);
+      --btn-edit-active: linear-gradient(135deg, #e0b0ff 0%, #8b45cc 100%);
+      --btn-export: linear-gradient(135deg, #1f7ba8 0%, #0c3550 100%);
+      --btn-import: linear-gradient(135deg, #ffe9b0 0%, #e8b44a 100%);
+      --btn-import-text: #2a1a08;
+      --btn-clear: linear-gradient(135deg, #4a4558 0%, #201d2a 100%);
+      --btn-bright: linear-gradient(135deg, #50ebaa 0%, #14795a 100%);
+      --btn-reset: linear-gradient(135deg, #ff5a3c 0%, #8c1f0c 100%);
+      --btn-victory: linear-gradient(135deg, #ffb02e 0%, #a3490a 100%);
+      --btn-active-glow: rgba(255, 60, 110, 0.8);
+      --btn-active-text: #ffffff;
+    }
+    body.theme-timessquare .header {
+      text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 14px rgba(255, 60, 110, 0.8),
+        0 0 28px rgba(70, 190, 255, 0.45);
+    }
+    body.theme-timessquare .top-date { color: rgba(255, 220, 200, 0.75); }
+    body.theme-timessquare .bottom-credit { color: rgba(255, 210, 190, 0.55); }
+
     /* Background Animation Canvas Element */
     .bg-canvas {
       position: fixed;
@@ -786,6 +819,7 @@
     body.theme-ocean #oceanCanvas { display: block; }
     body.theme-greenhouse #greenhouseCanvas { display: block; }
     body.theme-origami #origamiCanvas { display: block; }
+    body.theme-timessquare #timesSquareCanvas { display: block; }
 
     /* Vaporwave Custom CSS */
     #vaporwaveBg .svg-defs {
@@ -1380,6 +1414,12 @@
     .tt-ocean .tt-veil   { background: linear-gradient(180deg, #7cc3e8 0%, #1d6fa5 40%, #04263f 100%); }
     .tt-leaf .tt-veil    { background: linear-gradient(180deg, #eaf5e6 0%, #a9c9a0 100%); }
     .tt-leaf .tt-streak  { background-image: linear-gradient(100deg, transparent 40%, rgba(255, 250, 214, 0.85) 50%, transparent 60%); }
+    .tt-neon .tt-veil    { background: linear-gradient(180deg, #0a0a14 0%, #3a1c3c 55%, #08080e 100%); }
+    .tt-neon .tt-streak  {
+      background-image:
+        repeating-linear-gradient(101deg, rgba(198, 216, 245, 0.3) 0px, rgba(198, 216, 245, 0.3) 1px, transparent 1px, transparent 9px),
+        linear-gradient(100deg, transparent 38%, rgba(255, 60, 110, 0.5) 47%, rgba(70, 190, 255, 0.45) 54%, transparent 64%);
+    }
     .tt-fold .tt-veil    { background: linear-gradient(135deg, #fdfaf3 0%, #e8dfc9 100%); }
     .tt-fold .tt-streak  { background-image: linear-gradient(135deg, transparent 46%, rgba(120, 110, 90, 0.35) 49.8%, rgba(255, 255, 255, 0.95) 50.2%, transparent 55%); }
 
@@ -2116,6 +2156,7 @@
   <canvas id="oceanCanvas" class="bg-canvas"></canvas>
   <canvas id="greenhouseCanvas" class="bg-canvas"></canvas>
   <canvas id="origamiCanvas" class="bg-canvas"></canvas>
+  <canvas id="timesSquareCanvas" class="bg-canvas"></canvas>
   <canvas id="blueCanvas" class="bg-canvas"></canvas>
 
   <!-- Arizona Vaporwave Background -->
@@ -2299,6 +2340,7 @@
     <option value="theme-ocean">Open Ocean</option>
     <option value="theme-greenhouse">Greenhouse</option>
     <option value="theme-origami">Paper Cranes</option>
+    <option value="theme-timessquare">Times Square Rain</option>
   </select>
 
   <div class="app-container">
@@ -2413,7 +2455,8 @@
       { id: 'theme-backrooms', name: 'The Backrooms' },
       { id: 'theme-ocean', name: 'Open Ocean' },
       { id: 'theme-greenhouse', name: 'Greenhouse' },
-      { id: 'theme-origami', name: 'Paper Cranes' }
+      { id: 'theme-origami', name: 'Paper Cranes' },
+      { id: 'theme-timessquare', name: 'Times Square Rain' }
     ];
     const DEFAULT_THEME = 'theme-basic';
     let currentThemeIndex = 0;
@@ -2438,7 +2481,8 @@
       'theme-backrooms': { cls: 'tt-back', glyphs: [],                mode: 'rise' },
       'theme-ocean':  { cls: 'tt-ocean',  glyphs: ['🫧', '🐟', '🦈'], mode: 'rise' },
       'theme-greenhouse': { cls: 'tt-leaf', glyphs: ['🌵', '🦋', '🪴'], mode: 'rise' },
-      'theme-origami': { cls: 'tt-fold', glyphs: ['🕊️', '⛰️', '☀️'], mode: 'fall' }
+      'theme-origami': { cls: 'tt-fold', glyphs: ['🕊️', '⛰️', '☀️'], mode: 'fall' },
+      'theme-timessquare': { cls: 'tt-neon', glyphs: ['🌧️', '🗽', '☂️'], mode: 'fall' }
     };
 
     const TT_DURATION = 800;  // must match --tt-dur in the CSS
@@ -4111,15 +4155,6 @@
           size: Math.random() * 3 + 14, dir: 1, wob: Math.random() * Math.PI * 2
         })),
 
-        // Zebra danios: restless top-water sprinters that patrol wall to wall
-        danios: Array.from({ length: 6 }, () => ({
-          x: Math.random() * w, y: h * (0.17 + Math.random() * 0.14),
-          dir: Math.random() < 0.5 ? -1 : 1,
-          speed: Math.random() * 0.7 + 1.15, size: Math.random() * 2.5 + 15,
-          wob: Math.random() * Math.PI * 2,
-          dash: 0, dashTimer: Math.random() * 500 + 200
-        })),
-
         // A dwarf gourami, unbothered, trailing its two feelers
         gourami: {
           x: w * 0.55, y: h * 0.42, dir: -1, speed: 0.26, size: 40,
@@ -4588,57 +4623,6 @@
         ctx.fillStyle = '#10151a';
         ctx.beginPath();
         ctx.arc(L * 0.32, -L * 0.04, L * 0.06, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // Zebra danios — twitchy top-water sprinters, wall to wall
-      for (const d of s.danios) {
-        d.dashTimer -= 16;
-        if (d.dashTimer <= 0) {                    // sudden bursts of speed
-          d.dash = Math.random() * 260 + 120;
-          d.dashTimer = Math.random() * 1600 + 700;
-        }
-        if (d.dash > 0) d.dash -= 16;
-        const boost = d.dash > 0 ? 2.1 : 1;
-        d.x += d.speed * d.dir * boost;
-        d.wob += d.dash > 0 ? 0.42 : 0.26;
-        if (d.x > w + 40) { d.x = w + 40; d.dir = -1; }
-        if (d.x < -40) { d.x = -40; d.dir = 1; }
-
-        const L = d.size;
-        const yy = d.y + Math.sin(d.wob * 0.5) * 2.5;
-        ctx.save();
-        ctx.translate(d.x, yy);
-        ctx.scale(d.dir, 1);
-        ctx.fillStyle = '#c8d2d6';                 // slim silver torpedo
-        ctx.beginPath();
-        ctx.ellipse(0, 0, L * 0.5, L * 0.17, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.save();                                // the horizontal zebra stripes
-        ctx.beginPath();
-        ctx.ellipse(0, 0, L * 0.5, L * 0.17, 0, 0, Math.PI * 2);
-        ctx.clip();
-        ctx.strokeStyle = 'rgba(52, 92, 130, 0.85)';
-        ctx.lineWidth = L * 0.045;
-        for (let i = -2; i <= 2; i++) {
-          ctx.beginPath();
-          ctx.moveTo(-L * 0.5, i * L * 0.062);
-          ctx.lineTo(L * 0.5, i * L * 0.062 + L * 0.02);
-          ctx.stroke();
-        }
-        ctx.restore();
-        ctx.fillStyle = 'rgba(228, 238, 243, 0.7)';
-        ctx.beginPath();                           // tail, beating hard on a dash
-        const tf = Math.sin(d.wob) * L * 0.1;
-        ctx.moveTo(-L * 0.46, 0);
-        ctx.lineTo(-L * 0.72, -L * 0.16 + tf);
-        ctx.lineTo(-L * 0.72, L * 0.16 + tf);
-        ctx.closePath();
-        ctx.fill();
-        ctx.fillStyle = '#10151a';
-        ctx.beginPath();
-        ctx.arc(L * 0.36, -L * 0.025, L * 0.05, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }
@@ -7828,6 +7812,934 @@
       }
     }
 
+    /* ============================================================
+       Times Square Rain — a rainy night on the island of Broadway.
+       Two building facades rake away toward a vanishing point, every
+       one of them wearing a live billboard: scrolling zipper tickers,
+       LED walls, chasing marquee bulbs, cycling video ads. Everything
+       that emits light registers itself as an emitter, and the wet
+       asphalt smears all of it back up at the camera in wobbling
+       vertical columns — that reflection pass is what actually sells
+       "rain" more than the raindrops do. On top: taxis running the
+       avenue in true perspective, umbrellas bobbing along both
+       sidewalks, steam off a manhole, and four depth-layers of rain.
+       ============================================================ */
+
+    function tsOffscreen(W, H) {
+      const c = document.createElement('canvas');
+      c.width = Math.max(2, Math.round(W));
+      c.height = Math.max(2, Math.round(H));
+      return c;
+    }
+
+    function tsRoundRect(ctx, x, y, w, h, r) {
+      if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); return; }
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    /* Paint an offscreen billboard onto a trapezoid by slicing it into
+       vertical strips — cheap true perspective, no matrix math, and the
+       content renderer never has to know it's being foreshortened. */
+    function tsDrawTrapezoid(ctx, img, xL, tL, bL, xR, tR, bR, strips) {
+      const n = strips || 26;
+      const sw = img.width / n;
+      for (let i = 0; i < n; i++) {
+        const u0 = i / n, u1 = (i + 1) / n;
+        const dx0 = xL + (xR - xL) * u0;
+        const dx1 = xL + (xR - xL) * u1;
+        const t0 = tL + (tR - tL) * u0;
+        const b0 = bL + (bR - bL) * u0;
+        const dh = b0 - t0;
+        if (dh <= 0) continue;
+        ctx.drawImage(img, i * sw, 0, sw + 0.6, img.height,
+                      dx0, t0, (dx1 - dx0) + 0.8, dh);
+      }
+    }
+
+    /* ---- Billboard content renderers ----
+       Each fills its own offscreen canvas in its own pixel space. They
+       return a dominant colour so the street reflection knows what to
+       smear. Text is deliberately about Conor's Friday game rather than
+       real Broadway advertisers. */
+
+    const TS_TICKER_LINES = [
+      'BINGO NIGHT \u2605 FRIDAY 4:00 PM \u2605 BREAK ROOM ',
+      'FIVE IN A ROW WINS \u2605 FREE SPACE IS FREE \u2605 ',
+      'TONIGHT ONLY \u2605 DAUB RESPONSIBLY \u2605 GOOD LUCK \u2605 '
+    ];
+
+    function tsRenderTicker(c, t, b) {
+      const x = c.getContext('2d'), W = c.width, H = c.height;
+      x.fillStyle = '#07070a';
+      x.fillRect(0, 0, W, H);
+      const fs = Math.floor(H * 0.52);
+      x.font = 'bold ' + fs + 'px "Courier New", monospace';
+      x.textBaseline = 'middle';
+      const line = TS_TICKER_LINES[b.seed % TS_TICKER_LINES.length];
+      const tw = x.measureText(line).width || W;
+      const off = (t * 0.06 * b.spd) % tw;
+      x.fillStyle = '#ffb02e';
+      x.shadowColor = '#ff9500';
+      x.shadowBlur = fs * 0.5;
+      for (let k = -1; k < Math.ceil(W / tw) + 1; k++) {
+        x.fillText(line, k * tw - off, H * 0.5);
+      }
+      x.shadowBlur = 0;
+      // the dot-matrix grille the zipper is actually made of
+      x.fillStyle = 'rgba(0, 0, 0, 0.35)';
+      for (let gy = 0; gy < H; gy += 3) x.fillRect(0, gy, W, 1);
+      for (let gx = 0; gx < W; gx += 3) x.fillRect(gx, 0, 1, H);
+      return '255, 176, 46';
+    }
+
+    function tsRenderLedWall(c, t, b) {
+      const x = c.getContext('2d'), W = c.width, H = c.height;
+      x.fillStyle = '#08070d';
+      x.fillRect(0, 0, W, H);
+      const cell = Math.max(4, Math.round(H / 14));
+      const cols = Math.ceil(W / cell), rows = Math.ceil(H / cell);
+      const hueBase = b.hue;
+      for (let r = 0; r < rows; r++) {
+        for (let cIdx = 0; cIdx < cols; cIdx++) {
+          // a travelling wave plus a per-cell shimmer
+          const wave = Math.sin((cIdx * 0.4) - (t * 0.003 * b.spd) + r * 0.25 + b.seed);
+          const sh = Math.sin(t * 0.01 + cIdx * 7.3 + r * 3.1) * 0.15;
+          const v = Math.max(0, wave * 0.5 + 0.5 + sh);
+          const hue = (hueBase + wave * 40 + r * 3) % 360;
+          x.fillStyle = 'hsl(' + hue + ', 95%, ' + (12 + v * 52) + '%)';
+          x.fillRect(cIdx * cell, r * cell, cell - 1, cell - 1);
+        }
+      }
+      return b.rgb;
+    }
+
+    function tsRenderMarquee(c, t, b) {
+      const x = c.getContext('2d'), W = c.width, H = c.height;
+      const g = x.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, '#2a0b16');
+      g.addColorStop(1, '#12040a');
+      x.fillStyle = g;
+      x.fillRect(0, 0, W, H);
+      // inner panel
+      x.fillStyle = 'rgba(255, 60, 110, 0.14)';
+      x.fillRect(W * 0.1, H * 0.16, W * 0.8, H * 0.68);
+      const fs = Math.floor(H * 0.3);
+      x.font = 'bold ' + fs + 'px "Arial Black", Impact, sans-serif';
+      x.textAlign = 'center';
+      x.textBaseline = 'middle';
+      const pulse = 0.72 + 0.28 * Math.sin(t * 0.004 + b.seed);
+      x.fillStyle = 'rgba(255, 235, 245, ' + pulse + ')';
+      x.shadowColor = '#ff2d78';
+      x.shadowBlur = fs * 0.8;
+      x.fillText('BINGO', W * 0.5, H * 0.42);
+      x.font = 'bold ' + Math.floor(fs * 0.42) + 'px Arial, sans-serif';
+      x.fillText('TONIGHT', W * 0.5, H * 0.68);
+      x.shadowBlur = 0;
+      x.textAlign = 'left';
+      // chasing bulbs around the border
+      const step = Math.max(9, Math.round(H * 0.16));
+      const per = [];
+      for (let px = 0; px < W; px += step) per.push([px, 3]);
+      for (let py = 3; py < H; py += step) per.push([W - 3, py]);
+      for (let px = W; px > 0; px -= step) per.push([px, H - 3]);
+      for (let py = H; py > 0; py -= step) per.push([3, py]);
+      const phase = Math.floor(t * 0.008 * b.spd);
+      per.forEach((p, i) => {
+        const on = (i + phase) % 3 === 0;
+        x.fillStyle = on ? '#fff3c4' : 'rgba(120, 90, 60, 0.5)';
+        if (on) { x.shadowColor = '#ffcf5c'; x.shadowBlur = 8; }
+        x.beginPath();
+        x.arc(p[0], p[1], on ? 2.6 : 1.7, 0, Math.PI * 2);
+        x.fill();
+        x.shadowBlur = 0;
+      });
+      return '255, 90, 140';
+    }
+
+    function tsRenderVideoAd(c, t, b) {
+      const x = c.getContext('2d'), W = c.width, H = c.height;
+      const SCENE = 4600;
+      const idx = Math.floor(t / SCENE + b.seed) % 3;
+      const local = (t + b.seed * SCENE) % SCENE;
+      x.fillStyle = '#050509';
+      x.fillRect(0, 0, W, H);
+      if (idx === 0) {                       // scrolling colour bands
+        const bands = 7;
+        for (let i = 0; i < bands; i++) {
+          const yy = ((i / bands) * H + (t * 0.03 * b.spd) % H) % H;
+          const hue = (b.hue + i * 26) % 360;
+          x.fillStyle = 'hsl(' + hue + ', 90%, 52%)';
+          x.fillRect(0, yy - H / bands * 0.5, W, H / bands * 0.62);
+        }
+      } else if (idx === 1) {                // concentric pulse rings
+        const cx2 = W * 0.5, cy2 = H * 0.5;
+        for (let i = 6; i >= 0; i--) {
+          const rr = ((t * 0.05 * b.spd + i * 30) % 160) / 160;
+          x.strokeStyle = 'hsla(' + ((b.hue + i * 18) % 360) + ', 95%, 60%, ' + (1 - rr) + ')';
+          x.lineWidth = Math.max(2, H * 0.05);
+          x.beginPath();
+          x.ellipse(cx2, cy2, rr * W * 0.62, rr * H * 0.62, 0, 0, Math.PI * 2);
+          x.stroke();
+        }
+      } else {                               // big sweeping chevrons
+        x.save();
+        x.translate(-(t * 0.05 * b.spd) % (W * 0.4), 0);
+        for (let i = 0; i < 8; i++) {
+          x.fillStyle = 'hsl(' + ((b.hue + i * 14) % 360) + ', 88%, ' + (34 + (i % 2) * 24) + '%)';
+          x.beginPath();
+          const bx = i * W * 0.2;
+          x.moveTo(bx, 0); x.lineTo(bx + W * 0.1, 0);
+          x.lineTo(bx + W * 0.2, H); x.lineTo(bx + W * 0.1, H);
+          x.closePath(); x.fill();
+        }
+        x.restore();
+      }
+      // quick white wipe as one spot hands off to the next
+      if (local < 260) {
+        x.fillStyle = 'rgba(255, 255, 255, ' + (1 - local / 260) * 0.85 + ')';
+        x.fillRect(0, 0, W, H);
+      }
+      // screen scanlines + a faint vignette
+      x.fillStyle = 'rgba(0, 0, 0, 0.18)';
+      for (let gy = 0; gy < H; gy += 3) x.fillRect(0, gy, W, 1);
+      return b.rgb;
+    }
+
+    function tsRenderNeonScript(c, t, b) {
+      const x = c.getContext('2d'), W = c.width, H = c.height;
+      x.fillStyle = '#0a0710';
+      x.fillRect(0, 0, W, H);
+      const flick = (Math.sin(t * 0.05 + b.seed) > 0.93 && Math.sin(t * 0.31) > 0) ? 0.35 : 1;
+      const glow = (0.75 + 0.25 * Math.sin(t * 0.003 + b.seed)) * flick;
+      x.strokeStyle = 'rgba(' + b.rgb + ', ' + glow + ')';
+      x.shadowColor = 'rgb(' + b.rgb + ')';
+      x.shadowBlur = H * 0.3;
+      x.lineWidth = Math.max(2.5, H * 0.075);
+      x.lineCap = 'round';
+      x.lineJoin = 'round';
+      // a looping neon squiggle — reads as script lettering at this size
+      x.beginPath();
+      const segs = 60;
+      for (let i = 0; i <= segs; i++) {
+        const u = i / segs;
+        const px = W * (0.08 + u * 0.84);
+        const py = H * (0.5 + 0.3 * Math.sin(u * Math.PI * 3.2 + b.seed));
+        if (i === 0) x.moveTo(px, py); else x.lineTo(px, py);
+      }
+      x.stroke();
+      // the tube's hot white core
+      x.strokeStyle = 'rgba(255, 255, 255, ' + (0.55 * glow) + ')';
+      x.shadowBlur = H * 0.12;
+      x.lineWidth = Math.max(1, H * 0.026);
+      x.stroke();
+      x.shadowBlur = 0;
+      return b.rgb;
+    }
+
+    const TS_RENDERERS = {
+      ticker: tsRenderTicker,
+      led: tsRenderLedWall,
+      marquee: tsRenderMarquee,
+      video: tsRenderVideoAd,
+      neon: tsRenderNeonScript
+    };
+
+    function buildTimesSquare(canvas) {
+      const w = canvas.width, h = canvas.height;
+      const rnd = (a, b) => a + Math.random() * (b - a);
+      const streetY = h * 0.60;          // where facades meet asphalt
+      const vpX = w * 0.5, vpY = h * 0.53;
+
+      // Facades rake back toward the vanishing point. u=0 is nearest the
+      // camera (tall, off the top of frame), u=1 is deepest.
+      const left = { nearX: -w * 0.04, farX: w * 0.355, nearTop: -h * 0.24,
+                     nearBot: h * 0.95, farTop: h * 0.145, farBot: streetY - 1, side: -1 };
+      const right = { nearX: w * 1.04, farX: w * 0.645, nearTop: -h * 0.24,
+                      nearBot: h * 0.95, farTop: h * 0.145, farBot: streetY - 1, side: 1 };
+
+      const kinds = ['video', 'ticker', 'led', 'marquee', 'neon'];
+      const palettes = [
+        { hue: 350, rgb: '255, 60, 110' }, { hue: 200, rgb: '70, 190, 255' },
+        { hue: 45,  rgb: '255, 200, 60' }, { hue: 280, rgb: '190, 110, 255' },
+        { hue: 150, rgb: '80, 235, 170' }, { hue: 15,  rgb: '255, 120, 60' }
+      ];
+
+      let seedCount = 0;
+      const mk = (face, ua, ub, va, vb, kind, pIdx, res) => {
+        const p = palettes[pIdx % palettes.length];
+        const b = {
+          face, ua, ub, va, vb, kind,
+          hue: p.hue, rgb: p.rgb,
+          seed: seedCount++, spd: rnd(0.7, 1.5),
+          canvas: tsOffscreen(res[0], res[1])
+        };
+        return b;
+      };
+
+      // Left facade stack — nearest board is the huge one, then they
+      // shrink and multiply as the wall recedes.
+      const boards = [
+        mk(left, 0.02, 0.30, 0.10, 0.44, 'video',   0, [230, 150]),
+        mk(left, 0.02, 0.30, 0.50, 0.60, 'ticker',  2, [300, 34]),
+        mk(left, 0.33, 0.55, 0.14, 0.40, 'led',     1, [190, 130]),
+        mk(left, 0.33, 0.55, 0.46, 0.66, 'neon',    3, [190, 80]),
+        mk(left, 0.58, 0.76, 0.18, 0.46, 'marquee', 0, [150, 110]),
+        mk(left, 0.79, 0.95, 0.20, 0.44, 'video',   4, [120, 90]),
+
+        mk(right, 0.02, 0.28, 0.08, 0.40, 'led',     3, [230, 160]),
+        mk(right, 0.02, 0.28, 0.46, 0.56, 'ticker',  5, [300, 34]),
+        mk(right, 0.31, 0.52, 0.12, 0.34, 'video',   1, [190, 120]),
+        mk(right, 0.31, 0.52, 0.40, 0.62, 'marquee', 0, [190, 130]),
+        mk(right, 0.55, 0.74, 0.16, 0.42, 'neon',    4, [160, 90]),
+        mk(right, 0.77, 0.94, 0.18, 0.46, 'led',     2, [120, 90])
+      ];
+
+      // Flat billboards on the buildings that close off the far end
+      const farBoards = [
+        { x: w * 0.365, y: h * 0.20, w: w * 0.12, h: h * 0.16, kind: 'video',
+          hue: 200, rgb: '70, 190, 255', seed: 40, spd: 1.1, canvas: tsOffscreen(130, 100) },
+        { x: w * 0.50, y: h * 0.17, w: w * 0.13, h: h * 0.20, kind: 'led',
+          hue: 350, rgb: '255, 60, 110', seed: 41, spd: 0.9, canvas: tsOffscreen(140, 120) },
+        { x: w * 0.365, y: h * 0.38, w: w * 0.265, h: h * 0.035, kind: 'ticker',
+          hue: 45, rgb: '255, 200, 60', seed: 42, spd: 1.3, canvas: tsOffscreen(320, 30) },
+        { x: w * 0.40, y: h * 0.43, w: w * 0.085, h: h * 0.10, kind: 'neon',
+          hue: 150, rgb: '80, 235, 170', seed: 43, spd: 1.0, canvas: tsOffscreen(100, 70) },
+        { x: w * 0.515, y: h * 0.43, w: w * 0.095, h: h * 0.10, kind: 'marquee',
+          hue: 280, rgb: '190, 110, 255', seed: 44, spd: 1.2, canvas: tsOffscreen(110, 80) }
+      ];
+
+      // Unlit window grid on the upper facades, a few flickering awake
+      const windows = [];
+      for (let i = 0; i < 90; i++) {
+        windows.push({
+          u: Math.random(), v: rnd(0.02, 0.12),
+          face: Math.random() < 0.5 ? left : right,
+          lit: Math.random() < 0.42, ph: rnd(0, 6.28), warm: Math.random() < 0.7
+        });
+      }
+
+      // Rain in four depth layers: far drizzle to near streaks
+      const rainLayers = [];
+      const layerCfg = [
+        { n: 150, spd: 7,  len: 9,  a: 0.13, wob: 0.6 },
+        { n: 110, spd: 11, len: 15, a: 0.2,  wob: 0.9 },
+        { n: 70,  spd: 16, len: 26, a: 0.28, wob: 1.3 },
+        { n: 34,  spd: 24, len: 42, a: 0.34, wob: 1.8 }
+      ];
+      for (const cfg of layerCfg) {
+        const drops = [];
+        for (let i = 0; i < cfg.n; i++) {
+          drops.push({ x: Math.random() * (w + 200) - 100, y: Math.random() * h,
+                       s: rnd(0.75, 1.25) });
+        }
+        rainLayers.push({ cfg, drops });
+      }
+
+      const taxis = [];
+      for (let i = 0; i < 5; i++) {
+        taxis.push({
+          d: Math.random(),                       // 0 = at the vanishing point
+          lane: i % 2 === 0 ? -1 : 1,             // -1 approaches, +1 recedes
+          laneOff: (i % 2 === 0 ? -1 : 1) * rnd(0.1, 0.22),
+          spd: rnd(0.00019, 0.00034),
+          kind: Math.random() < 0.72 ? 'taxi' : 'car',
+          hue: rnd(0, 360)
+        });
+      }
+
+      const walkers = [];
+      for (let i = 0; i < 16; i++) {
+        walkers.push({
+          d: Math.random(), side: i % 2 === 0 ? -1 : 1,
+          off: rnd(0.22, 0.38),
+          spd: rnd(0.00011, 0.00023) * (Math.random() < 0.5 ? -1 : 1),
+          umb: ['#c9303e', '#1f4d8f', '#2b2b33', '#3f7d4f', '#7a3f8f', '#c8a03a'][i % 6],
+          coat: ['#1c1c22', '#2a2530', '#14202e', '#2e2018'][i % 4],
+          bob: rnd(0, 6.28), hasUmb: Math.random() < 0.82
+        });
+      }
+
+      const puddles = [];
+      for (let i = 0; i < 7; i++) {
+        puddles.push({
+          d: rnd(0.25, 1), off: rnd(-0.45, 0.45),
+          rx: rnd(0.05, 0.13), rings: [],
+          nextRing: rnd(0, 900)
+        });
+      }
+
+      const splashes = [];
+
+      return {
+        w, h, streetY, vpX, vpY, left, right,
+        boards, farBoards, windows, rainLayers, taxis, walkers, puddles, splashes,
+        emitters: [],
+        steam: Array.from({ length: 14 }, () => ({
+          p: Math.random(), sway: rnd(0, 6.28), sc: rnd(0.7, 1.4)
+        })),
+        light: { phase: 0, timer: 0 },
+        epoch: null
+      };
+    }
+
+    /* Position along a facade: u runs near->far, v runs top->bottom. */
+    function tsFacadePt(f, u, v) {
+      const x = f.nearX + (f.farX - f.nearX) * u;
+      const top = f.nearTop + (f.farTop - f.nearTop) * u;
+      const bot = f.nearBot + (f.farBot - f.nearBot) * u;
+      return { x, y: top + (bot - top) * v, top, bot };
+    }
+
+    /* Road perspective: d=0 at the vanishing point, d=1 at the camera. */
+    function tsRoad(s, d, off) {
+      const p = Math.pow(d, 1.7);
+      const y = s.vpY + (s.h * 1.02 - s.vpY) * p;
+      const spread = 0.04 + p * 1.5;
+      return { x: s.vpX + off * s.w * spread, y, sc: 0.06 + p * 1.25 };
+    }
+
+    function drawTimesSquare(ctx, canvas, s, t) {
+      const w = canvas.width, h = canvas.height;
+      const { streetY, vpX, vpY } = s;
+      if (s.epoch === null) s.epoch = t;
+      s.emitters.length = 0;
+      const emit = (x, y, wd, rgb, a) => s.emitters.push({ x, y, w: wd, rgb, a });
+
+      /* ---------- sky: low cloud lit orange from beneath by the signs ---------- */
+      const sky = ctx.createLinearGradient(0, 0, 0, streetY);
+      sky.addColorStop(0, '#0a0a14');
+      sky.addColorStop(0.55, '#191428');
+      sky.addColorStop(0.86, '#3a2440');
+      sky.addColorStop(1, '#5c3348');
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, w, streetY);
+      // the sodium-orange glow bouncing off the overcast
+      const glow = ctx.createRadialGradient(vpX, streetY, 0, vpX, streetY, h * 0.7);
+      glow.addColorStop(0, 'rgba(255, 150, 90, 0.34)');
+      glow.addColorStop(0.45, 'rgba(200, 90, 120, 0.14)');
+      glow.addColorStop(1, 'rgba(120, 60, 140, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, w, streetY);
+      // torn cloud bellies drifting
+      for (let i = 0; i < 5; i++) {
+        const cy2 = h * (0.04 + i * 0.045);
+        const cx2 = ((t * 0.004 * (0.5 + i * 0.2)) + i * w * 0.4) % (w + 500) - 250;
+        ctx.fillStyle = 'rgba(70, 48, 78, ' + (0.3 - i * 0.04) + ')';
+        ctx.beginPath();
+        ctx.ellipse(cx2, cy2, w * 0.3, h * 0.035, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      /* ---------- far buildings closing off the avenue ---------- */
+      ctx.fillStyle = '#100d1c';
+      const farTops = [0.155, 0.115, 0.175, 0.135, 0.165];
+      for (let i = 0; i < 5; i++) {
+        const bx = w * (0.355 + i * 0.058);
+        ctx.fillRect(bx, h * farTops[i], w * 0.06, streetY - h * farTops[i]);
+      }
+      ctx.fillStyle = '#161228';
+      ctx.fillRect(w * 0.355, h * 0.19, w * 0.29, streetY - h * 0.19);
+
+      /* ---------- facade masonry ---------- */
+      for (const f of [s.left, s.right]) {
+        const a = tsFacadePt(f, 0, 0), b2 = tsFacadePt(f, 1, 0);
+        ctx.fillStyle = '#0d0b16';
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.top); ctx.lineTo(b2.x, b2.top);
+        ctx.lineTo(b2.x, b2.bot); ctx.lineTo(a.x, a.bot);
+        ctx.closePath();
+        ctx.fill();
+        // a rim of bounced light down the leading edge
+        const edge = ctx.createLinearGradient(a.x, 0, b2.x, 0);
+        edge.addColorStop(0, 'rgba(120, 80, 130, 0.16)');
+        edge.addColorStop(1, 'rgba(120, 80, 130, 0)');
+        ctx.fillStyle = edge;
+        ctx.fill();
+      }
+
+      /* ---------- apartment windows above the signage ---------- */
+      for (const win of s.windows) {
+        const p = tsFacadePt(win.face, win.u, win.v);
+        const depth = 1 - win.u;
+        const ww = Math.max(1.5, 7 * (0.35 + depth * 0.8));
+        const hh = ww * 1.4;
+        let on = win.lit;
+        if (Math.sin(t * 0.0004 + win.ph * 9) > 0.985) on = !on;
+        if (on) {
+          ctx.fillStyle = win.warm ? 'rgba(255, 208, 140, 0.75)' : 'rgba(180, 214, 255, 0.6)';
+        } else {
+          ctx.fillStyle = 'rgba(28, 26, 44, 0.9)';
+        }
+        ctx.fillRect(p.x - ww / 2, p.y, ww, hh);
+      }
+
+      /* ---------- rooftop water tower, because it's New York ---------- */
+      {
+        const p = tsFacadePt(s.left, 0.46, 0);
+        const sc = 0.55;
+        const bx = p.x, by = p.top;
+        ctx.fillStyle = '#0b0912';
+        ctx.beginPath();                       // legs
+        ctx.fillRect(bx - 16 * sc, by - 14 * sc, 4 * sc, 16 * sc);
+        ctx.fillRect(bx + 12 * sc, by - 14 * sc, 4 * sc, 16 * sc);
+        ctx.beginPath();                       // tank
+        ctx.moveTo(bx - 20 * sc, by - 14 * sc);
+        ctx.lineTo(bx + 20 * sc, by - 14 * sc);
+        ctx.lineTo(bx + 17 * sc, by - 52 * sc);
+        ctx.lineTo(bx - 17 * sc, by - 52 * sc);
+        ctx.closePath(); ctx.fill();
+        ctx.beginPath();                       // conical cap
+        ctx.moveTo(bx - 21 * sc, by - 52 * sc);
+        ctx.lineTo(bx + 21 * sc, by - 52 * sc);
+        ctx.lineTo(bx, by - 68 * sc);
+        ctx.closePath(); ctx.fill();
+        // aircraft warning light
+        const bl = Math.sin(t * 0.004) > 0.4 ? 1 : 0.1;
+        ctx.fillStyle = 'rgba(255, 60, 60, ' + bl + ')';
+        ctx.beginPath();
+        ctx.arc(bx, by - 70 * sc, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      /* ---------- the billboards ---------- */
+      for (const b of s.boards) {
+        const rgb = TS_RENDERERS[b.kind](b.canvas, t, b);
+        const L1 = tsFacadePt(b.face, b.ua, b.va), L2 = tsFacadePt(b.face, b.ua, b.vb);
+        const R1 = tsFacadePt(b.face, b.ub, b.va), R2 = tsFacadePt(b.face, b.ub, b.vb);
+        tsDrawTrapezoid(ctx, b.canvas, L1.x, L1.y, L2.y, R1.x, R1.y, R2.y);
+        // a soft bloom halo so the sign bleeds into the wet air
+        const mx = (L1.x + R1.x) / 2, my = (L1.y + L2.y) / 2;
+        const bw = Math.abs(R1.x - L1.x), bh = Math.abs(L2.y - L1.y);
+        const hg = ctx.createRadialGradient(mx, my, 0, mx, my, Math.max(bw, bh) * 0.95);
+        hg.addColorStop(0, 'rgba(' + rgb + ', 0.2)');
+        hg.addColorStop(1, 'rgba(' + rgb + ', 0)');
+        ctx.fillStyle = hg;
+        ctx.fillRect(mx - bw, my - bh, bw * 2, bh * 2.4);
+        emit(mx, L2.y, bw, rgb, 0.5);
+      }
+
+      for (const b of s.farBoards) {
+        const rgb = TS_RENDERERS[b.kind](b.canvas, t, b);
+        ctx.drawImage(b.canvas, b.x, b.y, b.w, b.h);
+        const hg = ctx.createRadialGradient(b.x + b.w / 2, b.y + b.h / 2, 0,
+                                            b.x + b.w / 2, b.y + b.h / 2, Math.max(b.w, b.h));
+        hg.addColorStop(0, 'rgba(' + rgb + ', 0.16)');
+        hg.addColorStop(1, 'rgba(' + rgb + ', 0)');
+        ctx.fillStyle = hg;
+        ctx.fillRect(b.x - b.w * 0.5, b.y - b.h * 0.5, b.w * 2, b.h * 2);
+        emit(b.x + b.w / 2, b.y + b.h, b.w, rgb, 0.34);
+      }
+
+      /* ---------- traffic signal on the near corner ---------- */
+      s.light.timer += 16;
+      if (s.light.timer > (s.light.phase === 1 ? 1500 : 5200)) {
+        s.light.timer = 0;
+        s.light.phase = (s.light.phase + 1) % 3;
+      }
+      {
+        const lx = w * 0.19, ly = streetY - h * 0.115;
+        ctx.fillStyle = '#0a0a0e';
+        ctx.fillRect(lx - 1.5, ly, 3, h * 0.115);
+        tsRoundRect(ctx, lx - 9, ly - 34, 18, 36, 3);
+        ctx.fill();
+        const cols = ['#ff3b30', '#ffcc00', '#34c759'];
+        for (let i = 0; i < 3; i++) {
+          const on = s.light.phase === i;
+          ctx.fillStyle = on ? cols[i] : 'rgba(40, 40, 48, 0.9)';
+          if (on) { ctx.shadowColor = cols[i]; ctx.shadowBlur = 14; }
+          ctx.beginPath();
+          ctx.arc(lx, ly - 27 + i * 11, 3.6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+        const lit = ['255, 59, 48', '255, 204, 0', '52, 199, 89'][s.light.phase];
+        emit(lx, streetY, 26, lit, 0.42);
+      }
+
+      /* ---------- street lamps ---------- */
+      for (let i = 0; i < 4; i++) {
+        const side = i % 2 === 0 ? -1 : 1;
+        const d = 0.30 + Math.floor(i / 2) * 0.34;
+        const p = tsRoad(s, d, side * 0.52);
+        const lh = h * 0.2 * p.sc * 1.6;
+        ctx.strokeStyle = '#0c0c12';
+        ctx.lineWidth = Math.max(1, 3 * p.sc);
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x, p.y - lh);
+        ctx.quadraticCurveTo(p.x, p.y - lh - 10 * p.sc, p.x - side * 14 * p.sc, p.y - lh - 10 * p.sc);
+        ctx.stroke();
+        const hx = p.x - side * 14 * p.sc, hy = p.y - lh - 8 * p.sc;
+        const lg = ctx.createRadialGradient(hx, hy, 0, hx, hy, 46 * p.sc);
+        lg.addColorStop(0, 'rgba(255, 214, 150, 0.55)');
+        lg.addColorStop(1, 'rgba(255, 214, 150, 0)');
+        ctx.fillStyle = lg;
+        ctx.beginPath();
+        ctx.arc(hx, hy, 46 * p.sc, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255, 236, 190, 0.95)';
+        ctx.beginPath();
+        ctx.ellipse(hx, hy, 4 * p.sc, 2.4 * p.sc, 0, 0, Math.PI * 2);
+        ctx.fill();
+        emit(hx, p.y, 30 * p.sc, '255, 214, 150', 0.3);
+      }
+
+      /* ---------- wet asphalt ---------- */
+      const road = ctx.createLinearGradient(0, streetY, 0, h);
+      road.addColorStop(0, '#141220');
+      road.addColorStop(0.35, '#0d0c15');
+      road.addColorStop(1, '#08080e');
+      ctx.fillStyle = road;
+      ctx.fillRect(0, streetY, w, h - streetY);
+
+      // sidewalks angling out from the vanishing point
+      ctx.fillStyle = '#16141f';
+      for (const side of [-1, 1]) {
+        ctx.beginPath();
+        ctx.moveTo(vpX + side * w * 0.02, vpY);
+        ctx.lineTo(vpX + side * w * 0.9, h);
+        ctx.lineTo(vpX + side * w * 1.6, h);
+        ctx.lineTo(vpX + side * w * 0.05, vpY);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // lane dashes running to the vanishing point
+      ctx.fillStyle = 'rgba(210, 200, 170, 0.16)';
+      for (let i = 0; i < 9; i++) {
+        const d0 = (i / 9 + ((t * 0.00006) % (1 / 9)));
+        const a = tsRoad(s, d0, 0), b3 = tsRoad(s, Math.min(1, d0 + 0.045), 0);
+        const wd = Math.max(1, 3 * a.sc);
+        ctx.beginPath();
+        ctx.moveTo(a.x - wd, a.y); ctx.lineTo(a.x + wd, a.y);
+        ctx.lineTo(b3.x + wd * 1.6, b3.y); ctx.lineTo(b3.x - wd * 1.6, b3.y);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // crosswalk bars near the camera
+      ctx.fillStyle = 'rgba(220, 214, 190, 0.13)';
+      for (let i = -5; i <= 5; i++) {
+        const a = tsRoad(s, 0.62, i * 0.09), b4 = tsRoad(s, 0.72, i * 0.09);
+        ctx.beginPath();
+        ctx.moveTo(a.x - 4 * a.sc, a.y); ctx.lineTo(a.x + 4 * a.sc, a.y);
+        ctx.lineTo(b4.x + 4 * b4.sc, b4.y); ctx.lineTo(b4.x - 4 * b4.sc, b4.y);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      /* ---------- the reflection pass: every emitter smeared downward ----------
+         Drawn as stacked horizontal bands whose x wanders with time, which
+         is what makes the asphalt read as rippling wet rather than glossy. */
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      for (const e of s.emitters) {
+        const depth = h - streetY;
+        const bands = 20;
+        for (let i = 0; i < bands; i++) {
+          const f = i / bands;
+          const yy = streetY + f * depth * 0.92;
+          const wob = Math.sin(t * 0.0022 + f * 7 + e.x * 0.01) * (5 + f * 26);
+          const wid = e.w * (0.55 + f * 0.9);
+          const a = e.a * (1 - f) * (1 - f) * 0.5;
+          if (a <= 0.004) continue;
+          ctx.fillStyle = 'rgba(' + e.rgb + ', ' + a + ')';
+          ctx.fillRect(e.x - wid / 2 + wob, yy, wid, depth / bands * 1.5);
+        }
+      }
+      ctx.restore();
+
+      /* ---------- puddles: standing water with rain rings ---------- */
+      for (const p of s.puddles) {
+        const pos = tsRoad(s, p.d, p.off);
+        const prx = p.rx * w * pos.sc, pry = prx * 0.22;
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(pos.x, pos.y, prx, pry, 0, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.fillStyle = 'rgba(30, 34, 58, 0.5)';
+        ctx.fillRect(pos.x - prx, pos.y - pry, prx * 2, pry * 2);
+        // the sky and signs sitting in the water
+        ctx.globalCompositeOperation = 'lighter';
+        for (const e of s.emitters) {
+          if (Math.abs(e.x - pos.x) > prx * 2.6) continue;
+          ctx.fillStyle = 'rgba(' + e.rgb + ', ' + (e.a * 0.24) + ')';
+          const wob = Math.sin(t * 0.003 + e.x) * prx * 0.12;
+          ctx.fillRect(e.x - prx * 0.3 + wob, pos.y - pry, prx * 0.6, pry * 2);
+        }
+        ctx.restore();
+        // expanding rings from drops landing in it
+        p.nextRing -= 16;
+        if (p.nextRing <= 0) {
+          p.rings.push({ r: 0, a: 1, ox: (Math.random() - 0.5) * prx * 1.2 });
+          p.nextRing = 220 + Math.random() * 420;
+        }
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(pos.x, pos.y, prx, pry, 0, 0, Math.PI * 2);
+        ctx.clip();
+        for (let i = p.rings.length - 1; i >= 0; i--) {
+          const r = p.rings[i];
+          r.r += 0.5; r.a -= 0.018;
+          if (r.a <= 0) { p.rings.splice(i, 1); continue; }
+          ctx.strokeStyle = 'rgba(190, 210, 255, ' + r.a * 0.5 + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.ellipse(pos.x + r.ox, pos.y, r.r * prx * 0.09, r.r * pry * 0.09, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+        // rim highlight
+        ctx.strokeStyle = 'rgba(150, 175, 230, 0.13)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.ellipse(pos.x, pos.y, prx, pry, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      /* ---------- steam venting off a manhole ---------- */
+      {
+        const mh = tsRoad(s, 0.44, -0.14);
+        ctx.fillStyle = 'rgba(10, 10, 16, 0.8)';
+        ctx.beginPath();
+        ctx.ellipse(mh.x, mh.y, 15 * mh.sc, 4.5 * mh.sc, 0, 0, Math.PI * 2);
+        ctx.fill();
+        for (const st of s.steam) {
+          st.p += 0.0022 * st.sc;
+          if (st.p > 1) { st.p = 0; st.sway = Math.random() * 6.28; }
+          const rise = st.p;
+          const sx = mh.x + Math.sin(t * 0.0012 + st.sway) * 26 * rise * st.sc;
+          const sy = mh.y - rise * h * 0.17 * st.sc;
+          const rad = (10 + rise * 40) * mh.sc * st.sc;
+          const a = (1 - rise) * 0.16;
+          const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, rad);
+          sg.addColorStop(0, 'rgba(226, 208, 226, ' + a + ')');
+          sg.addColorStop(1, 'rgba(200, 180, 210, 0)');
+          ctx.fillStyle = sg;
+          ctx.beginPath();
+          ctx.arc(sx, sy, rad, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      /* ---------- traffic ---------- */
+      s.taxis.sort((a, b5) => a.d - b5.d);      // far cars drawn first
+      for (const car of s.taxis) {
+        car.d += car.spd * (car.lane === -1 ? 1 : -1);
+        if (car.d > 1.12) car.d = 0.02;
+        if (car.d < 0.02) car.d = 1.12;
+        const p = tsRoad(s, car.d, car.laneOff);
+        const sc = p.sc;
+        if (sc < 0.05) continue;
+        const bw = 62 * sc, bh = 26 * sc;
+        const approaching = car.lane === -1;
+
+        // headlight wash thrown onto the wet road
+        if (approaching) {
+          const cg = ctx.createLinearGradient(p.x, p.y, p.x, p.y + 150 * sc);
+          cg.addColorStop(0, 'rgba(255, 238, 200, 0.3)');
+          cg.addColorStop(1, 'rgba(255, 238, 200, 0)');
+          ctx.fillStyle = cg;
+          ctx.beginPath();
+          ctx.moveTo(p.x - bw * 0.45, p.y);
+          ctx.lineTo(p.x + bw * 0.45, p.y);
+          ctx.lineTo(p.x + bw * 1.5, p.y + 150 * sc);
+          ctx.lineTo(p.x - bw * 1.5, p.y + 150 * sc);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        const body = car.kind === 'taxi' ? '#f2b829' : 'hsl(' + car.hue + ', 22%, 26%)';
+        ctx.fillStyle = body;
+        tsRoundRect(ctx, p.x - bw / 2, p.y - bh, bw, bh, 4 * sc);
+        ctx.fill();
+        ctx.fillStyle = car.kind === 'taxi' ? '#e0a81f' : 'hsl(' + car.hue + ', 20%, 20%)';
+        tsRoundRect(ctx, p.x - bw * 0.34, p.y - bh * 1.62, bw * 0.68, bh * 0.7, 3 * sc);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(120, 170, 210, 0.5)';   // glass
+        tsRoundRect(ctx, p.x - bw * 0.29, p.y - bh * 1.54, bw * 0.58, bh * 0.5, 2 * sc);
+        ctx.fill();
+        if (car.kind === 'taxi' && sc > 0.35) {        // roof light
+          ctx.fillStyle = '#fff0c0';
+          ctx.fillRect(p.x - bw * 0.1, p.y - bh * 1.85, bw * 0.2, bh * 0.22);
+        }
+        // wheels
+        ctx.fillStyle = '#0a0a0d';
+        ctx.beginPath();
+        ctx.ellipse(p.x - bw * 0.3, p.y, bw * 0.1, bh * 0.16, 0, 0, Math.PI * 2);
+        ctx.ellipse(p.x + bw * 0.3, p.y, bw * 0.1, bh * 0.16, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (approaching) {
+          ctx.fillStyle = 'rgba(255, 245, 214, 0.95)';
+          ctx.shadowColor = '#fff2c8'; ctx.shadowBlur = 16 * sc;
+          ctx.beginPath();
+          ctx.ellipse(p.x - bw * 0.33, p.y - bh * 0.42, 4 * sc, 3 * sc, 0, 0, Math.PI * 2);
+          ctx.ellipse(p.x + bw * 0.33, p.y - bh * 0.42, 4 * sc, 3 * sc, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          emit(p.x, p.y, bw * 1.2, '255, 240, 200', 0.3 * Math.min(1, sc));
+        } else {
+          ctx.fillStyle = 'rgba(255, 70, 60, 0.95)';
+          ctx.shadowColor = '#ff3b30'; ctx.shadowBlur = 14 * sc;
+          ctx.beginPath();
+          ctx.ellipse(p.x - bw * 0.34, p.y - bh * 0.5, 3.4 * sc, 2.6 * sc, 0, 0, Math.PI * 2);
+          ctx.ellipse(p.x + bw * 0.34, p.y - bh * 0.5, 3.4 * sc, 2.6 * sc, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          emit(p.x, p.y, bw, '255, 70, 60', 0.26 * Math.min(1, sc));
+        }
+        // spray kicked off the tyres
+        if (sc > 0.4) {
+          ctx.fillStyle = 'rgba(190, 200, 225, 0.1)';
+          for (let i = 0; i < 5; i++) {
+            const sxp = p.x + (Math.random() - 0.5) * bw * 1.1;
+            ctx.beginPath();
+            ctx.ellipse(sxp, p.y + Math.random() * 5 * sc, 5 * sc, 2 * sc, 0, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      }
+
+      /* ---------- pedestrians under umbrellas ---------- */
+      s.walkers.sort((a, b6) => a.d - b6.d);
+      for (const wk of s.walkers) {
+        wk.d += wk.spd;
+        if (wk.d > 1.1) wk.d = 0.05;
+        if (wk.d < 0.05) wk.d = 1.1;
+        const p = tsRoad(s, wk.d, wk.side * wk.off);
+        const sc = p.sc * 0.85;
+        if (sc < 0.05) continue;
+        wk.bob += 0.06 * (0.5 + sc);
+        const bobY = Math.abs(Math.sin(wk.bob)) * 2 * sc;
+        const px = p.x, py = p.y - bobY;
+        const bodyH = 52 * sc;
+
+        ctx.fillStyle = wk.coat;                    // coat + legs silhouette
+        tsRoundRect(ctx, px - 7 * sc, py - bodyH, 14 * sc, bodyH * 0.68, 4 * sc);
+        ctx.fill();
+        ctx.strokeStyle = wk.coat;
+        ctx.lineWidth = 4 * sc;
+        ctx.lineCap = 'round';
+        const stride = Math.sin(wk.bob) * 6 * sc;
+        ctx.beginPath();
+        ctx.moveTo(px - 2 * sc, py - bodyH * 0.34);
+        ctx.lineTo(px - 2 * sc + stride, py);
+        ctx.moveTo(px + 2 * sc, py - bodyH * 0.34);
+        ctx.lineTo(px + 2 * sc - stride, py);
+        ctx.stroke();
+        ctx.fillStyle = '#2b2530';                  // head
+        ctx.beginPath();
+        ctx.arc(px, py - bodyH - 4 * sc, 5 * sc, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (wk.hasUmb) {
+          const uy = py - bodyH - 16 * sc;
+          const ur = 20 * sc;
+          ctx.strokeStyle = '#1a1a20';
+          ctx.lineWidth = 1.6 * sc;
+          ctx.beginPath();
+          ctx.moveTo(px, uy);
+          ctx.lineTo(px, py - bodyH * 0.5);
+          ctx.stroke();
+          ctx.fillStyle = wk.umb;
+          ctx.beginPath();
+          ctx.moveTo(px - ur, uy);
+          ctx.quadraticCurveTo(px, uy - ur * 1.15, px + ur, uy);
+          // scalloped hem
+          for (let i = 4; i >= 0; i--) {
+            const ux = px - ur + (ur * 2) * (i / 5);
+            ctx.quadraticCurveTo(ux + ur * 0.1, uy + 4 * sc, ux, uy);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';  // sheen off the wet canopy
+          ctx.beginPath();
+          ctx.moveTo(px - ur * 0.6, uy - ur * 0.25);
+          ctx.quadraticCurveTo(px - ur * 0.2, uy - ur * 0.9, px + ur * 0.1, uy - ur * 0.3);
+          ctx.closePath();
+          ctx.fill();
+          // rain sliding off the rim
+          if (sc > 0.45) {
+            ctx.strokeStyle = 'rgba(190, 210, 245, 0.3)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 3; i++) {
+              const dx2 = px - ur + (i + 0.5) * (ur * 2 / 3);
+              const dy2 = uy + ((t * 0.12 + i * 40) % 26) * sc;
+              ctx.beginPath();
+              ctx.moveTo(dx2, dy2);
+              ctx.lineTo(dx2, dy2 + 6 * sc);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      /* ---------- rain, four layers deep ---------- */
+      for (let li = 0; li < s.rainLayers.length; li++) {
+        const layer = s.rainLayers[li];
+        const cfg = layer.cfg;
+        ctx.strokeStyle = 'rgba(198, 216, 245, ' + cfg.a + ')';
+        ctx.lineWidth = li >= 2 ? 1.5 : 1;
+        ctx.lineCap = 'butt';
+        ctx.beginPath();
+        for (const dr of layer.drops) {
+          dr.y += cfg.spd * dr.s;
+          dr.x += cfg.wob * dr.s;
+          if (dr.y > h) { dr.y = -30; dr.x = Math.random() * (w + 200) - 100; }
+          if (dr.x > w + 100) dr.x = -100;
+          const len = cfg.len * dr.s;
+          ctx.moveTo(dr.x, dr.y);
+          ctx.lineTo(dr.x - cfg.wob * 1.6, dr.y + len);
+        }
+        ctx.stroke();
+      }
+
+      /* ---------- splashes where rain meets asphalt ---------- */
+      if (s.splashes.length < 46 && Math.random() < 0.7) {
+        const d = Math.random();
+        const off = (Math.random() - 0.5) * 1.5;
+        const pos = tsRoad(s, d, off);
+        s.splashes.push({ x: pos.x, y: pos.y, sc: pos.sc, life: 1 });
+      }
+      for (let i = s.splashes.length - 1; i >= 0; i--) {
+        const sp = s.splashes[i];
+        sp.life -= 0.05;
+        if (sp.life <= 0) { s.splashes.splice(i, 1); continue; }
+        const gr = (1 - sp.life) * 9 * sp.sc;
+        ctx.strokeStyle = 'rgba(200, 218, 250, ' + sp.life * 0.45 + ')';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.ellipse(sp.x, sp.y, gr, gr * 0.3, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        if (sp.sc > 0.5) {                     // a couple of kicked-up droplets
+          ctx.fillStyle = 'rgba(210, 226, 252, ' + sp.life * 0.5 + ')';
+          ctx.fillRect(sp.x - gr * 0.7, sp.y - gr * 0.9 * sp.life, 1.2, 1.2);
+          ctx.fillRect(sp.x + gr * 0.7, sp.y - gr * 0.8 * sp.life, 1.2, 1.2);
+        }
+      }
+
+      /* ---------- final grade: haze into the distance, dark corners ---------- */
+      const haze = ctx.createRadialGradient(vpX, vpY, 0, vpX, vpY, w * 0.55);
+      haze.addColorStop(0, 'rgba(180, 130, 170, 0.14)');
+      haze.addColorStop(1, 'rgba(180, 130, 170, 0)');
+      ctx.fillStyle = haze;
+      ctx.fillRect(0, 0, w, h);
+
+      const vig = ctx.createRadialGradient(w * 0.5, h * 0.5, Math.min(w, h) * 0.32,
+                                           w * 0.5, h * 0.5, Math.max(w, h) * 0.78);
+      vig.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      vig.addColorStop(1, 'rgba(0, 0, 0, 0.6)');
+      ctx.fillStyle = vig;
+      ctx.fillRect(0, 0, w, h);
+    }
+
     const EFFECTS = {
       'theme-sakura': new PetalSystem('sakuraCanvas', 55, makeSakuraPetal),
       'theme-retro': new PetalSystem('vaporwavePetals', 80, makeVaporPetal),
@@ -7845,7 +8757,8 @@
       'theme-backrooms': new SceneSystem('backroomsCanvas', buildBackrooms, drawBackrooms),
       'theme-ocean': new SceneSystem('oceanCanvas', buildOcean, drawOcean),
       'theme-greenhouse': new SceneSystem('greenhouseCanvas', buildGreenhouse, drawGreenhouse),
-      'theme-origami': new SceneSystem('origamiCanvas', buildOrigami, drawOrigami)
+      'theme-origami': new SceneSystem('origamiCanvas', buildOrigami, drawOrigami),
+      'theme-timessquare': new SceneSystem('timesSquareCanvas', buildTimesSquare, drawTimesSquare)
     };
 
     // One shared resize handler for all effect canvases
