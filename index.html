@@ -1910,6 +1910,47 @@
     }
     .btn-victory:hover { opacity: 1; }
 
+    /* Small, transparent hide/unhide toggle, tucked right above Victory. */
+    .btn-hide-ui {
+      position: fixed;
+      bottom: 62px;
+      right: 24px;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff !important;
+      font-size: 0.85rem !important;
+      border-radius: 50%;
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      z-index: 10;
+      opacity: 0.32;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: opacity 0.3s ease, transform 0.2s ease, background 0.2s ease;
+    }
+    .btn-hide-ui:hover { opacity: 1; background: rgba(255, 255, 255, 0.2); }
+    .btn-hide-ui.active { opacity: 0.75; }
+
+    /* While hidden, only the card/controls vanish — the theme picker, date,
+       credit line, and the two floating corner buttons stay put so the
+       player can always get back in. */
+    body.ui-hidden .app-container { display: none; }
+
+    /* The card becomes a free-floating, draggable window once picked up. */
+    .bingo-card { cursor: grab; }
+    .bingo-card .grid { cursor: default; }
+    .bingo-card.dragging {
+      cursor: grabbing;
+      transition: none !important;
+      touch-action: none;
+    }
+
     #fileInput { display: none; }
 
     .status-msg {
@@ -2264,6 +2305,7 @@
 
   <div class="bottom-credit">Made by Conor in his free time, August 2026.</div>
 
+  <button class="btn-hide-ui" id="hideUiBtn" onclick="toggleUIVisibility()" title="Hide bingo card & controls" aria-label="Hide bingo card and controls">👁️</button>
   <button class="btn-victory" onclick="triggerVictory(true)">🏆 Victory</button>
 
   <div class="overlay" id="victoryOverlay">
@@ -2616,6 +2658,133 @@
         saveToLocalStorage();
         checkAutoVictory();
       });
+    })();
+
+    // ---- Card drag: pick the card up anywhere except the grid cells or an
+    // in-progress edit-mode input, and drop it anywhere on screen. The
+    // dropped position persists across reloads. ----
+    (function setupCardDrag() {
+      const card = document.getElementById('bingoCardElement');
+      if (!card) return;
+      let dragging = false, moved = false;
+      let startX = 0, startY = 0, origLeft = 0, origTop = 0;
+
+      function blocked(target) {
+        return !!(target.closest('.grid') || target.closest('input'));
+      }
+
+      function clamp(left, top, rect) {
+        const maxLeft = Math.max(0, window.innerWidth - rect.width);
+        const maxTop = Math.max(0, window.innerHeight - rect.height);
+        return [Math.min(Math.max(left, 0), maxLeft), Math.min(Math.max(top, 0), maxTop)];
+      }
+
+      function pinToFixed() {
+        const rect = card.getBoundingClientRect();
+        card.style.position = 'fixed';
+        card.style.margin = '0';
+        card.style.right = 'auto';
+        card.style.bottom = 'auto';
+        card.style.zIndex = '5';
+        card.style.left = rect.left + 'px';
+        card.style.top = rect.top + 'px';
+        return rect;
+      }
+
+      function beginDrag(clientX, clientY, target) {
+        if (blocked(target)) return false;
+        const rect = pinToFixed();
+        startX = clientX; startY = clientY;
+        origLeft = rect.left; origTop = rect.top;
+        dragging = true; moved = false;
+        card.classList.add('dragging');
+        return true;
+      }
+
+      function moveDrag(clientX, clientY) {
+        if (!dragging) return;
+        const dx = clientX - startX, dy = clientY - startY;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+        const rect = card.getBoundingClientRect();
+        const [left, top] = clamp(origLeft + dx, origTop + dy, rect);
+        card.style.left = left + 'px';
+        card.style.top = top + 'px';
+      }
+
+      function endDrag() {
+        if (!dragging) return;
+        dragging = false;
+        card.classList.remove('dragging');
+        if (moved) {
+          localStorage.setItem('bingoCardPos', JSON.stringify({ left: card.style.left, top: card.style.top }));
+        }
+      }
+
+      card.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        if (beginDrag(e.clientX, e.clientY, e.target)) e.preventDefault();
+      });
+      window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+      window.addEventListener('mouseup', endDrag);
+
+      card.addEventListener('touchstart', (e) => {
+        const tch = e.touches[0];
+        beginDrag(tch.clientX, tch.clientY, e.target);
+      }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (!dragging) return;
+        moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+        e.preventDefault();
+      }, { passive: false });
+      window.addEventListener('touchend', endDrag);
+      window.addEventListener('touchcancel', endDrag);
+
+      window.addEventListener('resize', () => {
+        if (card.style.position !== 'fixed') return;
+        const rect = card.getBoundingClientRect();
+        const [left, top] = clamp(parseFloat(card.style.left) || 0, parseFloat(card.style.top) || 0, rect);
+        card.style.left = left + 'px';
+        card.style.top = top + 'px';
+      });
+
+      // Restore a dropped position from a previous visit, clamped in case
+      // the viewport is now smaller than it was.
+      const saved = localStorage.getItem('bingoCardPos');
+      if (saved) {
+        try {
+          const pos = JSON.parse(saved);
+          card.style.position = 'fixed';
+          card.style.margin = '0';
+          card.style.right = 'auto';
+          card.style.bottom = 'auto';
+          card.style.zIndex = '5';
+          card.style.left = pos.left;
+          card.style.top = pos.top;
+          const rect = card.getBoundingClientRect();
+          const [left, top] = clamp(parseFloat(pos.left) || 0, parseFloat(pos.top) || 0, rect);
+          card.style.left = left + 'px';
+          card.style.top = top + 'px';
+        } catch (e) {
+          console.error('Failed to restore card position', e);
+        }
+      }
+    })();
+
+    // ---- Hide/unhide toggle for the card + controls panel ----
+    let uiHidden = false;
+    function toggleUIVisibility() {
+      uiHidden = !uiHidden;
+      document.body.classList.toggle('ui-hidden', uiHidden);
+      const btn = document.getElementById('hideUiBtn');
+      btn.textContent = uiHidden ? '🙈' : '👁️';
+      btn.classList.toggle('active', uiHidden);
+      const label = uiHidden ? 'Show bingo card & controls' : 'Hide bingo card & controls';
+      btn.title = label;
+      btn.setAttribute('aria-label', label);
+      localStorage.setItem('bingoUiHidden', uiHidden ? '1' : '0');
+    }
+    (function restoreUiHiddenState() {
+      if (localStorage.getItem('bingoUiHidden') === '1') toggleUIVisibility();
     })();
 
     function loadPresetLayout(key) {
@@ -6456,27 +6625,58 @@
       const w = canvas.width, h = canvas.height;
       const rnd = (a, b) => a + Math.random() * (b - a);
       const motes = [];
-      for (let i = 0; i < 70; i++) {
+      for (let i = 0; i < 90; i++) {
         motes.push({ x: Math.random() * w, y: Math.random() * h,
                      s: rnd(0.5, 1.6), ph: rnd(0, 6.28), dr: rnd(-0.08, 0.08) });
       }
-      const kinds = ['echeveria', 'cactus', 'jade', 'snake', 'aloe', 'echeveria', 'cactus'];
+
+      /* Nine procedural plant kinds, cycled across three shelves so the
+         glasshouse reads as genuinely stocked rather than sparsely staged. */
+      const kinds = ['echeveria', 'cactus', 'jade', 'snake', 'aloe',
+                      'fern', 'pilea', 'haworthia', 'burro'];
+
+      /* Three shelves at different depths: back (furthest, smallest,
+         faintest — atmospheric perspective through humid glass), mid,
+         and front (closest, largest, full contrast — the original shelf
+         position, kept so existing saves/layouts still feel familiar). */
+      const shelfDefs = [
+        { y: h * 0.40, sc: 0.68, alpha: 0.76, density: 175 },
+        { y: h * 0.63, sc: 0.85, alpha: 0.9,  density: 138 },
+        { y: h * 0.85, sc: 1.0,  alpha: 1.0,  density: 108 }
+      ];
+
       const plants = [];
-      const n = Math.max(5, Math.min(8, Math.floor(w / 150)));
-      for (let i = 0; i < n; i++) {
-        plants.push({
-          kind: kinds[i % kinds.length],
-          x: w * (0.06 + 0.88 * i / (n - 1)) + rnd(-12, 12),
-          sc: rnd(0.8, 1.15),
-          hue: rnd(-12, 12),
-          bloom: Math.random() < 0.45
-        });
+      let ki = 0;
+      const shelves = shelfDefs.map((sh, si) => {
+        const minN = si === 0 ? 5 : si === 1 ? 6 : 7;
+        const maxN = si === 0 ? 8 : si === 1 ? 10 : 13;
+        const n = Math.max(minN, Math.min(maxN, Math.floor(w / sh.density)));
+        for (let i = 0; i < n; i++) {
+          const kind = kinds[ki % kinds.length]; ki++;
+          plants.push({
+            kind,
+            x: w * (0.05 + 0.9 * (n === 1 ? 0.5 : i / (n - 1))) + rnd(-9, 9),
+            shelfY: sh.y,
+            sc: sh.sc * rnd(0.82, 1.18),
+            alpha: sh.alpha,
+            hue: rnd(-12, 12),
+            bloom: Math.random() < 0.4,
+            sway: rnd(0, 6.28)
+          });
+        }
+        return { y: sh.y, sc: sh.sc, alpha: sh.alpha, n };
+      });
+
+      /* Ceiling-hung string-of-pearls, spread wider now there's more to fill. */
+      const vines = [];
+      const vN = 5;
+      for (let i = 0; i < vN; i++) {
+        vines.push({ x: w * (0.06 + 0.88 * i / (vN - 1)) + rnd(-10, 10),
+                     len: h * rnd(0.14, 0.3), ph: rnd(0, 6) });
       }
+
       return {
-        motes, plants,
-        vines: [ { x: w * 0.1, len: h * 0.24, ph: rnd(0, 6) },
-                 { x: w * 0.52, len: h * 0.18, ph: rnd(0, 6) },
-                 { x: w * 0.92, len: h * 0.27, ph: rnd(0, 6) } ],
+        motes, plants, shelves, vines,
         fly: { x: w * 0.3, y: h * 0.4, tx: w * 0.6, ty: h * 0.7, hold: 0 },
         drip: { at: 5000, x: 0, y: 0, active: false },
         epoch: null
@@ -6572,24 +6772,31 @@
         }
       }
 
-      /* the shelf */
-      const shY = h * 0.84;
-      ctx.fillStyle = '#8a6b4a';
-      ctx.fillRect(0, shY, w, 13);
-      ctx.fillStyle = '#a5825c';
-      ctx.fillRect(0, shY, w, 3);
-      ctx.fillStyle = '#6e5238';
-      for (let i = 0; i < 5; i++) {
-        const bx = w * (0.1 + i * 0.2);
-        ctx.beginPath();
-        ctx.moveTo(bx, shY + 13); ctx.lineTo(bx + 14, shY + 13);
-        ctx.lineTo(bx, shY + 34);
-        ctx.closePath(); ctx.fill();
+      /* the shelves — back to front, each a plank with support brackets */
+      for (const shelf of s.shelves) {
+        const shY = shelf.y, sc = shelf.sc;
+        ctx.save();
+        ctx.globalAlpha = shelf.alpha;
+        ctx.fillStyle = '#8a6b4a';
+        ctx.fillRect(0, shY, w, 13 * sc);
+        ctx.fillStyle = '#a5825c';
+        ctx.fillRect(0, shY, w, 3 * sc);
+        ctx.fillStyle = '#6e5238';
+        for (let i = 0; i < 5; i++) {
+          const bx = w * (0.1 + i * 0.2);
+          ctx.beginPath();
+          ctx.moveTo(bx, shY + 13 * sc); ctx.lineTo(bx + 14 * sc, shY + 13 * sc);
+          ctx.lineTo(bx, shY + 34 * sc);
+          ctx.closePath(); ctx.fill();
+        }
+        ctx.restore();
       }
 
-      /* potted plants */
+      /* potted plants across all shelves */
       for (const p of s.plants) {
-        const sc = p.sc, px = p.x, base = shY;
+        const sc = p.sc, px = p.x, base = p.shelfY;
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
         ctx.fillStyle = '#b5714e';                     // terracotta pot
         ctx.beginPath();
         ctx.moveTo(px - 17 * sc, base - 26 * sc);
@@ -6666,7 +6873,7 @@
             ctx.quadraticCurveTo(px + i * 8 * sc, top - bh * 0.9, px + i * 6 * sc + 1 * sc, top - bh + 2);
             ctx.stroke();
           }
-        } else {                                       // aloe
+        } else if (p.kind === 'aloe') {
           ctx.fillStyle = '#6f9c6f';
           for (let i = -2; i <= 2; i++) {
             ctx.save();
@@ -6679,19 +6886,100 @@
             ctx.closePath(); ctx.fill();
             ctx.restore();
           }
+        } else if (p.kind === 'fern') {
+          const swayF = Math.sin(t / 1800 + p.sway) * 0.08;
+          ctx.strokeStyle = '#3f6e46'; ctx.lineWidth = 1.4 * sc; ctx.lineCap = 'round';
+          for (let i = -3; i <= 3; i++) {
+            const a = i * 0.24 + swayF;
+            const len = (30 - Math.abs(i) * 3) * sc;
+            const fx = px + Math.sin(a) * len, fy = top - Math.cos(a) * len;
+            ctx.beginPath(); ctx.moveTo(px, top); ctx.quadraticCurveTo(px + Math.sin(a) * len * 0.55,
+              top - Math.cos(a) * len * 0.55, fx, fy); ctx.stroke();
+            for (let k = 1; k <= 5; k++) {
+              const f = k / 6;
+              const midx = px + Math.sin(a) * len * f, midy = top - Math.cos(a) * len * f;
+              const perp = a + Math.PI / 2;
+              ctx.strokeStyle = '#4f8a58'; ctx.lineWidth = 1 * sc;
+              ctx.beginPath();
+              ctx.moveTo(midx, midy);
+              ctx.lineTo(midx + Math.cos(perp) * 5 * sc * (1 - f), midy + Math.sin(perp) * 5 * sc * (1 - f));
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.moveTo(midx, midy);
+              ctx.lineTo(midx - Math.cos(perp) * 5 * sc * (1 - f), midy - Math.sin(perp) * 5 * sc * (1 - f));
+              ctx.stroke();
+              ctx.strokeStyle = '#3f6e46'; ctx.lineWidth = 1.4 * sc;
+            }
+          }
+        } else if (p.kind === 'pilea') {
+          ctx.strokeStyle = '#5c7a52'; ctx.lineWidth = 1.2 * sc;
+          const coins = [[-9, -20], [8, -24], [0, -30], [-13, -10], [12, -12], [1, -14]];
+          for (const c of coins) {
+            const cx2 = px + c[0] * sc, cy2 = top + c[1] * sc;
+            ctx.beginPath(); ctx.moveTo(px, top + 2 * sc); ctx.lineTo(cx2, cy2 + 4 * sc); ctx.stroke();
+            ctx.fillStyle = '#6fae72';
+            ctx.beginPath(); ctx.arc(cx2, cy2, 6 * sc, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.beginPath(); ctx.arc(cx2 - 1.6 * sc, cy2 - 1.6 * sc, 2 * sc, 0, Math.PI * 2); ctx.fill();
+          }
+        } else if (p.kind === 'haworthia') {
+          for (let i = 0; i < 10; i++) {
+            const a = i / 10 * Math.PI * 2;
+            const len = 14 * sc;
+            ctx.save();
+            ctx.translate(px + Math.cos(a) * 3 * sc, top - 2 * sc + Math.sin(a) * 3 * sc);
+            ctx.rotate(a + Math.PI / 2);
+            ctx.fillStyle = '#3f7a56';
+            ctx.beginPath();
+            ctx.moveTo(-3 * sc, 0);
+            ctx.lineTo(3 * sc, 0);
+            ctx.lineTo(0, -len);
+            ctx.closePath(); ctx.fill();
+            ctx.strokeStyle = 'rgba(220, 240, 220, 0.6)'; ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            for (let sIdx = 1; sIdx <= 3; sIdx++) {
+              const sy2 = -len * sIdx / 4;
+              ctx.moveTo(-2.4 * sc * (1 - sIdx / 4), sy2);
+              ctx.lineTo(2.4 * sc * (1 - sIdx / 4), sy2);
+            }
+            ctx.stroke();
+            ctx.restore();
+          }
+        } else {                                       // burro's tail — trailing over the pot lip
+          const swayB = Math.sin(t / 2200 + p.sway) * 6;
+          for (let strand = -1; strand <= 1; strand++) {
+            const sx = px + strand * 8 * sc;
+            const sl = (26 + Math.abs(strand) * 4) * sc;
+            ctx.strokeStyle = '#6b9c72'; ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(sx, base - 24 * sc);
+            ctx.quadraticCurveTo(sx + swayB * 0.4 * sc, base - 6 * sc, sx + swayB * sc, base + sl * 0.55);
+            ctx.stroke();
+            ctx.fillStyle = '#8fc08f';
+            for (let k = 1; k <= 7; k++) {
+              const f = k / 7;
+              const bx3 = sx + swayB * sc * f * f;
+              const by3 = base - 24 * sc + sl * f * 0.8;
+              ctx.beginPath(); ctx.arc(bx3, by3, (2.4 - f * 0.8) * sc, 0, Math.PI * 2); ctx.fill();
+            }
+          }
+          ctx.fillStyle = '#74a57f';                   // a small rosette at the crown
+          ctx.beginPath(); ctx.arc(px, top + 2 * sc, 5 * sc, 0, Math.PI * 2); ctx.fill();
         }
+        ctx.restore();
       }
 
-      /* humidity wisps near the shelf */
+      /* humidity wisps near the nearest shelf */
+      const frontShY = s.shelves[s.shelves.length - 1].y;
       for (let i = 0; i < 7; i++) {
         const cyc = (t / 9000 + i / 7) % 1;
-        const wy = shY - cyc * h * 0.24;
+        const wy = frontShY - cyc * h * 0.24;
         const wx = w * (0.08 + i * 0.14) + 18 * Math.sin(t / 1600 + i);
         ctx.fillStyle = 'rgba(255, 255, 255, ' + 0.09 * (1 - cyc) + ')';
         ctx.beginPath(); ctx.ellipse(wx, wy, 34, 12, 0, 0, Math.PI * 2); ctx.fill();
       }
 
-      /* one unhurried butterfly */
+      /* one unhurried butterfly, now visiting all three shelves */
       const f = s.fly;
       if (f.hold > 0) {
         f.hold -= 16;
@@ -6702,7 +6990,7 @@
           f.hold = 2200 + Math.random() * 2200;
           const target = s.plants[Math.floor(Math.random() * s.plants.length)];
           f.tx = target.x + (Math.random() - 0.5) * 30;
-          f.ty = shY - 50 - Math.random() * h * 0.3;
+          f.ty = target.shelfY - 46 * target.sc - Math.random() * 26;
         } else {
           f.x += dx / dist * 1.1;
           f.y += dy / dist * 1.1 + Math.sin(t / 180) * 0.8;
