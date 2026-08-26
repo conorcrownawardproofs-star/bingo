@@ -480,6 +480,228 @@
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75), 0 0 16px rgba(125, 211, 252, 0.6);
     }
 
+    /* ============ In Orbit: low Earth orbit, the limb below, the Moon out the window ============ */
+    body.theme-orbit {
+      --tune-accent: #7dd3fc;
+      --bg-gradient:
+        radial-gradient(circle at 30% 18%, rgba(28, 42, 88, 0.5) 0%, rgba(0, 0, 0, 0.95) 62%),
+        linear-gradient(180deg, #010208 0%, #04060f 100%);
+      --card-bg: linear-gradient(145deg, rgba(18, 28, 52, 0.85) 0%, rgba(6, 10, 22, 0.92) 55%, rgba(24, 38, 70, 0.85) 100%);
+      --card-shadow-color: rgba(96, 165, 250, 0.55);
+      --btn-layouts: linear-gradient(135deg, #64748b 0%, #1e293b 100%);
+      --btn-select: linear-gradient(135deg, #60a5fa 0%, #1d4ed8 100%);
+      --btn-mode: linear-gradient(135deg, #334155 0%, #0f172a 100%);
+      --btn-mode-active: linear-gradient(135deg, #fb923c 0%, #c2410c 100%);
+      --btn-edit: linear-gradient(135deg, #38bdf8 0%, #0369a1 100%);
+      --btn-edit-active: linear-gradient(135deg, #93c5fd 0%, #2563eb 100%);
+      --btn-export: linear-gradient(135deg, #0ea5e9 0%, #0c4a6e 100%);
+      --btn-import: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+      --btn-import-text: #0b1120;
+      --btn-clear: linear-gradient(135deg, #475569 0%, #1e293b 100%);
+      --btn-bright: linear-gradient(135deg, #7dd3fc 0%, #0284c7 100%);
+      --btn-reset: linear-gradient(135deg, #ef4444 0%, #7f1d1d 100%);
+      --btn-victory: linear-gradient(135deg, #fbbf24 0%, #b45309 100%);
+      --btn-active-glow: rgba(125, 211, 252, 0.7);
+      --btn-active-text: #ffffff;
+    }
+    body.theme-orbit .header {
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.85), 0 0 16px rgba(125, 211, 252, 0.75);
+    }
+
+    /* ============ The Backrooms: mono-yellow office, damp carpet, humming lights ============ */
+    body.theme-backrooms {
+      --tune-accent: #d6c25e;
+      --bg-gradient: linear-gradient(180deg, #a8964a 0%, #877636 45%, #4f4318 100%);
+      --card-shadow-color: rgba(0, 0, 0, 0.55);
+      --btn-layouts: linear-gradient(135deg, #b3a04e 0%, #6e5f26 100%);
+      --btn-select: linear-gradient(135deg, #c9b45a 0%, #7d6c2c 100%);
+      --btn-mode: linear-gradient(135deg, #9c8a3f 0%, #5c4e1e 100%);
+      --btn-mode-active: linear-gradient(135deg, #efe0a0 0%, #a58e3a 100%);
+      --btn-edit: linear-gradient(135deg, #8a7a38 0%, #4a3f14 100%);
+      --btn-edit-active: linear-gradient(135deg, #e8d98d 0%, #93803a 100%);
+      --btn-export: linear-gradient(135deg, #7d6c2c 0%, #453a10 100%);
+      --btn-import: linear-gradient(135deg, #efe6c2 0%, #c4b478 100%);
+      --btn-import-text: #3a3110;
+      --btn-clear: linear-gradient(135deg, #6b5d24 0%, #3a3110 100%);
+      --btn-bright: linear-gradient(135deg, #d8c66a 0%, #8a7a38 100%);
+      --btn-reset: linear-gradient(135deg, #a13d2d 0%, #571d13 100%);
+      --btn-victory: linear-gradient(135deg, #cdb85e 0%, #6e5f26 100%);
+      --btn-active-glow: rgba(240, 225, 160, 0.6);
+      --btn-active-text: #fff8dc;
+    }
+    /* The card becomes a scanned photo of an old paper bingo card: aged
+       stock, coffee-ring stains, a fold crease, faint scanner banding,
+       typewriter numerals, and a slight crooked-on-the-glass tilt. */
+    body.theme-backrooms .bingo-card {
+      background:
+        radial-gradient(ellipse at 18% 12%, rgba(120, 90, 30, 0.2) 0%, transparent 40%),
+        radial-gradient(ellipse at 84% 78%, rgba(96, 70, 20, 0.24) 0%, transparent 45%),
+        radial-gradient(circle at 72% 16%, transparent 5.5%, rgba(110, 78, 26, 0.28) 6%, rgba(110, 78, 26, 0.28) 7%, transparent 7.6%),
+        linear-gradient(160deg, #eadfb8 0%, #ddcda0 45%, #ccb987 100%);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-radius: 3px;
+      border: 1px solid rgba(70, 55, 20, 0.45);
+      box-shadow:
+        0 18px 40px rgba(12, 9, 0, 0.65),
+        0 2px 6px rgba(20, 14, 0, 0.5);
+      transform: rotate(-1.4deg);
+      filter: sepia(0.28) contrast(0.95) saturate(0.85);
+    }
+    body.theme-backrooms .bingo-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 9;
+      background:
+        linear-gradient(178deg, transparent 47.4%, rgba(80, 62, 20, 0.3) 48.1%, rgba(255, 250, 225, 0.35) 48.6%, transparent 49.4%),
+        repeating-linear-gradient(0deg, rgba(60, 45, 10, 0.055) 0px, rgba(60, 45, 10, 0.055) 1px, transparent 1px, transparent 3px),
+        repeating-linear-gradient(90deg, rgba(255, 248, 220, 0.05) 0px, rgba(255, 248, 220, 0.05) 2px, transparent 2px, transparent 5px);
+    }
+    body.theme-backrooms .header {
+      color: #3a2f14;
+      text-shadow: 1px 1px 0 rgba(255, 248, 220, 0.55);
+      font-family: 'Courier New', 'Courier', monospace;
+      opacity: 0.88;
+    }
+    body.theme-backrooms .grid {
+      background-color: rgba(58, 47, 20, 0.55);
+      border-radius: 2px;
+    }
+    body.theme-backrooms .cell {
+      background-color: #efe5c4;
+      color: #35290e;
+      font-family: 'Courier New', 'Courier', monospace;
+      box-shadow: inset 0 0 7px rgba(90, 70, 25, 0.28);
+    }
+    body.theme-backrooms .cell.free { color: #6e3a1c; }
+    body.theme-backrooms .cell input.edit-input { color: #35290e; }
+    body.theme-backrooms .top-date { color: rgba(28, 22, 4, 0.6); }
+    body.theme-backrooms .bottom-credit { color: rgba(28, 22, 4, 0.5); }
+    body.theme-backrooms .controls {
+      background: rgba(38, 31, 9, 0.55);
+      border-color: rgba(220, 200, 130, 0.22);
+    }
+
+    /* ============ Open Ocean: the mini giant tank — pelagic blue, hulls overhead ============ */
+    body.theme-ocean {
+      --tune-accent: #38bdf8;
+      --bg-gradient: linear-gradient(180deg, #9bd4f0 0%, #3690c4 14%, #1b6698 34%, #0b3f6e 68%, #041f3d 100%);
+      --card-bg: linear-gradient(145deg, rgba(16, 78, 128, 0.62) 0%, rgba(5, 38, 70, 0.72) 100%);
+      --card-shadow-color: rgba(56, 189, 248, 0.55);
+      --btn-layouts: linear-gradient(135deg, #38bdf8 0%, #075985 100%);
+      --btn-select: linear-gradient(135deg, #22d3ee 0%, #0e7490 100%);
+      --btn-mode: linear-gradient(135deg, #0ea5e9 0%, #0c4a6e 100%);
+      --btn-mode-active: linear-gradient(135deg, #fbbf24 0%, #b45309 100%);
+      --btn-edit: linear-gradient(135deg, #67e8f9 0%, #0891b2 100%);
+      --btn-edit-active: linear-gradient(135deg, #fde047 0%, #ca8a04 100%);
+      --btn-export: linear-gradient(135deg, #0284c7 0%, #083b66 100%);
+      --btn-import: linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%);
+      --btn-import-text: #4a2c04;
+      --btn-clear: linear-gradient(135deg, #475569 0%, #1e293b 100%);
+      --btn-bright: linear-gradient(135deg, #7dd3fc 0%, #0369a1 100%);
+      --btn-reset: linear-gradient(135deg, #f87171 0%, #991b1b 100%);
+      --btn-victory: linear-gradient(135deg, #f59e0b 0%, #92400e 100%);
+      --btn-active-glow: rgba(103, 232, 249, 0.7);
+      --btn-active-text: #ffffff;
+    }
+    body.theme-ocean .header {
+      text-shadow: 0 2px 4px rgba(0, 10, 25, 0.7), 0 0 14px rgba(125, 211, 252, 0.6);
+    }
+    /* ============ Greenhouse: glass panes, sunbeams, a shelf of succulents ============ */
+    body.theme-greenhouse {
+      --tune-accent: #84a98c;
+      --bg-gradient: linear-gradient(180deg, #eaf5e6 0%, #d4e8cf 55%, #bcd8b4 100%);
+      --card-bg: linear-gradient(150deg, rgba(255, 255, 255, 0.72) 0%, rgba(230, 243, 226, 0.8) 100%);
+      --card-shadow-color: rgba(90, 130, 90, 0.4);
+      --btn-layouts: linear-gradient(135deg, #84a98c 0%, #52796f 100%);
+      --btn-select: linear-gradient(135deg, #6a994e 0%, #386641 100%);
+      --btn-mode: linear-gradient(135deg, #8d7b68 0%, #5c4d3c 100%);
+      --btn-mode-active: linear-gradient(135deg, #d68c45 0%, #a05a1e 100%);        /* terracotta */
+      --btn-edit: linear-gradient(135deg, #74a57f 0%, #446e51 100%);
+      --btn-edit-active: linear-gradient(135deg, #a7cf9f 0%, #6a994e 100%);
+      --btn-export: linear-gradient(135deg, #52796f 0%, #2f4a44 100%);
+      --btn-import: linear-gradient(135deg, #fdf7e8 0%, #e2d3ae 100%);
+      --btn-import-text: #4a3f26;
+      --btn-clear: linear-gradient(135deg, #7d8c7d 0%, #4b564b 100%);
+      --btn-bright: linear-gradient(135deg, #b6cf6e 0%, #7b9c31 100%);
+      --btn-reset: linear-gradient(135deg, #bc6c4a 0%, #7a3b22 100%);
+      --btn-victory: linear-gradient(135deg, #e9b44c 0%, #a87b1d 100%);
+      --btn-active-glow: rgba(166, 207, 159, 0.7);
+      --btn-active-text: #ffffff;
+    }
+    body.theme-greenhouse .header {
+      color: #386641;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.85), 0 2px 6px rgba(90, 130, 90, 0.3);
+    }
+    body.theme-greenhouse .cell { color: #2f3e2f; }
+    body.theme-greenhouse .top-date { color: rgba(47, 74, 47, 0.75); }
+    body.theme-greenhouse .bottom-credit { color: rgba(47, 74, 47, 0.55); }
+
+    /* ============ Paper Cranes: a folded-paper world, cranes in flight ============ */
+    body.theme-origami {
+      --tune-accent: #e07a5f;
+      --bg-gradient: linear-gradient(180deg, #f6f1e7 0%, #efe7d7 100%);
+      --card-shadow-color: rgba(90, 80, 65, 0.35);
+      --btn-layouts: linear-gradient(135deg, #e07a5f 0%, #a8442c 100%);
+      --btn-select: linear-gradient(135deg, #5f7a8a 0%, #35505e 100%);
+      --btn-mode: linear-gradient(135deg, #8a8175 0%, #55504a 100%);
+      --btn-mode-active: linear-gradient(135deg, #e6b655 0%, #a87a18 100%);
+      --btn-edit: linear-gradient(135deg, #81b29a 0%, #4a7a63 100%);
+      --btn-edit-active: linear-gradient(135deg, #b5d6c3 0%, #81b29a 100%);
+      --btn-export: linear-gradient(135deg, #6b7f94 0%, #3c4c5e 100%);
+      --btn-import: linear-gradient(135deg, #fdfaf3 0%, #dcd2be 100%);
+      --btn-import-text: #4a4234;
+      --btn-clear: linear-gradient(135deg, #9a9184 0%, #5e574d 100%);
+      --btn-bright: linear-gradient(135deg, #f2cc8f 0%, #c08e3a 100%);
+      --btn-reset: linear-gradient(135deg, #c05a49 0%, #762c1f 100%);
+      --btn-victory: linear-gradient(135deg, #dfae4f 0%, #96701a 100%);
+      --btn-active-glow: rgba(224, 122, 95, 0.55);
+      --btn-active-text: #ffffff;
+    }
+    /* The card is a crisp sheet of folded paper: hairline creases, cut-paper shadow. */
+    body.theme-origami .bingo-card {
+      background: linear-gradient(155deg, #ffffff 0%, #f7f2e8 60%, #efe8d8 100%);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-radius: 6px;
+      border: 1px solid rgba(120, 110, 90, 0.3);
+      box-shadow: 0 16px 32px rgba(90, 80, 65, 0.35), 0 3px 8px rgba(90, 80, 65, 0.25);
+    }
+    body.theme-origami .bingo-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 9;
+      background:
+        linear-gradient(135deg, transparent 49.5%, rgba(120, 110, 90, 0.14) 50%, rgba(255, 255, 255, 0.5) 50.4%, transparent 51%),
+        linear-gradient(45deg, transparent 49.6%, rgba(120, 110, 90, 0.1) 50%, rgba(255, 255, 255, 0.4) 50.4%, transparent 51%);
+    }
+    body.theme-origami .header {
+      color: #3d405b;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.9);
+    }
+    body.theme-origami .grid {
+      background-color: rgba(61, 64, 91, 0.25);
+    }
+    body.theme-origami .cell {
+      background-color: #fdfbf5;
+      color: #3d405b;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), inset 0 -1px 2px rgba(120, 110, 90, 0.15);
+    }
+    body.theme-origami .cell.free { color: #a8442c; }
+    body.theme-origami .cell input.edit-input { color: #3d405b; }
+    body.theme-origami .top-date { color: rgba(61, 64, 91, 0.7); }
+    body.theme-origami .bottom-credit { color: rgba(61, 64, 91, 0.55); }
+    body.theme-origami .controls {
+      background: rgba(61, 64, 91, 0.12);
+      border-color: rgba(61, 64, 91, 0.2);
+    }
+
     /* Background Animation Canvas Element */
     .bg-canvas {
       position: fixed;
@@ -502,6 +724,11 @@
     body.theme-space #spaceCanvas { display: block; }
     body.theme-city #cityCanvas { display: block; }
     body.theme-drive #driveCanvas { display: block; }
+    body.theme-orbit #orbitCanvas { display: block; }
+    body.theme-backrooms #backroomsCanvas { display: block; }
+    body.theme-ocean #oceanCanvas { display: block; }
+    body.theme-greenhouse #greenhouseCanvas { display: block; }
+    body.theme-origami #origamiCanvas { display: block; }
 
     /* Vaporwave Custom CSS */
     #vaporwaveBg .svg-defs {
@@ -1066,6 +1293,29 @@
     /* Night Drive — dusk-purple wash with a passing-headlight sweep */
     .tt-city .tt-veil    { background: linear-gradient(180deg, #0d1026 0%, #2a1a3d 55%, #08090f 100%); }
     .tt-city .tt-streak  { background-image: linear-gradient(105deg, transparent 40%, rgba(255, 196, 100, 0.9) 50%, transparent 60%); }
+
+    /* In Orbit — cut to black space with a thin sunrise streak over the limb */
+    .tt-orbit .tt-veil   { background: radial-gradient(circle at 50% 72%, #0a1230 0%, #000000 70%); }
+    .tt-orbit .tt-streak { background-image: linear-gradient(105deg, transparent 44%, rgba(191, 219, 254, 0.9) 50%, transparent 56%); }
+
+    /* The Backrooms — sodium-yellow wash with a failing fluorescent stutter
+       (borrows the Blood Red lightning's flash timing) */
+    .tt-back .tt-veil    { background: linear-gradient(180deg, #b3a04e 0%, #877636 55%, #3a3110 100%); }
+    .tt-back .tt-streak  {
+      background-image: radial-gradient(ellipse at 50% 6%, rgba(255, 246, 200, 0.95) 0%, rgba(240, 220, 150, 0.35) 40%, transparent 75%);
+      background-size: 100% 100%;
+      background-position: center;
+    }
+    .theme-transition.tt-back.active .tt-streak {
+      animation: ttFlash var(--tt-dur) linear forwards;
+    }
+
+    /* Open Ocean — plunge from surface light down into deep blue */
+    .tt-ocean .tt-veil   { background: linear-gradient(180deg, #7cc3e8 0%, #1d6fa5 40%, #04263f 100%); }
+    .tt-leaf .tt-veil    { background: linear-gradient(180deg, #eaf5e6 0%, #a9c9a0 100%); }
+    .tt-leaf .tt-streak  { background-image: linear-gradient(100deg, transparent 40%, rgba(255, 250, 214, 0.85) 50%, transparent 60%); }
+    .tt-fold .tt-veil    { background: linear-gradient(135deg, #fdfaf3 0%, #e8dfc9 100%); }
+    .tt-fold .tt-streak  { background-image: linear-gradient(135deg, transparent 46%, rgba(120, 110, 90, 0.35) 49.8%, rgba(255, 255, 255, 0.95) 50.2%, transparent 55%); }
 
     /* Glyph particles (hearts, petals, shamrocks) */
     .tt-particle {
@@ -1747,6 +1997,11 @@
   <canvas id="spaceCanvas" class="bg-canvas"></canvas>
   <canvas id="cityCanvas" class="bg-canvas"></canvas>
   <canvas id="driveCanvas" class="bg-canvas"></canvas>
+  <canvas id="orbitCanvas" class="bg-canvas"></canvas>
+  <canvas id="backroomsCanvas" class="bg-canvas"></canvas>
+  <canvas id="oceanCanvas" class="bg-canvas"></canvas>
+  <canvas id="greenhouseCanvas" class="bg-canvas"></canvas>
+  <canvas id="origamiCanvas" class="bg-canvas"></canvas>
   <canvas id="blueCanvas" class="bg-canvas"></canvas>
 
   <!-- Arizona Vaporwave Background -->
@@ -1924,6 +2179,11 @@
     <option value="theme-space">Deep Space</option>
     <option value="theme-city">City Nights</option>
     <option value="theme-drive">Night Drive</option>
+    <option value="theme-orbit">In Orbit</option>
+    <option value="theme-backrooms">The Backrooms</option>
+    <option value="theme-ocean">Open Ocean</option>
+    <option value="theme-greenhouse">Greenhouse</option>
+    <option value="theme-origami">Paper Cranes</option>
   </select>
 
   <div class="app-container">
@@ -2031,7 +2291,12 @@
       { id: 'theme-portal', name: 'Portal Lab' },
       { id: 'theme-space', name: 'Deep Space' },
       { id: 'theme-city', name: 'City Nights' },
-      { id: 'theme-drive', name: 'Night Drive' }
+      { id: 'theme-drive', name: 'Night Drive' },
+      { id: 'theme-orbit', name: 'In Orbit' },
+      { id: 'theme-backrooms', name: 'The Backrooms' },
+      { id: 'theme-ocean', name: 'Open Ocean' },
+      { id: 'theme-greenhouse', name: 'Greenhouse' },
+      { id: 'theme-origami', name: 'Paper Cranes' }
     ];
     const DEFAULT_THEME = 'theme-basic';
     let currentThemeIndex = 0;
@@ -2050,7 +2315,12 @@
       'theme-portal': { cls: 'tt-portal', glyphs: [],                  mode: 'rise' },
       'theme-space':  { cls: 'tt-space',  glyphs: ['✦', '✧', '⋆'],    mode: 'rise' },
       'theme-city':   { cls: 'tt-city',   glyphs: [],                  mode: 'rise' },
-      'theme-drive':  { cls: 'tt-city',   glyphs: [],                  mode: 'rise' }
+      'theme-drive':  { cls: 'tt-city',   glyphs: [],                  mode: 'rise' },
+      'theme-orbit':  { cls: 'tt-orbit',  glyphs: ['✦', '🛰️', '⋆'],   mode: 'rise' },
+      'theme-backrooms': { cls: 'tt-back', glyphs: [],                mode: 'rise' },
+      'theme-ocean':  { cls: 'tt-ocean',  glyphs: ['🫧', '🐟', '🦈'], mode: 'rise' },
+      'theme-greenhouse': { cls: 'tt-leaf', glyphs: ['🌵', '🦋', '🪴'], mode: 'rise' },
+      'theme-origami': { cls: 'tt-fold', glyphs: ['🕊️', '⛰️', '☀️'], mode: 'fall' }
     };
 
     const TT_DURATION = 800;  // must match --tt-dur in the CSS
@@ -5226,6 +5496,1544 @@
 
     }
 
+
+    /* =====================================================================
+       IN ORBIT — low Earth orbit. The planet fills the lower third of the
+       window: sunlit ocean, drifting continents and cloud decks, a thin
+       cyan atmosphere hugging the limb, city lights glittering past the
+       terminator. The Moon hangs out the window, a satellite makes its
+       lap, and the odd meteor skims by.
+       ===================================================================== */
+
+    function buildOrbit(canvas) {
+      const w = canvas.width, h = canvas.height;
+      const R = Math.max(w, h) * 1.4;      // planet radius: huge, so the limb is a gentle arc
+      const limbY = h * 0.6;               // where the limb crests at screen centre
+      const cx = w * 0.5, cy = limbY + R;
+      const band = h - limbY;              // visible depth of the disc
+
+      const stars = Array.from({ length: 160 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * limbY,
+        r: Math.random() * 1.3 + 0.4,
+        phase: Math.random() * Math.PI * 2,
+        tw: Math.random() * 0.0016 + 0.0005
+      }));
+
+      const blobCluster = (baseR, spreadX, spreadY, nMin, nExtra) => {
+        const blobs = [];
+        const n = Math.floor(Math.random() * nExtra) + nMin;
+        for (let b = 0; b < n; b++) {
+          blobs.push({
+            dx: (Math.random() - 0.5) * baseR * spreadX,
+            dy: (Math.random() - 0.5) * baseR * spreadY,
+            r: baseR * (Math.random() * 0.5 + 0.35)
+          });
+        }
+        return blobs;
+      };
+
+      const landTones = ['#3f7a3a', '#4c8a40', '#6f8f45', '#8a8a4d', '#b09a5e'];
+      const continents = Array.from({ length: 7 }, (_, i) => ({
+        lon: Math.random(),
+        lat: Math.random() * 0.6 + 0.1,
+        blobs: blobCluster(Math.random() * 55 + 50, 2.6, 1.1, 5, 5),
+        color: landTones[i % landTones.length]
+      }));
+
+      const clouds = Array.from({ length: 15 }, () => ({
+        lon: Math.random(),
+        lat: Math.random() * 0.85 + 0.04,
+        puffs: blobCluster(Math.random() * 36 + 24, 3.2, 0.9, 3, 4),
+        alpha: Math.random() * 0.22 + 0.34
+      }));
+
+      const cityLights = Array.from({ length: 70 }, () => ({
+        lon: Math.random(),
+        lat: Math.random() * 0.55 + 0.04,
+        r: Math.random() * 1.5 + 0.7,
+        phase: Math.random() * Math.PI * 2
+      }));
+
+      const moonR = Math.min(w, h) * 0.075;
+      const craters = Array.from({ length: 10 }, () => {
+        const a = Math.random() * Math.PI * 2;
+        const d = Math.random() * 0.72;
+        return { x: Math.cos(a) * d, y: Math.sin(a) * d, r: Math.random() * 0.14 + 0.045 };
+      });
+
+      return {
+        w, h, R, cx, cy, limbY, band, stars, continents, clouds, cityLights,
+        moon: { x: w * 0.78, y: h * 0.17, r: moonR, craters },
+        sat: { period: 34000, y: limbY * 0.42 },
+        meteor: null,
+        nextMeteor: 3000 + Math.random() * 6000
+      };
+    }
+
+    function drawOrbit(ctx, canvas, s, t) {
+      const { w, h, R, cx, cy, limbY, band } = s;
+      ctx.clearRect(0, 0, w, h);
+
+      // Twinkling starfield above the limb
+      ctx.fillStyle = '#eef3ff';
+      for (const st of s.stars) {
+        ctx.globalAlpha = 0.35 + Math.abs(Math.sin(t * st.tw + st.phase)) * 0.6;
+        ctx.fillRect(st.x, st.y, st.r, st.r);
+      }
+      ctx.globalAlpha = 1;
+
+      // The odd meteor skimming past
+      if (!s.meteor && t > s.nextMeteor) {
+        s.meteor = { x: Math.random() * w * 0.6 + w * 0.1, y: Math.random() * limbY * 0.4, life: 1 };
+      }
+      if (s.meteor) {
+        const m = s.meteor;
+        m.x += 7; m.y += 2.6; m.life -= 0.02;
+        ctx.strokeStyle = `rgba(226, 236, 255, ${Math.max(m.life, 0) * 0.85})`;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(m.x - 46, m.y - 17);
+        ctx.stroke();
+        if (m.life <= 0 || m.x > w + 60) {
+          s.meteor = null;
+          s.nextMeteor = t + 6000 + Math.random() * 14000;
+        }
+      }
+
+      // The Moon, a quarter-million miles out
+      const mo = s.moon;
+      const mg = ctx.createRadialGradient(mo.x - mo.r * 0.4, mo.y - mo.r * 0.45, mo.r * 0.15, mo.x, mo.y, mo.r);
+      mg.addColorStop(0, '#e8e8e4');
+      mg.addColorStop(0.65, '#b9bab6');
+      mg.addColorStop(1, '#7e7f7d');
+      ctx.save();
+      ctx.shadowColor = 'rgba(230, 233, 240, 0.5)';
+      ctx.shadowBlur = 22;
+      ctx.fillStyle = mg;
+      ctx.beginPath();
+      ctx.arc(mo.x, mo.y, mo.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      ctx.fillStyle = 'rgba(90, 92, 92, 0.4)';
+      for (const c of mo.craters) {
+        ctx.beginPath();
+        ctx.arc(mo.x + c.x * mo.r, mo.y + c.y * mo.r, c.r * mo.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      const ms = ctx.createLinearGradient(mo.x - mo.r, 0, mo.x + mo.r, 0);
+      ms.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      ms.addColorStop(1, 'rgba(8, 10, 18, 0.55)');
+      ctx.fillStyle = ms;
+      ctx.beginPath();
+      ctx.arc(mo.x, mo.y, mo.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // ---- The planet ----
+      // Surface features live on a wrapping longitude strip; "place" maps a
+      // (lon, lat) onto the visible limb with the current rotation applied.
+      const loop = w + 700;
+      const scroll = (t * 0.0000045) % 1;       // one lap every few minutes
+      const cloudScroll = (t * 0.0000062) % 1;  // clouds ride a faster wind
+      const place = (lon, lat, sc) => {
+        const x = ((lon + sc) % 1) * loop - (loop - w) / 2;
+        const dx = x - cx;
+        if (Math.abs(dx) >= R * 0.999) return null;
+        return { x, y: cy - Math.sqrt(R * R - dx * dx) + lat * band };
+      };
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx.clip();
+
+      // Ocean, bright at the sunlit limb fading into depth
+      const og = ctx.createLinearGradient(0, limbY, 0, h);
+      og.addColorStop(0, '#5aa7e0');
+      og.addColorStop(0.35, '#2f6fb5');
+      og.addColorStop(1, '#123e77');
+      ctx.fillStyle = og;
+      ctx.fillRect(0, limbY - 6, w, h - limbY + 6);
+
+      // Continents drifting with the planet's rotation (foreshortened flat)
+      ctx.globalAlpha = 0.92;
+      for (const cont of s.continents) {
+        const p = place(cont.lon, cont.lat, scroll);
+        if (!p) continue;
+        ctx.fillStyle = cont.color;
+        for (const b of cont.blobs) {
+          ctx.beginPath();
+          ctx.ellipse(p.x + b.dx, p.y + b.dy * 0.6, b.r, b.r * 0.52, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+
+      // Cloud decks
+      ctx.fillStyle = '#f4f8fc';
+      for (const cl of s.clouds) {
+        const p = place(cl.lon, cl.lat, cloudScroll);
+        if (!p) continue;
+        ctx.globalAlpha = cl.alpha;
+        for (const b of cl.puffs) {
+          ctx.beginPath();
+          ctx.ellipse(p.x + b.dx, p.y + b.dy * 0.55, b.r, b.r * 0.4, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+
+      // Day/night terminator creeping in from the right
+      const night = ctx.createLinearGradient(w * 0.45, 0, w, 0);
+      night.addColorStop(0, 'rgba(2, 4, 12, 0)');
+      night.addColorStop(1, 'rgba(2, 4, 12, 0.82)');
+      ctx.fillStyle = night;
+      ctx.fillRect(0, limbY - 6, w, h - limbY + 6);
+
+      // City lights glittering on the night side
+      ctx.fillStyle = '#ffd97a';
+      for (const li of s.cityLights) {
+        const p = place(li.lon, li.lat, scroll);
+        if (!p) continue;
+        const dark = Math.min(Math.max((p.x - w * 0.5) / (w * 0.5), 0), 1);
+        if (dark < 0.25) continue;
+        ctx.globalAlpha = dark * (0.5 + Math.abs(Math.sin(t * 0.001 + li.phase)) * 0.5) * 0.85;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, li.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      ctx.restore();
+
+      // Atmosphere: thin cyan glow hugging the limb
+      const atm = ctx.createRadialGradient(cx, cy, R * 0.985, cx, cy, R * 1.05);
+      atm.addColorStop(0, 'rgba(125, 211, 252, 0)');
+      atm.addColorStop(0.28, 'rgba(147, 216, 255, 0.55)');
+      atm.addColorStop(0.55, 'rgba(96, 165, 250, 0.18)');
+      atm.addColorStop(1, 'rgba(59, 130, 246, 0)');
+      ctx.fillStyle = atm;
+      ctx.fillRect(0, limbY - h * 0.18, w, h * 0.55);
+
+      // A satellite on its lap around the planet
+      const sp = (t % s.sat.period) / s.sat.period;
+      const sx = -70 + sp * (w + 140);
+      const sy = s.sat.y - Math.sin(sp * Math.PI) * h * 0.05;
+      ctx.save();
+      ctx.translate(sx, sy);
+      ctx.rotate(-0.12);
+      ctx.fillStyle = '#31384a';                       // panel truss
+      ctx.fillRect(-26, -1.5, 52, 3);
+      ctx.fillStyle = '#2e5fa8';                       // solar wings
+      ctx.fillRect(-30, -7, 16, 14);
+      ctx.fillRect(14, -7, 16, 14);
+      ctx.strokeStyle = 'rgba(180, 205, 255, 0.5)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(-30, -7, 16, 14);
+      ctx.strokeRect(14, -7, 16, 14);
+      ctx.fillStyle = '#c8cfdd';                       // bus
+      ctx.fillRect(-7, -6, 14, 12);
+      ctx.fillStyle = '#8f99ad';
+      ctx.fillRect(-7, -6, 14, 4);
+      const blink = Math.sin(t * 0.009) > 0.86 ? 1 : 0.12;
+      ctx.fillStyle = `rgba(255, 84, 84, ${blink})`;
+      ctx.beginPath();
+      ctx.arc(0, -9, 2.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    /* =====================================================================
+       THE BACKROOMS — one-point-perspective hallway that never ends.
+       Mono-yellow wallpaper, damp carpet, drop-ceiling rows of humming
+       fluorescents (one of them dying), film grain, a vignette, the whole
+       hall stuttering now and then — and, rarely, something standing at
+       the far end that is gone when the lights settle.
+       ===================================================================== */
+
+    function buildBackrooms(canvas) {
+      const w = canvas.width, h = canvas.height;
+      const vp = { x: w * 0.5, y: h * 0.44 };
+
+      // Receding depth stops: light rows every few tiles, seams in between
+      const rows = [];
+      for (let i = 1; i <= 9; i++) {
+        rows.push({
+          k: 1 - Math.pow(0.76, i),
+          panels: [-1, 0, 1].map(off => ({
+            off,
+            base: 0.82 + Math.random() * 0.14,
+            buzz: Math.random() * Math.PI * 2,
+            dead: false
+          }))
+        });
+      }
+      rows[3].panels[Math.floor(Math.random() * 3)].dead = true;
+
+      const seams = [];
+      for (let i = 1; i <= 14; i++) seams.push(1 - Math.pow(0.83, i));
+
+      // Pre-rendered grain tile, re-offset every frame for VHS crawl
+      const tile = document.createElement('canvas');
+      tile.width = tile.height = 160;
+      const tctx = tile.getContext('2d');
+      const img = tctx.createImageData(160, 160);
+      for (let i = 0; i < img.data.length; i += 4) {
+        const v = Math.floor(Math.random() * 255);
+        img.data[i] = v; img.data[i + 1] = v; img.data[i + 2] = v;
+        img.data[i + 3] = 26;
+      }
+      tctx.putImageData(img, 0, 0);
+
+      return {
+        w, h, vp, rows, seams,
+        grain: tile,
+        flickerUntil: 0,
+        nextFlicker: 5000 + Math.random() * 9000,
+        figure: { visibleUntil: 0, next: 16000 + Math.random() * 24000, off: 0 }
+      };
+    }
+
+    function drawBackrooms(ctx, canvas, s, t) {
+      const { w, h, vp } = s;
+      const lerp = (a, b, k) => a + (b - a) * k;
+      const px = (x, k) => lerp(x, vp.x, k);
+      const py = (y, k) => lerp(y, vp.y, k);
+      const kFar = 0.975;
+
+      // Whole-hall brown-out stutter
+      if (t > s.nextFlicker) {
+        s.flickerUntil = t + 260 + Math.random() * 240;
+        s.nextFlicker = t + 6000 + Math.random() * 12000;
+      }
+      const dim = t < s.flickerUntil ? 0.35 + Math.random() * 0.4 : 1;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Ceiling
+      let g = ctx.createLinearGradient(0, 0, 0, vp.y);
+      g.addColorStop(0, '#97874a');
+      g.addColorStop(1, '#4a3f16');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(0, 0); ctx.lineTo(w, 0);
+      ctx.lineTo(px(w, kFar), py(0, kFar)); ctx.lineTo(px(0, kFar), py(0, kFar));
+      ctx.closePath(); ctx.fill();
+
+      // Carpet
+      g = ctx.createLinearGradient(0, h, 0, vp.y);
+      g.addColorStop(0, '#6b5c26');
+      g.addColorStop(1, '#332a0c');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(0, h); ctx.lineTo(w, h);
+      ctx.lineTo(px(w, kFar), py(h, kFar)); ctx.lineTo(px(0, kFar), py(h, kFar));
+      ctx.closePath(); ctx.fill();
+
+      // Walls
+      g = ctx.createLinearGradient(0, 0, vp.x, 0);
+      g.addColorStop(0, '#b7a44f');
+      g.addColorStop(1, '#544818');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(0, 0); ctx.lineTo(px(0, kFar), py(0, kFar));
+      ctx.lineTo(px(0, kFar), py(h, kFar)); ctx.lineTo(0, h);
+      ctx.closePath(); ctx.fill();
+      g = ctx.createLinearGradient(w, 0, vp.x, 0);
+      g.addColorStop(0, '#b7a44f');
+      g.addColorStop(1, '#544818');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(w, 0); ctx.lineTo(px(w, kFar), py(0, kFar));
+      ctx.lineTo(px(w, kFar), py(h, kFar)); ctx.lineTo(w, h);
+      ctx.closePath(); ctx.fill();
+
+      // Two-stripe wallpaper trim running down both walls
+      for (const yf of [0.7, 0.74]) {
+        ctx.strokeStyle = yf === 0.7 ? 'rgba(60, 50, 14, 0.6)' : 'rgba(230, 214, 150, 0.35)';
+        ctx.lineWidth = yf === 0.7 ? 3 : 1.5;
+        for (const side of [0, w]) {
+          ctx.beginPath();
+          ctx.moveTo(side, h * yf);
+          ctx.lineTo(px(side, kFar), py(h * yf, kFar));
+          ctx.stroke();
+        }
+      }
+
+      // Wall seams and ceiling-tile seams marching toward the dark
+      for (const k of s.seams) {
+        const a = 0.16 * (1 - k * 0.7);
+        ctx.strokeStyle = `rgba(40, 32, 6, ${a})`;
+        ctx.lineWidth = 1;
+        for (const side of [0, w]) {
+          ctx.beginPath();
+          ctx.moveTo(px(side, k), py(0, k));
+          ctx.lineTo(px(side, k), py(h, k));
+          ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.moveTo(px(0, k), py(0, k));
+        ctx.lineTo(px(w, k), py(0, k));
+        ctx.stroke();
+      }
+      ctx.strokeStyle = 'rgba(40, 32, 6, 0.12)';
+      for (const xf of [0.3, 0.5, 0.7]) {
+        ctx.beginPath();
+        ctx.moveTo(w * xf, 0);
+        ctx.lineTo(px(w * xf, kFar), py(0, kFar));
+        ctx.stroke();
+      }
+
+      // The far end falls away into black
+      g = ctx.createRadialGradient(vp.x, vp.y, 4, vp.x, vp.y, Math.max(w, h) * 0.34);
+      g.addColorStop(0, 'rgba(8, 6, 0, 0.92)');
+      g.addColorStop(1, 'rgba(8, 6, 0, 0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+
+      // ...and sometimes something is standing in it
+      const fig = s.figure;
+      if (t > fig.next) {
+        fig.visibleUntil = t + 1500;
+        fig.next = t + 22000 + Math.random() * 32000;
+        fig.off = (Math.random() - 0.5) * w * 0.05;
+      }
+      if (t < fig.visibleUntil) {
+        const prog = 1 - (fig.visibleUntil - t) / 1500;
+        const a = Math.sin(prog * Math.PI) * 0.75;
+        const fk = 0.9;
+        const floorY = py(h, fk);
+        const fh = (py(h, fk) - py(0, fk)) * 0.46;
+        const fx = vp.x + fig.off + Math.sin(t * 0.004) * 1.2;
+        ctx.fillStyle = `rgba(14, 11, 1, ${a})`;
+        ctx.beginPath();
+        ctx.moveTo(fx - fh * 0.13, floorY);
+        ctx.quadraticCurveTo(fx - fh * 0.16, floorY - fh * 0.62, fx - fh * 0.08, floorY - fh * 0.78);
+        ctx.lineTo(fx + fh * 0.08, floorY - fh * 0.78);
+        ctx.quadraticCurveTo(fx + fh * 0.16, floorY - fh * 0.62, fx + fh * 0.13, floorY);
+        ctx.closePath(); ctx.fill();
+        ctx.beginPath();
+        ctx.arc(fx, floorY - fh * 0.88, fh * 0.11, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Fluorescent rows, far to near, with pools of light on the carpet
+      for (let i = s.rows.length - 1; i >= 0; i--) {
+        const row = s.rows[i];
+        const k = row.k;
+        const scale = 1 - k;
+        const len = scale * w * 0.1;
+        const wid = scale * h * 0.032;
+        const ceilY = py(0, k);
+        const floorY = py(h, k);
+        for (const p of row.panels) {
+          const cxp = lerp(w * 0.5 + p.off * w * 0.36, vp.x, k);
+          let b;
+          if (p.dead) {
+            b = Math.random() < 0.055 ? 0.85 : 0.05;   // strobing, mostly out
+          } else {
+            b = p.base + Math.sin(t * 0.02 + p.buzz) * 0.05 + (Math.random() - 0.5) * 0.07;
+          }
+          b = Math.max(0, Math.min(1, b)) * dim;
+
+          // Halo on the ceiling around the fixture
+          g = ctx.createRadialGradient(cxp, ceilY, 2, cxp, ceilY, len * 2.4);
+          g.addColorStop(0, `rgba(255, 244, 195, ${b * 0.28})`);
+          g.addColorStop(1, 'rgba(255, 244, 195, 0)');
+          ctx.fillStyle = g;
+          ctx.fillRect(cxp - len * 2.4, ceilY - wid * 3, len * 4.8, wid * 8);
+
+          // The tube itself
+          ctx.fillStyle = `rgba(30, 25, 6, ${0.55 * scale + 0.2})`;
+          ctx.fillRect(cxp - len / 2 - 1.5, ceilY - 1.5, len + 3, wid + 3);
+          ctx.fillStyle = `rgba(252, 243, 198, ${b})`;
+          ctx.fillRect(cxp - len / 2, ceilY, len, wid);
+
+          // Wet-carpet pool beneath it
+          g = ctx.createRadialGradient(cxp, floorY, 2, cxp, floorY, len * 1.7);
+          g.addColorStop(0, `rgba(255, 240, 180, ${b * 0.16})`);
+          g.addColorStop(1, 'rgba(255, 240, 180, 0)');
+          ctx.fillStyle = g;
+          ctx.save();
+          ctx.translate(cxp, floorY);
+          ctx.scale(1, 0.32);
+          ctx.beginPath();
+          ctx.arc(0, 0, len * 1.7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      // Film grain crawling over everything
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      const gx = Math.floor(Math.random() * 160), gy = Math.floor(Math.random() * 160);
+      ctx.translate(-gx, -gy);
+      ctx.fillStyle = ctx.createPattern(s.grain, 'repeat');
+      ctx.fillRect(0, 0, w + 160, h + 160);
+      ctx.restore();
+
+      // Vignette, plus extra darkness while the power stutters
+      g = ctx.createRadialGradient(w * 0.5, h * 0.5, Math.min(w, h) * 0.35, w * 0.5, h * 0.5, Math.max(w, h) * 0.75);
+      g.addColorStop(0, 'rgba(10, 8, 0, 0)');
+      g.addColorStop(1, 'rgba(10, 8, 0, 0.58)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+      if (dim < 1) {
+        ctx.fillStyle = `rgba(0, 0, 0, ${(1 - dim) * 0.5})`;
+        ctx.fillRect(0, 0, w, h);
+      }
+    }
+
+    /* =====================================================================
+       OPEN OCEAN — the mini giant tank. The waterline sits near the top:
+       above it a hazy sky, a couple of small boats and a laden cargo ship;
+       below it god rays, marine snow, an anchovy bait ball swirling as one
+       animal, a ribbon school crossing mid-water, marlins that dart at the
+       ball, and sharks patrolling the deep.
+       ===================================================================== */
+
+    function buildOcean(canvas) {
+      const w = canvas.width, h = canvas.height;
+      const waterY = h * 0.16;
+
+      const clouds = Array.from({ length: 4 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * waterY * 0.45 + waterY * 0.08,
+        s: Math.random() * 0.7 + 0.6,
+        v: Math.random() * 0.05 + 0.02
+      }));
+
+      const rays = Array.from({ length: 6 }, () => ({
+        x: Math.random() * w,
+        width: Math.random() * 30 + 14,
+        tilt: Math.random() * 0.16 - 0.08,
+        phase: Math.random() * Math.PI * 2
+      }));
+
+      const snow = Array.from({ length: 70 }, () => ({
+        x: Math.random() * w,
+        y: waterY + Math.random() * (h - waterY),
+        r: Math.random() * 1.4 + 0.4,
+        v: Math.random() * 0.16 + 0.05,
+        drift: Math.random() * Math.PI * 2
+      }));
+
+      const bubbles = Array.from({ length: 26 }, () => ({
+        x: Math.random() * w,
+        y: waterY + Math.random() * (h - waterY),
+        r: Math.random() * 2.4 + 0.8,
+        v: Math.random() * 0.5 + 0.25,
+        wob: Math.random() * Math.PI * 2
+      }));
+
+      // Anchovy bait ball — 150 slivers swirling around a drifting centre
+      const bait = {
+        x: w * 0.32, y: h * 0.56,
+        vx: 0.14, vy: 0.05,
+        spook: 0,
+        fish: Array.from({ length: 150 }, () => ({
+          ang: Math.random() * Math.PI * 2,
+          rad: Math.random() * 70 + 16,
+          spd: Math.random() * 0.02 + 0.017,
+          squash: Math.random() * 0.25 + 0.45,
+          size: Math.random() * 3 + 4.5,
+          shim: Math.random() * Math.PI * 2
+        }))
+      };
+
+      // A ribbon school snaking across mid-water
+      const ribbon = {
+        y: h * 0.36, speed: 0.55, phase: Math.random() * Math.PI * 2,
+        x: -34 * 22,
+        fish: Array.from({ length: 34 }, (_, i) => ({
+          lag: i * 22,
+          off: (Math.random() - 0.5) * 26,
+          size: Math.random() * 3 + 6
+        }))
+      };
+
+      const marlins = [
+        { x: w * 0.8, y: h * 0.45, dir: -1, speed: 1.25, size: 76, wob: 0, dart: 0, nextDart: 6000 },
+        { x: w * 0.12, y: h * 0.68, dir: 1, speed: 1.05, size: 64, wob: Math.PI, dart: 0, nextDart: 13000 }
+      ];
+
+      const sharks = [
+        { x: w * 0.2, y: h * 0.62, dir: -1, speed: 0.5, size: 92, sway: Math.PI * 0.7 },
+        { x: w * 0.55, y: h * 0.8, dir: 1, speed: 0.42, size: 122, sway: 0 },
+        { x: w * 0.85, y: h * 0.9, dir: -1, speed: 0.34, size: 155, sway: Math.PI * 1.3 }
+      ];
+
+      const boxTones = ['#c0392b', '#2471a3', '#1e8449', '#d68910', '#7d3c98', '#839192'];
+      const cargo = {
+        x: -Math.max(w * 0.42, 340) - 80,
+        speed: 0.055,
+        len: Math.max(w * 0.42, 340),
+        phase: Math.random() * Math.PI * 2,
+        stacks: Array.from({ length: 9 }, () => ({
+          tiers: Math.floor(Math.random() * 2) + 2,
+          tones: [0, 1, 2, 3].map(() => boxTones[Math.floor(Math.random() * boxTones.length)])
+        }))
+      };
+      const boats = [
+        { kind: 'fishing', x: w * 0.68, drift: 0.02, phase: Math.random() * Math.PI * 2 },
+        { kind: 'sail', x: w * 0.3, drift: -0.015, phase: Math.random() * Math.PI * 2 }
+      ];
+
+      return { w, h, waterY, clouds, rays, snow, bubbles, bait, ribbon, marlins, sharks, cargo, boats };
+    }
+
+    function drawOcean(ctx, canvas, s, t) {
+      const { w, h, waterY } = s;
+      const waveAt = x => waterY + Math.sin(x * 0.012 + t * 0.0012) * 3 + Math.sin(x * 0.03 - t * 0.0019) * 1.6;
+      ctx.clearRect(0, 0, w, h);
+
+      // ---- Sky ----
+      let g = ctx.createLinearGradient(0, 0, 0, waterY + 8);
+      g.addColorStop(0, '#cfeafa');
+      g.addColorStop(1, '#8fc9ea');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, waterY + 8);
+      g = ctx.createRadialGradient(w * 0.18, 0, 4, w * 0.18, 0, waterY * 1.6);
+      g.addColorStop(0, 'rgba(255, 250, 220, 0.85)');
+      g.addColorStop(1, 'rgba(255, 250, 220, 0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, waterY + 8);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      for (const c of s.clouds) {
+        c.x += c.v;
+        if (c.x > w + 90) c.x = -90;
+        for (const [dx, dy, r] of [[-26, 2, 15], [0, -5, 20], [26, 3, 14]]) {
+          ctx.beginPath();
+          ctx.ellipse(c.x + dx * c.s, c.y + dy * c.s, r * c.s, r * 0.55 * c.s, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // ---- Vessels (drawn before the water fill so their hulls read as submerged) ----
+      const cg = s.cargo;
+      cg.x += cg.speed;
+      if (cg.x > w + 120) cg.x = -cg.len - 160;
+      const cgY = waveAt(cg.x + cg.len / 2) + Math.sin(t * 0.0008 + cg.phase) * 1.4;
+      ctx.save();
+      ctx.translate(cg.x + cg.len / 2, cgY);
+      ctx.rotate(Math.sin(t * 0.0006 + cg.phase) * 0.006);
+      const L = cg.len;
+      // Anti-fouling hull below the waterline
+      ctx.fillStyle = '#7b241c';
+      ctx.beginPath();
+      ctx.moveTo(-L / 2, 0);
+      ctx.lineTo(L / 2 + 20, 0);
+      ctx.lineTo(L / 2 - 4, 17);
+      ctx.lineTo(-L / 2 + 22, 17);
+      ctx.closePath();
+      ctx.fill();
+      // Freeboard
+      ctx.fillStyle = '#1c2833';
+      ctx.beginPath();
+      ctx.moveTo(-L / 2 - 4, -15);
+      ctx.lineTo(L / 2 + 30, -15);
+      ctx.lineTo(L / 2 + 20, 1);
+      ctx.lineTo(-L / 2, 1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#e74c3c';                        // boot stripe
+      ctx.fillRect(-L / 2 - 1, -2.5, L + 26, 3);
+      // Container stacks
+      const bw = L * 0.068, bh = 8;
+      for (let i = 0; i < cg.stacks.length; i++) {
+        const st = cg.stacks[i];
+        const bx = -L / 2 + 14 + i * bw * 1.06;
+        for (let tier = 0; tier < st.tiers; tier++) {
+          ctx.fillStyle = st.tones[tier];
+          ctx.fillRect(bx, -15 - (tier + 1) * bh, bw, bh - 1);
+        }
+      }
+      // Bridge castle aft, funnel, radar mast
+      ctx.fillStyle = '#ecf0f1';
+      ctx.fillRect(-L / 2 + 4, -48, L * 0.085, 33);
+      ctx.fillStyle = '#5d6d7e';
+      for (let win = 0; win < 3; win++) ctx.fillRect(-L / 2 + 7, -45 + win * 9, L * 0.085 - 6, 3);
+      ctx.fillStyle = '#b03a2e';
+      ctx.fillRect(-L / 2 + 8, -58, L * 0.04, 10);
+      ctx.strokeStyle = '#34495e';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(L / 2 + 8, -15); ctx.lineTo(L / 2 + 8, -34);
+      ctx.stroke();
+      ctx.restore();
+      // Bow foam
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+      const bowX = cg.x + cg.len + 22;
+      for (let f = 0; f < 3; f++) {
+        ctx.beginPath();
+        ctx.ellipse(bowX + f * 7, waveAt(bowX) + 1, 6 - f * 1.5, 2.2, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      for (const b of s.boats) {
+        b.x += b.drift;
+        if (b.x > w + 60) b.x = -60;
+        if (b.x < -60) b.x = w + 60;
+        const by = waveAt(b.x) + Math.sin(t * 0.0016 + b.phase) * 1.8;
+        ctx.save();
+        ctx.translate(b.x, by);
+        ctx.rotate(Math.sin(t * 0.0014 + b.phase) * 0.03);
+        if (b.kind === 'fishing') {
+          ctx.fillStyle = '#21618c';                    // hull
+          ctx.beginPath();
+          ctx.moveTo(-26, -6); ctx.lineTo(26, -6); ctx.lineTo(19, 6); ctx.lineTo(-21, 6);
+          ctx.closePath(); ctx.fill();
+          ctx.fillStyle = '#f4f6f7';                    // wheelhouse
+          ctx.fillRect(-14, -16, 15, 10);
+          ctx.fillStyle = '#2e4053';
+          ctx.fillRect(-11, -14, 5, 4);
+          ctx.strokeStyle = '#4d5656';                  // boom
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(8, -6); ctx.lineTo(8, -24); ctx.lineTo(22, -12);
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = '#f8f9f9';                    // hull
+          ctx.beginPath();
+          ctx.moveTo(-22, -4); ctx.lineTo(22, -4); ctx.lineTo(15, 5); ctx.lineTo(-17, 5);
+          ctx.closePath(); ctx.fill();
+          ctx.strokeStyle = '#616a6b';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(0, -4); ctx.lineTo(0, -34);
+          ctx.stroke();
+          ctx.fillStyle = '#fdfefe';                    // main + jib
+          ctx.beginPath();
+          ctx.moveTo(1, -33); ctx.lineTo(1, -6); ctx.lineTo(19, -6);
+          ctx.closePath(); ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(-1, -30); ctx.lineTo(-1, -6); ctx.lineTo(-15, -6);
+          ctx.closePath(); ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      // ---- The water column ----
+      ctx.beginPath();
+      ctx.moveTo(0, waveAt(0));
+      for (let x = 8; x <= w; x += 8) ctx.lineTo(x, waveAt(x));
+      ctx.lineTo(w, h); ctx.lineTo(0, h);
+      ctx.closePath();
+      g = ctx.createLinearGradient(0, waterY, 0, h);
+      g.addColorStop(0, 'rgba(110, 185, 220, 0.88)');
+      g.addColorStop(0.16, 'rgba(35, 110, 160, 0.94)');
+      g.addColorStop(0.55, 'rgba(10, 62, 105, 0.97)');
+      g.addColorStop(1, 'rgba(3, 26, 48, 0.99)');
+      ctx.fillStyle = g;
+      ctx.fill();
+      // Sun-catch along the swell
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(0, waveAt(0));
+      for (let x = 8; x <= w; x += 8) ctx.lineTo(x, waveAt(x));
+      ctx.stroke();
+
+      // God rays swinging down from the surface
+      ctx.fillStyle = '#dff3ff';
+      for (const r of s.rays) {
+        const sway = Math.sin(t * 0.00028 + r.phase) * w * 0.02;
+        ctx.globalAlpha = 0.05 + Math.abs(Math.sin(t * 0.00038 + r.phase)) * 0.05;
+        ctx.beginPath();
+        ctx.moveTo(r.x + sway, waterY);
+        ctx.lineTo(r.x + sway + r.width, waterY);
+        ctx.lineTo(r.x + sway + r.width * 2.4 + w * r.tilt, h * 0.9);
+        ctx.lineTo(r.x + sway - r.width * 1.5 + w * r.tilt, h * 0.9);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // Marine snow sinking through the column
+      ctx.fillStyle = 'rgba(220, 235, 245, 0.5)';
+      for (const p of s.snow) {
+        p.y += p.v;
+        p.x += Math.sin(t * 0.0004 + p.drift) * 0.12;
+        if (p.y > h) { p.y = waterY + 4; p.x = Math.random() * w; }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Ribbon school snaking left to right
+      const rb = s.ribbon;
+      rb.x += rb.speed;
+      const tailX = rb.x - rb.fish[rb.fish.length - 1].lag;
+      if (tailX > w + 40) {
+        rb.x = -rb.fish[rb.fish.length - 1].lag - 40;
+        rb.y = h * (0.28 + Math.random() * 0.2);
+        rb.phase = Math.random() * Math.PI * 2;
+      }
+      for (const f of rb.fish) {
+        const fx = rb.x - f.lag;
+        if (fx < -20 || fx > w + 20) continue;
+        const fy = rb.y + Math.sin(fx * 0.02 + rb.phase + t * 0.001) * 18 + f.off;
+        const fl = f.size;
+        ctx.fillStyle = '#8fa8bd';
+        ctx.beginPath();
+        ctx.moveTo(fx - fl * 0.7, fy);
+        ctx.lineTo(fx - fl * 1.05, fy - fl * 0.3);
+        ctx.lineTo(fx - fl * 1.05, fy + fl * 0.3);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(fx, fy, fl * 0.75, fl * 0.26, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#dde7ee';
+        ctx.beginPath();
+        ctx.ellipse(fx, fy + fl * 0.08, fl * 0.6, fl * 0.13, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // The bait ball: drifts, tightens, and flares away from marlins
+      const bb = s.bait;
+      bb.x += bb.vx; bb.y += bb.vy;
+      if (bb.x < w * 0.16 || bb.x > w * 0.62) bb.vx *= -1;
+      if (bb.y < h * 0.36 || bb.y > h * 0.74) bb.vy *= -1;
+      let threat = 0;
+      for (const m of s.marlins) {
+        const d = Math.hypot(m.x - bb.x, m.y - bb.y);
+        if (d < 170) threat = Math.max(threat, 1 - d / 170);
+      }
+      bb.spook += (threat - bb.spook) * 0.04;
+      const radMul = 1 + bb.spook * 1.1;
+      for (const f of bb.fish) {
+        f.ang += f.spd * (1 + bb.spook * 1.4);
+        const fx = bb.x + Math.cos(f.ang) * f.rad * radMul;
+        const fy = bb.y + Math.sin(f.ang) * f.rad * radMul * f.squash;
+        const tang = f.ang + Math.PI / 2;
+        const shimmer = 0.3 + 0.7 * Math.abs(Math.sin(f.ang + f.shim + t * 0.0012));
+        ctx.strokeStyle = `rgba(206, 220, 232, ${shimmer})`;
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(fx - Math.cos(tang) * f.size * 0.5, fy - Math.sin(tang) * f.size * 0.5 * f.squash);
+        ctx.lineTo(fx + Math.cos(tang) * f.size * 0.5, fy + Math.sin(tang) * f.size * 0.5 * f.squash);
+        ctx.stroke();
+      }
+
+      // Marlins: cruise the blue, then dart at the ball
+      for (const m of s.marlins) {
+        m.wob += 0.05;
+        if (t > m.nextDart && m.dart <= 0) {
+          m.dart = 95;
+          m.nextDart = t + 9000 + Math.random() * 13000;
+          m.dir = bb.x > m.x ? 1 : -1;
+        }
+        let spd = m.speed;
+        if (m.dart > 0) {
+          m.dart--;
+          spd = m.speed + 2.6;
+          m.y += (bb.y - m.y) * 0.02;
+        } else {
+          m.y += Math.sin(m.wob) * 0.3;
+        }
+        m.x += spd * m.dir;
+        if (m.x > w + 90) { m.x = w + 90; m.dir = -1; }
+        if (m.x < -90) { m.x = -90; m.dir = 1; }
+        m.y = Math.max(waterY + 60, Math.min(h * 0.82, m.y));
+        const ml = m.size;
+        ctx.save();
+        ctx.translate(m.x, m.y);
+        ctx.scale(m.dir, 1);
+        ctx.rotate(Math.sin(m.wob) * 0.03);
+        g = ctx.createLinearGradient(0, -ml * 0.14, 0, ml * 0.14);
+        g.addColorStop(0, '#1b4f72');
+        g.addColorStop(0.55, '#5d87a8');
+        g.addColorStop(1, '#d5dee6');
+        ctx.strokeStyle = '#123f5c';                     // the bill
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.moveTo(ml * 0.36, -ml * 0.01);
+        ctx.lineTo(ml * 0.66, -ml * 0.045);
+        ctx.stroke();
+        ctx.fillStyle = g;                               // body
+        ctx.beginPath();
+        ctx.ellipse(0, 0, ml * 0.4, ml * 0.115, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#1b4f72';                       // dorsal sail
+        ctx.beginPath();
+        ctx.moveTo(-ml * 0.08, -ml * 0.09);
+        ctx.quadraticCurveTo(ml * 0.02, -ml * 0.3, ml * 0.2, -ml * 0.1);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();                                 // sickle tail
+        ctx.moveTo(-ml * 0.38, 0);
+        ctx.quadraticCurveTo(-ml * 0.56, -ml * 0.02, -ml * 0.6, -ml * 0.2);
+        ctx.quadraticCurveTo(-ml * 0.48, -ml * 0.03, -ml * 0.44, 0);
+        ctx.quadraticCurveTo(-ml * 0.48, ml * 0.03, -ml * 0.6, ml * 0.18);
+        ctx.quadraticCurveTo(-ml * 0.56, ml * 0.02, -ml * 0.38, 0);
+        ctx.fill();
+        ctx.fillStyle = '#0e2f45';                       // eye
+        ctx.beginPath();
+        ctx.arc(ml * 0.28, -ml * 0.025, ml * 0.026, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Sharks patrolling, biggest in the deepest water
+      for (const sh of s.sharks) {
+        sh.sway += 0.028;
+        sh.x += sh.speed * sh.dir;
+        sh.y += Math.sin(sh.sway) * 0.18;
+        if (sh.x > w + sh.size && sh.dir > 0) sh.dir = -1;
+        if (sh.x < -sh.size && sh.dir < 0) sh.dir = 1;
+        const sl = sh.size;
+        ctx.save();
+        ctx.translate(sh.x, sh.y);
+        ctx.scale(sh.dir, 1);
+        ctx.rotate(Math.sin(sh.sway) * 0.035);
+        g = ctx.createLinearGradient(0, -sl * 0.16, 0, sl * 0.14);
+        g.addColorStop(0, '#5d6d7e');
+        g.addColorStop(0.62, '#8b9aa8');
+        g.addColorStop(0.72, '#cfd8de');
+        g.addColorStop(1, '#dbe2e7');
+        ctx.fillStyle = g;
+        ctx.beginPath();                                 // body + caudal fin
+        ctx.moveTo(sl * 0.52, 0);
+        ctx.quadraticCurveTo(sl * 0.2, -sl * 0.155, -sl * 0.2, -sl * 0.095);
+        ctx.lineTo(-sl * 0.46, -sl * 0.02);
+        ctx.lineTo(-sl * 0.63, -sl * 0.19);
+        ctx.lineTo(-sl * 0.54, 0);
+        ctx.lineTo(-sl * 0.62, sl * 0.11);
+        ctx.lineTo(-sl * 0.44, sl * 0.025);
+        ctx.quadraticCurveTo(sl * 0.12, sl * 0.135, sl * 0.52, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#5d6d7e';                       // dorsal fin
+        ctx.beginPath();
+        ctx.moveTo(-sl * 0.02, -sl * 0.12);
+        ctx.quadraticCurveTo(sl * 0.03, -sl * 0.3, sl * 0.13, -sl * 0.125);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#6d7c8b';                       // pectoral fin
+        ctx.beginPath();
+        ctx.moveTo(sl * 0.12, sl * 0.05);
+        ctx.lineTo(-sl * 0.04, sl * 0.2);
+        ctx.lineTo(-sl * 0.06, sl * 0.07);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(52, 63, 74, 0.55)';      // gill slits
+        ctx.lineWidth = 1.4;
+        for (let gi = 0; gi < 4; gi++) {
+          ctx.beginPath();
+          ctx.moveTo(sl * (0.24 - gi * 0.028), -sl * 0.055);
+          ctx.lineTo(sl * (0.235 - gi * 0.028), sl * 0.045);
+          ctx.stroke();
+        }
+        ctx.fillStyle = '#1c2833';                       // eye
+        ctx.beginPath();
+        ctx.arc(sl * 0.4, -sl * 0.045, sl * 0.02, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Bubbles working their way back to the surface
+      ctx.strokeStyle = 'rgba(220, 240, 250, 0.55)';
+      ctx.lineWidth = 1;
+      for (const b of s.bubbles) {
+        b.y -= b.v;
+        b.wob += 0.03;
+        b.x += Math.sin(b.wob) * 0.25;
+        if (b.y < waterY + 6) { b.y = h - 6; b.x = Math.random() * w; }
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    /* ============================================================
+       Greenhouse — glass panes and mullions, sunbeams full of dust,
+       a shelf of potted succulents, hanging string-of-pearls, one
+       unhurried butterfly, and the occasional condensation drip.
+       ============================================================ */
+    function buildGreenhouse(canvas) {
+      const w = canvas.width, h = canvas.height;
+      const rnd = (a, b) => a + Math.random() * (b - a);
+      const motes = [];
+      for (let i = 0; i < 70; i++) {
+        motes.push({ x: Math.random() * w, y: Math.random() * h,
+                     s: rnd(0.5, 1.6), ph: rnd(0, 6.28), dr: rnd(-0.08, 0.08) });
+      }
+      const kinds = ['echeveria', 'cactus', 'jade', 'snake', 'aloe', 'echeveria', 'cactus'];
+      const plants = [];
+      const n = Math.max(5, Math.min(8, Math.floor(w / 150)));
+      for (let i = 0; i < n; i++) {
+        plants.push({
+          kind: kinds[i % kinds.length],
+          x: w * (0.06 + 0.88 * i / (n - 1)) + rnd(-12, 12),
+          sc: rnd(0.8, 1.15),
+          hue: rnd(-12, 12),
+          bloom: Math.random() < 0.45
+        });
+      }
+      return {
+        motes, plants,
+        vines: [ { x: w * 0.1, len: h * 0.24, ph: rnd(0, 6) },
+                 { x: w * 0.52, len: h * 0.18, ph: rnd(0, 6) },
+                 { x: w * 0.92, len: h * 0.27, ph: rnd(0, 6) } ],
+        fly: { x: w * 0.3, y: h * 0.4, tx: w * 0.6, ty: h * 0.7, hold: 0 },
+        drip: { at: 5000, x: 0, y: 0, active: false },
+        epoch: null
+      };
+    }
+
+    function drawGreenhouse(ctx, canvas, s, t) {
+      const w = canvas.width, h = canvas.height;
+      if (s.epoch === null) s.epoch = t;
+      const local = t - s.epoch;
+
+      /* light through glass */
+      const sky = ctx.createLinearGradient(0, 0, 0, h);
+      sky.addColorStop(0, '#f2f9ec');
+      sky.addColorStop(0.55, '#ddefd6');
+      sky.addColorStop(1, '#c2ddb8');
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, w, h);
+      const sun = ctx.createRadialGradient(w * 0.18, h * 0.1, 0, w * 0.18, h * 0.1, h * 0.5);
+      sun.addColorStop(0, 'rgba(255, 250, 214, 0.75)');
+      sun.addColorStop(1, 'rgba(255, 250, 214, 0)');
+      ctx.fillStyle = sun;
+      ctx.fillRect(0, 0, w, h);
+
+      /* drifting cloud shadows */
+      ctx.fillStyle = 'rgba(70, 100, 70, 0.05)';
+      for (let i = 0; i < 3; i++) {
+        const cx = ((t * 0.008 * (1 + i * 0.4)) + i * w * 0.5) % (w + 400) - 200;
+        ctx.beginPath();
+        ctx.ellipse(cx, h * (0.2 + i * 0.25), 220, 70, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      /* glass mullions */
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+      ctx.lineWidth = 5;
+      for (let i = 1; i < 5; i++) {
+        ctx.beginPath(); ctx.moveTo(w * i / 5, 0); ctx.lineTo(w * i / 5, h); ctx.stroke();
+      }
+      for (let i = 1; i < 4; i++) {
+        ctx.beginPath(); ctx.moveTo(0, h * i / 4); ctx.lineTo(w, h * i / 4); ctx.stroke();
+      }
+      ctx.strokeStyle = 'rgba(140, 165, 140, 0.5)';
+      ctx.lineWidth = 1.5;
+      for (let i = 1; i < 5; i++) {
+        ctx.beginPath(); ctx.moveTo(w * i / 5 + 3, 0); ctx.lineTo(w * i / 5 + 3, h); ctx.stroke();
+      }
+      for (let i = 1; i < 4; i++) {
+        ctx.beginPath(); ctx.moveTo(0, h * i / 4 + 3); ctx.lineTo(w, h * i / 4 + 3); ctx.stroke();
+      }
+
+      /* sunbeams */
+      for (let i = 0; i < 3; i++) {
+        const bx = w * (0.12 + i * 0.3);
+        const a = 0.06 + 0.03 * Math.sin(t / 3800 + i * 2);
+        ctx.fillStyle = 'rgba(255, 250, 200, ' + a + ')';
+        ctx.beginPath();
+        ctx.moveTo(bx, -20);
+        ctx.lineTo(bx + 70, -20);
+        ctx.lineTo(bx + 240, h + 20);
+        ctx.lineTo(bx + 110, h + 20);
+        ctx.closePath(); ctx.fill();
+      }
+
+      /* dust motes */
+      for (const m of s.motes) {
+        const mx = (m.x + t * 0.012 * m.dr * 10 + w) % w;
+        const my = (m.y - t * 0.006 * m.s + h) % h;
+        const tw = 0.35 + 0.35 * Math.sin(t / 700 + m.ph);
+        ctx.fillStyle = 'rgba(255, 252, 230, ' + tw + ')';
+        ctx.beginPath(); ctx.arc(mx, my, m.s, 0, Math.PI * 2); ctx.fill();
+      }
+
+      /* hanging vines: string-of-pearls, swaying */
+      for (const v of s.vines) {
+        const sway = Math.sin(t / 2600 + v.ph) * 10;
+        ctx.strokeStyle = '#5c7a52';
+        ctx.lineWidth = 1.5;
+        for (let strand = -1; strand <= 1; strand++) {
+          const sx = v.x + strand * 7;
+          const sl = v.len * (1 - Math.abs(strand) * 0.22);
+          ctx.beginPath();
+          ctx.moveTo(sx, 0);
+          ctx.quadraticCurveTo(sx + sway * 0.5, sl * 0.5, sx + sway, sl);
+          ctx.stroke();
+          ctx.fillStyle = '#74a57f';
+          for (let k = 1; k <= 9; k++) {
+            const f = k / 9;
+            const bx2 = sx + sway * f * f;
+            const by2 = sl * f;
+            ctx.beginPath(); ctx.arc(bx2, by2, 2.6 - f * 0.6, 0, Math.PI * 2); ctx.fill();
+          }
+        }
+      }
+
+      /* the shelf */
+      const shY = h * 0.84;
+      ctx.fillStyle = '#8a6b4a';
+      ctx.fillRect(0, shY, w, 13);
+      ctx.fillStyle = '#a5825c';
+      ctx.fillRect(0, shY, w, 3);
+      ctx.fillStyle = '#6e5238';
+      for (let i = 0; i < 5; i++) {
+        const bx = w * (0.1 + i * 0.2);
+        ctx.beginPath();
+        ctx.moveTo(bx, shY + 13); ctx.lineTo(bx + 14, shY + 13);
+        ctx.lineTo(bx, shY + 34);
+        ctx.closePath(); ctx.fill();
+      }
+
+      /* potted plants */
+      for (const p of s.plants) {
+        const sc = p.sc, px = p.x, base = shY;
+        ctx.fillStyle = '#b5714e';                     // terracotta pot
+        ctx.beginPath();
+        ctx.moveTo(px - 17 * sc, base - 26 * sc);
+        ctx.lineTo(px + 17 * sc, base - 26 * sc);
+        ctx.lineTo(px + 12 * sc, base);
+        ctx.lineTo(px - 12 * sc, base);
+        ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#c98257';
+        ctx.fillRect(px - 19 * sc, base - 30 * sc, 38 * sc, 6 * sc);
+        const top = base - 30 * sc;
+        if (p.kind === 'echeveria') {
+          for (let ring = 0; ring < 2; ring++) {
+            const nL = 7 - ring * 2, rr = (13 - ring * 5) * sc;
+            for (let i = 0; i < nL; i++) {
+              const a = i / nL * Math.PI * 2 + ring * 0.4;
+              ctx.fillStyle = ring ? '#8fbf95' : '#74a57f';
+              ctx.save();
+              ctx.translate(px + Math.cos(a) * rr * 0.5, top - 4 * sc + Math.sin(a) * rr * 0.3);
+              ctx.rotate(a);
+              ctx.beginPath();
+              ctx.ellipse(rr * 0.4, 0, rr * 0.55, rr * 0.26, 0, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+            }
+          }
+          ctx.fillStyle = '#e8a0a8';                   // pink tips
+          ctx.beginPath(); ctx.arc(px, top - 6 * sc, 3 * sc, 0, Math.PI * 2); ctx.fill();
+        } else if (p.kind === 'cactus') {
+          ctx.fillStyle = '#5f8f5f';
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(px - 8 * sc, top - 42 * sc, 16 * sc, 44 * sc, 8 * sc);
+          else ctx.rect(px - 8 * sc, top - 42 * sc, 16 * sc, 44 * sc);
+          ctx.fill();
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(px + 6 * sc, top - 30 * sc, 12 * sc, 8 * sc, 4 * sc);
+          else ctx.rect(px + 6 * sc, top - 30 * sc, 12 * sc, 8 * sc);
+          ctx.fill();
+          ctx.fillRect(px + 12 * sc, top - 30 * sc, 6 * sc, 18 * sc);
+          ctx.strokeStyle = 'rgba(240, 245, 230, 0.8)';
+          ctx.lineWidth = 1;
+          for (let i = 0; i < 8; i++) {
+            const sy = top - 38 * sc + i * 5 * sc;
+            ctx.beginPath();
+            ctx.moveTo(px - 8 * sc + (i % 2) * 8 * sc, sy);
+            ctx.lineTo(px - 11 * sc + (i % 2) * 8 * sc, sy - 3 * sc);
+            ctx.stroke();
+          }
+          if (p.bloom) {
+            ctx.fillStyle = '#e87a9a';
+            ctx.beginPath(); ctx.arc(px, top - 44 * sc, 4.5 * sc, 0, Math.PI * 2); ctx.fill();
+          }
+        } else if (p.kind === 'jade') {
+          ctx.strokeStyle = '#7a5a3a'; ctx.lineWidth = 4 * sc; ctx.lineCap = 'round';
+          ctx.beginPath(); ctx.moveTo(px, top); ctx.lineTo(px, top - 18 * sc); ctx.stroke();
+          ctx.fillStyle = '#5f8f5f';
+          const cls = [[-10, -22], [8, -26], [-2, -34], [12, -14], [-14, -12]];
+          for (const c of cls) {
+            ctx.beginPath();
+            ctx.arc(px + c[0] * sc, top + c[1] * sc, 7 * sc, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        } else if (p.kind === 'snake') {
+          for (let i = -2; i <= 2; i++) {
+            const bh = (34 - Math.abs(i) * 7) * sc;
+            ctx.fillStyle = i % 2 ? '#4f7a4f' : '#6f9c5f';
+            ctx.beginPath();
+            ctx.moveTo(px + i * 6 * sc - 3 * sc, top);
+            ctx.quadraticCurveTo(px + i * 8 * sc, top - bh, px + i * 6 * sc + 1 * sc, top - bh);
+            ctx.quadraticCurveTo(px + i * 8 * sc + 3 * sc, top - bh * 0.5, px + i * 6 * sc + 3 * sc, top);
+            ctx.closePath(); ctx.fill();
+            ctx.strokeStyle = '#d9c86a'; ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(px + i * 6 * sc - 2 * sc, top - 2);
+            ctx.quadraticCurveTo(px + i * 8 * sc, top - bh * 0.9, px + i * 6 * sc + 1 * sc, top - bh + 2);
+            ctx.stroke();
+          }
+        } else {                                       // aloe
+          ctx.fillStyle = '#6f9c6f';
+          for (let i = -2; i <= 2; i++) {
+            ctx.save();
+            ctx.translate(px, top);
+            ctx.rotate(i * 0.32);
+            ctx.beginPath();
+            ctx.moveTo(-4 * sc, 0);
+            ctx.quadraticCurveTo(-2 * sc, -30 * sc, 0, -36 * sc);
+            ctx.quadraticCurveTo(2 * sc, -30 * sc, 4 * sc, 0);
+            ctx.closePath(); ctx.fill();
+            ctx.restore();
+          }
+        }
+      }
+
+      /* humidity wisps near the shelf */
+      for (let i = 0; i < 7; i++) {
+        const cyc = (t / 9000 + i / 7) % 1;
+        const wy = shY - cyc * h * 0.24;
+        const wx = w * (0.08 + i * 0.14) + 18 * Math.sin(t / 1600 + i);
+        ctx.fillStyle = 'rgba(255, 255, 255, ' + 0.09 * (1 - cyc) + ')';
+        ctx.beginPath(); ctx.ellipse(wx, wy, 34, 12, 0, 0, Math.PI * 2); ctx.fill();
+      }
+
+      /* one unhurried butterfly */
+      const f = s.fly;
+      if (f.hold > 0) {
+        f.hold -= 16;
+      } else {
+        const dx = f.tx - f.x, dy = f.ty - f.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 8) {
+          f.hold = 2200 + Math.random() * 2200;
+          const target = s.plants[Math.floor(Math.random() * s.plants.length)];
+          f.tx = target.x + (Math.random() - 0.5) * 30;
+          f.ty = shY - 50 - Math.random() * h * 0.3;
+        } else {
+          f.x += dx / dist * 1.1;
+          f.y += dy / dist * 1.1 + Math.sin(t / 180) * 0.8;
+        }
+      }
+      const flap = Math.sin(t / (f.hold > 0 ? 260 : 110));
+      ctx.save();
+      ctx.translate(f.x, f.y);
+      ctx.fillStyle = '#e2955c';
+      ctx.strokeStyle = '#8a4f2a'; ctx.lineWidth = 1;
+      for (const side of [-1, 1]) {
+        ctx.save();
+        ctx.rotate(side * flap * 0.6);
+        ctx.beginPath();
+        ctx.ellipse(side * 7, -2, 8, 5.5, side * 0.5, 0, Math.PI * 2);
+        ctx.fill(); ctx.stroke();
+        ctx.restore();
+      }
+      ctx.fillStyle = '#4a3a2a';
+      ctx.beginPath(); ctx.ellipse(0, 0, 2, 5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+
+      /* condensation drip down a mullion */
+      const dp = s.drip;
+      if (!dp.active && local > dp.at) {
+        dp.active = true;
+        dp.x = w * (1 + Math.floor(Math.random() * 4)) / 5 + 1.5;
+        dp.y = -6;
+      }
+      if (dp.active) {
+        dp.y += 3.4;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(dp.x, Math.max(0, dp.y - 46));
+        ctx.lineTo(dp.x, dp.y);
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.beginPath(); ctx.arc(dp.x, dp.y, 2.6, 0, Math.PI * 2); ctx.fill();
+        if (dp.y > h + 10) {
+          dp.active = false;
+          dp.at = local + 7000 + Math.random() * 9000;
+        }
+      }
+    }
+
+    /* ============================================================
+       Paper Cranes — a folded-paper world. Rotating paper sun,
+       faceted mountain ranges in parallax, a chevron river with a
+       paper boat, and origami cranes crossing at their own pace.
+       Everything casts the little offset shadow of cut paper.
+       ============================================================ */
+    function buildOrigami(canvas) {
+      const w = canvas.width, h = canvas.height;
+      const rnd = (a, b) => a + Math.random() * (b - a);
+
+      /* paper grain tile */
+      const tile = document.createElement('canvas');
+      tile.width = 140; tile.height = 140;
+      const tc = tile.getContext('2d');
+      tc.fillStyle = 'rgba(0, 0, 0, 0)';
+      for (let i = 0; i < 240; i++) {
+        tc.fillStyle = Math.random() < 0.5 ? 'rgba(120, 108, 88, 0.05)' : 'rgba(255, 255, 255, 0.5)';
+        tc.fillRect(Math.random() * 140, Math.random() * 140, rnd(0.5, 1.6), rnd(0.5, 1.2));
+      }
+
+      function ridge(count, amp, base) {
+        const pts = [];
+        const span = w * 1.5;
+        for (let i = 0; i <= count; i++) {
+          pts.push([span * i / count, base - (i % 2 ? amp * rnd(0.55, 1) : amp * rnd(0, 0.25))]);
+        }
+        return { pts, span, base };
+      }
+
+      const cranes = [];
+      const pal = ['#fdfaf3', '#e07a5f', '#5f7a8a', '#81b29a', '#e6b655', '#fdfaf3'];
+      for (let i = 0; i < 6; i++) {
+        cranes.push({
+          x: Math.random() * w, y: h * rnd(0.08, 0.5),
+          sc: rnd(0.55, 1.2), spd: rnd(0.35, 1),
+          ph: rnd(0, 6.28), col: pal[i], dir: Math.random() < 0.8 ? 1 : -1
+        });
+      }
+      cranes.sort((a, b) => a.sc - b.sc);      // small (far) drawn first
+
+      return {
+        tile,
+        layers: [
+          { r: ridge(9, h * 0.13, h * 0.68), col: '#b9c6cf', spd: 0.0022 },
+          { r: ridge(7, h * 0.17, h * 0.78), col: '#81b29a', spd: 0.005 },
+          { r: ridge(6, h * 0.2, h * 0.9), col: '#5c6378', spd: 0.009 }
+        ],
+        cranes,
+        clouds: [ { x: w * 0.2, y: h * 0.12, s: 1 },
+                  { x: w * 0.6, y: h * 0.22, s: 0.7 },
+                  { x: w * 0.9, y: h * 0.08, s: 0.85 } ],
+        boat: { x: -60 },
+        leaf: { at: 4000, x: 0, born: 0, active: false },
+        epoch: null
+      };
+    }
+
+    function drawOrigami(ctx, canvas, s, t) {
+      const w = canvas.width, h = canvas.height;
+      if (s.epoch === null) s.epoch = t;
+      const local = t - s.epoch;
+
+      const shade = (fn) => {                 // cut-paper shadow, then the shape
+        ctx.save();
+        ctx.translate(3, 5);
+        ctx.globalAlpha = 0.16;
+        fn('#3a352b');
+        ctx.restore();
+        fn(null);
+      };
+
+      /* the sheet itself */
+      ctx.fillStyle = '#f6f1e7';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = ctx.createPattern(s.tile, 'repeat');
+      ctx.fillRect(0, 0, w, h);
+
+      /* rotating paper sun */
+      const scx = w * 0.8, scy = h * 0.16, rot = t / 22000;
+      shade((over) => {
+        ctx.fillStyle = over || '#f2cc8f';
+        for (let i = 0; i < 12; i++) {
+          const a = rot + i / 12 * Math.PI * 2;
+          ctx.beginPath();
+          ctx.moveTo(scx + Math.cos(a - 0.09) * 44, scy + Math.sin(a - 0.09) * 44);
+          ctx.lineTo(scx + Math.cos(a) * 70, scy + Math.sin(a) * 70);
+          ctx.lineTo(scx + Math.cos(a + 0.09) * 44, scy + Math.sin(a + 0.09) * 44);
+          ctx.closePath(); ctx.fill();
+        }
+        ctx.beginPath(); ctx.arc(scx, scy, 42, 0, Math.PI * 2); ctx.fill();
+        if (!over) {
+          ctx.fillStyle = '#e0b168';
+          ctx.beginPath(); ctx.arc(scx + 6, scy + 8, 34, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#f2cc8f';
+          ctx.beginPath(); ctx.arc(scx + 2, scy + 3, 33, 0, Math.PI * 2); ctx.fill();
+        }
+      });
+
+      /* paper clouds */
+      for (const c of s.clouds) {
+        const cx = (c.x + t * 0.006 * c.s) % (w + 240) - 120;
+        shade((over) => {
+          ctx.fillStyle = over || '#fdfbf5';
+          ctx.beginPath();
+          ctx.arc(cx, c.y, 26 * c.s, Math.PI * 0.5, Math.PI * 1.5);
+          ctx.arc(cx + 26 * c.s, c.y - 14 * c.s, 22 * c.s, Math.PI, Math.PI * 1.9);
+          ctx.arc(cx + 58 * c.s, c.y - 8 * c.s, 20 * c.s, Math.PI * 1.2, Math.PI * 2);
+          ctx.arc(cx + 74 * c.s, c.y, 18 * c.s, Math.PI * 1.5, Math.PI * 0.5);
+          ctx.closePath(); ctx.fill();
+        });
+      }
+
+      /* faceted mountain layers */
+      const darken = { '#b9c6cf': '#9dabb6', '#81b29a': '#68937e', '#5c6378': '#484e60' };
+      for (const L of s.layers) {
+        const off = (t * L.spd) % (L.r.span - w);
+        ctx.save();
+        ctx.translate(-off, 0);
+        shade((over) => {
+          ctx.fillStyle = over || L.col;
+          ctx.beginPath();
+          ctx.moveTo(L.r.pts[0][0], h + 10);
+          for (const p of L.r.pts) ctx.lineTo(p[0], p[1]);
+          ctx.lineTo(L.r.pts[L.r.pts.length - 1][0], h + 10);
+          ctx.closePath(); ctx.fill();
+          if (!over) {
+            ctx.fillStyle = darken[L.col];
+            for (let i = 1; i < L.r.pts.length - 1; i += 2) {
+              const pk = L.r.pts[i], nx = L.r.pts[i + 1];
+              ctx.beginPath();
+              ctx.moveTo(pk[0], pk[1]);
+              ctx.lineTo(nx[0], nx[1]);
+              ctx.lineTo(pk[0] + (nx[0] - pk[0]) * 0.35, Math.max(pk[1], nx[1]) + 30);
+              ctx.closePath(); ctx.fill();
+            }
+          }
+        });
+        ctx.restore();
+      }
+
+      /* chevron river */
+      const ry = h * 0.9;
+      const rCols = ['#7fc4c9', '#5aa8ae', '#3d8c92'];
+      for (let band = 0; band < 3; band++) {
+        const by = ry + band * (h - ry) / 3;
+        const bh2 = (h - ry) / 3 + 2;
+        const phase = (t * (0.014 + band * 0.006)) % 56;
+        ctx.fillStyle = rCols[band];
+        ctx.beginPath();
+        ctx.moveTo(-60, by + bh2);
+        for (let x = -60 - phase; x < w + 60; x += 56) {
+          ctx.lineTo(x + 28, by - 5);
+          ctx.lineTo(x + 56, by + 4);
+        }
+        ctx.lineTo(w + 60, by + bh2);
+        ctx.closePath(); ctx.fill();
+      }
+
+      /* the paper boat */
+      const bt = s.boat;
+      bt.x += 0.22;
+      if (bt.x > w + 80) bt.x = -80;
+      const bob = Math.sin(t / 900) * 3;
+      const tilt = Math.sin(t / 1300) * 0.05;
+      ctx.save();
+      ctx.translate(bt.x, ry + 6 + bob);
+      ctx.rotate(tilt);
+      shade((over) => {
+        ctx.fillStyle = over || '#fdfbf5';
+        ctx.beginPath();                       // hull
+        ctx.moveTo(-30, 0); ctx.lineTo(30, 0);
+        ctx.lineTo(18, 12); ctx.lineTo(-18, 12);
+        ctx.closePath(); ctx.fill();
+        ctx.beginPath();                       // sail
+        ctx.moveTo(-14, 0); ctx.lineTo(0, -20); ctx.lineTo(14, 0);
+        ctx.closePath(); ctx.fill();
+        if (!over) {
+          ctx.fillStyle = '#e4ddca';
+          ctx.beginPath();
+          ctx.moveTo(0, -20); ctx.lineTo(14, 0); ctx.lineTo(0, 0);
+          ctx.closePath(); ctx.fill();
+        }
+      });
+      ctx.restore();
+
+      /* origami cranes */
+      for (const cr of s.cranes) {
+        cr.x += cr.spd * cr.dir;
+        if (cr.dir > 0 && cr.x > w + 60) cr.x = -60;
+        if (cr.dir < 0 && cr.x < -60) cr.x = w + 60;
+        const flap = Math.sin(t / 280 * (0.7 + cr.spd * 0.5) + cr.ph);
+        const cy = cr.y + Math.sin(t / 1100 + cr.ph) * 8 - flap * 3;
+        ctx.save();
+        ctx.translate(cr.x, cy);
+        ctx.scale(cr.sc * cr.dir, cr.sc);
+        const body = (over) => {
+          /* far wing */
+          ctx.save();
+          ctx.translate(0, -2);
+          ctx.rotate(0.35 - flap * 0.55);
+          ctx.fillStyle = over || shadeCol(cr.col);
+          ctx.beginPath();
+          ctx.moveTo(-5, 0); ctx.lineTo(6, 0); ctx.lineTo(-4, -26);
+          ctx.closePath(); ctx.fill();
+          ctx.restore();
+          /* body */
+          ctx.fillStyle = over || cr.col;
+          ctx.beginPath();
+          ctx.moveTo(-16, 0); ctx.lineTo(0, -6); ctx.lineTo(14, 0); ctx.lineTo(0, 7);
+          ctx.closePath(); ctx.fill();
+          ctx.beginPath();                     // tail
+          ctx.moveTo(-16, 0); ctx.lineTo(-27, -9); ctx.lineTo(-13, -2);
+          ctx.closePath(); ctx.fill();
+          ctx.beginPath();                     // neck + head
+          ctx.moveTo(14, 0); ctx.lineTo(25, -12); ctx.lineTo(15, -2);
+          ctx.closePath(); ctx.fill();
+          if (!over) {
+            ctx.fillStyle = '#e6b655';
+            ctx.beginPath();
+            ctx.moveTo(25, -12); ctx.lineTo(30, -12.5); ctx.lineTo(25, -9.5);
+            ctx.closePath(); ctx.fill();
+          }
+          /* near wing */
+          ctx.save();
+          ctx.translate(0, -2);
+          ctx.rotate(-0.2 + flap * 0.6);
+          ctx.fillStyle = over || cr.col;
+          ctx.beginPath();
+          ctx.moveTo(-5, 0); ctx.lineTo(7, 0); ctx.lineTo(0, -30);
+          ctx.closePath(); ctx.fill();
+          if (!over) {
+            ctx.strokeStyle = 'rgba(80, 70, 55, 0.3)';
+            ctx.lineWidth = 0.8;
+            ctx.beginPath(); ctx.moveTo(1, -1); ctx.lineTo(0, -28); ctx.stroke();
+          }
+          ctx.restore();
+        };
+        ctx.save();
+        ctx.translate(2.4, 4);
+        ctx.globalAlpha = 0.14;
+        body('#3a352b');
+        ctx.restore();
+        body(null);
+        ctx.restore();
+      }
+
+      /* the occasional drifting leaf of paper */
+      const lf = s.leaf;
+      if (!lf.active && local > lf.at) {
+        lf.active = true;
+        lf.born = local;
+        lf.x = w * (0.15 + Math.random() * 0.7);
+      }
+      if (lf.active) {
+        const age = (local - lf.born) / 1000;
+        const ly = age * 46;
+        const lx = lf.x + Math.sin(age * 1.7) * 34;
+        const rotL = Math.sin(age * 2.1) * 0.9;
+        if (ly > h * 0.92) {
+          lf.active = false;
+          lf.at = local + 8000 + Math.random() * 9000;
+        } else {
+          ctx.save();
+          ctx.translate(lx, ly);
+          ctx.rotate(rotL);
+          ctx.fillStyle = 'rgba(58, 53, 43, 0.14)';
+          ctx.fillRect(-5 + 2, -5 + 3, 11, 11);
+          ctx.fillStyle = '#e07a5f';
+          ctx.fillRect(-5.5, -5.5, 11, 11);
+          ctx.fillStyle = '#c4604a';
+          ctx.beginPath();
+          ctx.moveTo(-5.5, -5.5); ctx.lineTo(5.5, 5.5); ctx.lineTo(-5.5, 5.5);
+          ctx.closePath(); ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      /* helper: darker face of a crane's colour */
+      function shadeCol(c) {
+        const map = { '#fdfaf3': '#ddd5c2', '#e07a5f': '#b85a42', '#5f7a8a': '#48606e',
+                      '#81b29a': '#68937e', '#e6b655': '#c2953a' };
+        return map[c] || '#b0a890';
+      }
+    }
+
     const EFFECTS = {
       'theme-sakura': new PetalSystem('sakuraCanvas', 55, makeSakuraPetal),
       'theme-retro': new PetalSystem('vaporwavePetals', 80, makeVaporPetal),
@@ -5237,7 +7045,12 @@
       'theme-portal': new PetalSystem('portalDust', 45, makeDustMote),
       'theme-space': new PetalSystem('spaceCanvas', 150, makePixelStar),
       'theme-city': new SceneSystem('cityCanvas', buildCityDrive, drawCityDrive),
-      'theme-drive': new SceneSystem('driveCanvas', buildGwbDrive, drawGwbDrive)
+      'theme-drive': new SceneSystem('driveCanvas', buildGwbDrive, drawGwbDrive),
+      'theme-orbit': new SceneSystem('orbitCanvas', buildOrbit, drawOrbit),
+      'theme-backrooms': new SceneSystem('backroomsCanvas', buildBackrooms, drawBackrooms),
+      'theme-ocean': new SceneSystem('oceanCanvas', buildOcean, drawOcean),
+      'theme-greenhouse': new SceneSystem('greenhouseCanvas', buildGreenhouse, drawGreenhouse),
+      'theme-origami': new SceneSystem('origamiCanvas', buildOrigami, drawOrigami)
     };
 
     // One shared resize handler for all effect canvases
