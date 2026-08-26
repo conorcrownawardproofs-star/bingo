@@ -114,6 +114,62 @@
       --btn-active-text: #ffffff;
     }
 
+    /* ============ Arizona Midnight: the vaporwave desert after dark ============
+       Same scene as Arizona Vaporwave — sun, grid plane, sakura branches —
+       but repainted for night. The background's own CSS vars are overridden
+       here, so the shared #vaporwaveBg markup restyles itself wholesale
+       without a second copy of the DOM. */
+    body.theme-retro-dark {
+      --arizona-cyan: #1b2a4a;
+      --vapor-pink: #b5179e;
+      --vapor-yellow: #f72585;
+      --grid-color: #7b2cbf;
+
+      --tune-accent: #c77dff;
+      --bg-gradient: linear-gradient(180deg, #0a0a18 0%, #14162e 45%, #1b2a4a 100%);
+      --card-bg: rgba(94, 23, 132, 0.32);
+      --card-shadow-color: rgba(199, 125, 255, 0.55);
+      --btn-layouts: linear-gradient(135deg, #4361ee 0%, #1a1a56 100%);
+      --btn-select: linear-gradient(135deg, #b5179e 0%, #560bad 100%);
+      --btn-mode: linear-gradient(135deg, #5a189a 0%, #240046 100%);
+      --btn-mode-active: linear-gradient(135deg, #f72585 0%, #7209b7 100%);
+      --btn-edit: linear-gradient(135deg, #4cc9f0 0%, #1f6f8b 100%);
+      --btn-edit-active: linear-gradient(135deg, #90e0ef 0%, #4361ee 100%);
+      --btn-export: linear-gradient(135deg, #7209b7 0%, #2d0b4e 100%);
+      --btn-import: linear-gradient(135deg, #e0aaff 0%, #9d4edd 100%);
+      --btn-import-text: #1a0b2e;
+      --btn-clear: linear-gradient(135deg, #3f4470 0%, #1a1c33 100%);
+      --btn-bright: linear-gradient(135deg, #c77dff 0%, #7209b7 100%);
+      --btn-reset: linear-gradient(135deg, #e5383b 0%, #6a040f 100%);
+      --btn-victory: linear-gradient(135deg, #ffb703 0%, #9d0208 100%);
+      --btn-active-glow: rgba(199, 125, 255, 0.75);
+      --btn-active-text: #ffffff;
+    }
+    body.theme-retro-dark .header {
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 18px rgba(199, 125, 255, 0.8);
+    }
+    /* A bruised magenta sun sinking into the horizon instead of the hot
+       yellow one, with its glow pulled in tighter against the dark sky. */
+    body.theme-retro-dark #vaporwaveBg .sun {
+      background: linear-gradient(to bottom, #f72585 0%, #7209b7 60%, #3a0ca3 100%);
+      box-shadow: 0 0 120px rgba(183, 33, 158, 0.75);
+    }
+    /* Ground plane fades from deep indigo at the horizon into near-black. */
+    body.theme-retro-dark #vaporwaveBg .grid-container {
+      background: linear-gradient(to bottom, #1b2a4a 0%, #07070f 100%);
+      box-shadow: inset 0 80px 100px rgba(27, 42, 74, 0.9);
+    }
+    /* Night sky behind the scene, so the sun has something to sit against. */
+    body.theme-retro-dark #vaporwaveBg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 62%, rgba(114, 9, 183, 0.35) 0%, transparent 55%),
+        linear-gradient(180deg, #07070f 0%, #14162e 55%, #24244a 100%);
+      z-index: 0;
+    }
+
     /* Pink Girly Theme with Idle Animation */
     @keyframes pinkIdle {
       0% { background-position: 0% 50%; }
@@ -716,6 +772,7 @@
 
     body.theme-sakura #sakuraCanvas { display: block; }
     body.theme-retro #vaporwaveBg { display: block; }
+    body.theme-retro-dark #vaporwaveBg { display: block; }
     body.theme-pink #pinkCanvas { display: block; }
     body.theme-green #luckyCanvas { display: block; }
     body.theme-red #redCanvas { display: block; }
@@ -1267,6 +1324,15 @@
       background-position: 0 0;
     }
     .theme-transition.tt-retro.active .tt-streak {
+      animation: ttScan var(--tt-dur) linear forwards;
+    }
+    .tt-retro-dark .tt-veil   { background: linear-gradient(180deg, #14162e 0%, #7209b7 55%, #07070f 100%); }
+    .tt-retro-dark .tt-streak {
+      background-image: repeating-linear-gradient(0deg, rgba(199, 125, 255, 0.5) 0px, rgba(199, 125, 255, 0.5) 2px, transparent 2px, transparent 10px);
+      background-size: 100% 100%;
+      background-position: 0 0;
+    }
+    .theme-transition.tt-retro-dark.active .tt-streak {
       animation: ttScan var(--tt-dur) linear forwards;
     }
     @keyframes ttScan {
@@ -1942,13 +2008,20 @@
        player can always get back in. */
     body.ui-hidden .app-container { display: none; }
 
-    /* The card becomes a free-floating, draggable window once picked up. */
-    .bingo-card { cursor: grab; }
+    /* The card becomes a free-floating, draggable window once picked up.
+       touch-action must be none *before* the gesture starts — a mobile
+       browser decides whether a swipe is a scroll at touch-down, so setting
+       it only while .dragging is applied is always one beat too late. */
+    .bingo-card {
+      cursor: grab;
+      touch-action: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
     .bingo-card .grid { cursor: default; }
     .bingo-card.dragging {
       cursor: grabbing;
       transition: none !important;
-      touch-action: none;
     }
 
     #fileInput { display: none; }
@@ -2211,6 +2284,7 @@
     <option value="">Monochrome</option>
     <option value="theme-sakura">Cherry Blossom</option>
     <option value="theme-retro">Arizona Vaporwave</option>
+    <option value="theme-retro-dark">Arizona Midnight</option>
     <option value="theme-pink">Pink Hearts</option>
     <option value="theme-green">Green Metallic</option>
     <option value="theme-blue">Blue Metallic</option>
@@ -2325,6 +2399,7 @@
       { id: '', name: 'Monochrome' },
       { id: 'theme-sakura', name: 'Cherry Blossom' },
       { id: 'theme-retro', name: 'Arizona Vaporwave' },
+      { id: 'theme-retro-dark', name: 'Arizona Midnight' },
       { id: 'theme-pink', name: 'Pink Hearts' },
       { id: 'theme-green', name: 'Green Metallic' },
       { id: 'theme-blue', name: 'Blue Metallic' },
@@ -2349,6 +2424,7 @@
       '':             { cls: 'tt-mono',   glyphs: [],                  mode: 'rise' },
       'theme-sakura': { cls: 'tt-sakura', glyphs: ['🌸', '🌸', '🌺'],  mode: 'fall' },
       'theme-retro':  { cls: 'tt-retro',  glyphs: [],                  mode: 'rise' },
+      'theme-retro-dark': { cls: 'tt-retro-dark', glyphs: ['✦', '◆', '✧'], mode: 'rise' },
       'theme-pink':   { cls: 'tt-pink',   glyphs: ['💖', '💕', '♥'],   mode: 'rise' },
       'theme-green':  { cls: 'tt-green',  glyphs: ['🍀'],              mode: 'rise' },
       'theme-blue':   { cls: 'tt-blue',   glyphs: [],                  mode: 'rise' },
@@ -2679,10 +2755,25 @@
         return !!(target.closest('.grid') || target.closest('input'));
       }
 
-      function clamp(left, top, rect) {
-        const maxLeft = Math.max(0, window.innerWidth - rect.width);
-        const maxTop = Math.max(0, window.innerHeight - rect.height);
-        return [Math.min(Math.max(left, 0), maxLeft), Math.min(Math.max(top, 0), maxTop)];
+      // Keep a grabbable slice of the *card* on screen rather than demanding
+      // the whole panel fit. On a phone the stacked card+controls panel is
+      // taller than the viewport, and the old whole-panel rule collapsed to
+      // "top must be 0", which is why it wouldn't move vertically at all.
+      const KEEP = 64;
+      function clamp(left, top) {
+        const cardRect = card.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        const offX = cardRect.left - panelRect.left;   // card's offset inside
+        const offY = cardRect.top - panelRect.top;     // the panel (constant)
+        const cw = cardRect.width, ch = cardRect.height;
+        const minLeft = KEEP - offX - cw;
+        const maxLeft = window.innerWidth - KEEP - offX;
+        const minTop = KEEP - offY - ch;
+        const maxTop = window.innerHeight - KEEP - offY;
+        return [
+          Math.min(Math.max(left, minLeft), Math.max(minLeft, maxLeft)),
+          Math.min(Math.max(top, minTop), Math.max(minTop, maxTop))
+        ];
       }
 
       // Freeze the panel's current rendered box exactly as-is, then switch
@@ -2716,8 +2807,7 @@
         if (!dragging) return;
         const dx = clientX - startX, dy = clientY - startY;
         if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
-        const rect = panel.getBoundingClientRect();
-        const [left, top] = clamp(origLeft + dx, origTop + dy, rect);
+        const [left, top] = clamp(origLeft + dx, origTop + dy);
         panel.style.left = left + 'px';
         panel.style.top = top + 'px';
       }
@@ -2731,32 +2821,61 @@
         }
       }
 
-      card.addEventListener('mousedown', (e) => {
-        if (e.button !== 0) return;
-        if (beginDrag(e.clientX, e.clientY, e.target)) e.preventDefault();
-      });
-      window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
-      window.addEventListener('mouseup', endDrag);
+      // Pointer Events handle mouse, touch and stylus through one path.
+      // The old split mouse/touch version couldn't work on a phone: its
+      // touchstart was passive (so it could never claim the gesture) and
+      // touch-action was only set *after* a drag began, by which time the
+      // browser had already committed the swipe to scrolling. Capturing the
+      // pointer also keeps the drag alive when the finger outruns the card.
+      let activePointer = null;
 
-      card.addEventListener('touchstart', (e) => {
-        const tch = e.touches[0];
-        beginDrag(tch.clientX, tch.clientY, e.target);
-      }, { passive: true });
-      window.addEventListener('touchmove', (e) => {
-        if (!dragging) return;
-        moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+      card.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        if (!beginDrag(e.clientX, e.clientY, e.target)) return;
+        activePointer = e.pointerId;
+        try { card.setPointerCapture(e.pointerId); } catch (err) { /* not fatal */ }
         e.preventDefault();
-      }, { passive: false });
-      window.addEventListener('touchend', endDrag);
-      window.addEventListener('touchcancel', endDrag);
+      });
+
+      card.addEventListener('pointermove', (e) => {
+        if (e.pointerId !== activePointer) return;
+        moveDrag(e.clientX, e.clientY);
+        e.preventDefault();
+      });
+
+      function releasePointer(e) {
+        if (e.pointerId !== activePointer) return;
+        try { card.releasePointerCapture(e.pointerId); } catch (err) { /* already gone */ }
+        activePointer = null;
+        endDrag();
+      }
+      card.addEventListener('pointerup', releasePointer);
+      card.addEventListener('pointercancel', releasePointer);
 
       window.addEventListener('resize', () => {
         if (panel.style.position !== 'fixed') return;
-        const rect = panel.getBoundingClientRect();
-        const [left, top] = clamp(parseFloat(panel.style.left) || 0, parseFloat(panel.style.top) || 0, rect);
+        const [left, top] = clamp(parseFloat(panel.style.left) || 0, parseFloat(panel.style.top) || 0);
         panel.style.left = left + 'px';
         panel.style.top = top + 'px';
       });
+
+      // Drop every inline override so the panel falls back into its normal
+      // centered flex layout, and forget the saved drop point.
+      window.resetPanelPosition = function () {
+        dragging = false;
+        activePointer = null;
+        card.classList.remove('dragging');
+        panel.style.position = '';
+        panel.style.left = '';
+        panel.style.top = '';
+        panel.style.right = '';
+        panel.style.bottom = '';
+        panel.style.margin = '';
+        panel.style.width = '';
+        panel.style.maxWidth = '';
+        panel.style.zIndex = '';
+        localStorage.removeItem('bingoPanelPos');
+      };
 
       // Restore a dropped position from a previous visit, clamped in case
       // the viewport is now smaller than it was.
@@ -2774,8 +2893,7 @@
           panel.style.zIndex = '5';
           panel.style.left = pos.left;
           panel.style.top = pos.top;
-          const rect = panel.getBoundingClientRect();
-          const [left, top] = clamp(parseFloat(pos.left) || 0, parseFloat(pos.top) || 0, rect);
+          const [left, top] = clamp(parseFloat(pos.left) || 0, parseFloat(pos.top) || 0);
           panel.style.left = left + 'px';
           panel.style.top = top + 'px';
         } catch (e) {
@@ -3152,8 +3270,11 @@
 
       renderGrid(PRESET_LAYOUTS.CONOR);
       document.getElementById('layoutSelect').value = 'CONOR';
+      // A reset should put the card back where it started, too — otherwise a
+      // card dragged into a corner stays there looking broken after a reset.
+      if (typeof resetPanelPosition === 'function') resetPanelPosition();
       saveToLocalStorage();
-      showStatus('Reset to the default layout.');
+      showStatus('Reset to the default layout and position.');
     }
 
     function showStatus(msg) {
@@ -3331,6 +3452,34 @@
           ctx.restore();
         }
       };
+    }
+
+    /* Same falling petals as the daylight desert, but catching moonlight
+       instead of sun — cool violet edges over a pale core, and a faint
+       glow so they still read against a near-black sky. */
+    function makeVaporPetalDark(w, h) {
+      const p = makeVaporPetal(w, h);
+      p.glow = Math.random() * 0.35 + 0.35;
+      p.draw = function (ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate((this.rotation * Math.PI) / 180);
+        ctx.scale(this.size, this.size);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-10, -10, -14, -28, 0, -32);
+        ctx.bezierCurveTo(14, -28, 10, -10, 0, 0);
+        const grad = ctx.createLinearGradient(0, -32, 0, 0);
+        grad.addColorStop(0, '#e8dcff');
+        grad.addColorStop(0.55, '#c77dff');
+        grad.addColorStop(1, '#7209b7');
+        ctx.fillStyle = grad;
+        ctx.shadowColor = 'rgba(199, 125, 255, ' + this.glow + ')';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.restore();
+      };
+      return p;
     }
 
     /* Shared path helpers for the themed particles */
@@ -3947,11 +4096,43 @@
           clump(w * 0.68 + Math.random() * w * 0.05, h * 0.28, 8, frontGreens, 9)
         ],
 
-        // The tetra school chases a slowly wandering shared center
-        tetras: Array.from({ length: 12 }, () => ({
-          x: w * (0.1 + Math.random() * 0.2), y: h * (0.35 + Math.random() * 0.2),
+        // The tetra school flocks — spawned already spread out so it starts
+        // as a shoal rather than resolving out of one stacked pile
+        tetras: Array.from({ length: 14 }, () => ({
+          x: w * (0.12 + Math.random() * 0.5), y: h * (0.3 + Math.random() * 0.3),
           vx: Math.random() * 1.2 - 0.6, vy: Math.random() * 0.4 - 0.2,
           size: Math.random() * 3.5 + 11.5, dir: 1, wob: Math.random() * Math.PI * 2
+        })),
+
+        // Harlequin rasboras: loose copper shoal, that black wedge on the flank
+        rasboras: Array.from({ length: 8 }, () => ({
+          x: Math.random() * w * 0.7 + w * 0.15, y: h * (0.32 + Math.random() * 0.3),
+          vx: Math.random() * 0.9 - 0.45, vy: Math.random() * 0.3 - 0.15,
+          size: Math.random() * 3 + 14, dir: 1, wob: Math.random() * Math.PI * 2
+        })),
+
+        // Zebra danios: restless top-water sprinters that patrol wall to wall
+        danios: Array.from({ length: 6 }, () => ({
+          x: Math.random() * w, y: h * (0.17 + Math.random() * 0.14),
+          dir: Math.random() < 0.5 ? -1 : 1,
+          speed: Math.random() * 0.7 + 1.15, size: Math.random() * 2.5 + 15,
+          wob: Math.random() * Math.PI * 2,
+          dash: 0, dashTimer: Math.random() * 500 + 200
+        })),
+
+        // A dwarf gourami, unbothered, trailing its two feelers
+        gourami: {
+          x: w * 0.55, y: h * 0.42, dir: -1, speed: 0.26, size: 40,
+          wob: Math.random() * Math.PI * 2, vy: 0, targetY: h * 0.42, turnTimer: 600
+        },
+
+        // Otocinclus rasping algae off the glass and driftwood
+        otos: Array.from({ length: 3 }, (_, i) => ({
+          x: w * (0.2 + i * 0.3), y: h * (0.3 + Math.random() * 0.35),
+          dir: Math.random() < 0.5 ? -1 : 1, size: 21,
+          rasp: Math.random() * Math.PI * 2,
+          restTimer: Math.random() * 900 + 400, moving: Math.random() < 0.5,
+          vx: 0, vy: 0
         })),
 
         glassCats: Array.from({ length: 6 }, (_, i) => ({
@@ -4242,17 +4423,58 @@
         ctx.restore();
       }
 
-      // Neon tetra school, steering toward a wandering shared center
+      // Neon tetra school — proper flocking.
+      // These used to each home in on one shared point with no awareness of
+      // each other, so all twelve piled onto the same coordinate and swam as
+      // one overlapping smear. Now each fish balances its neighbours
+      // (separation / alignment / cohesion) and only *weakly* follows the
+      // wandering school center, so the shoal holds real spacing and shape,
+      // banks together, and drifts as a body.
       // School center dwells on the flanks (the card owns the middle),
       // crossing quickly when it changes sides
       const cx = w * (0.5 + 0.34 * Math.tanh(3 * Math.sin(t * 0.00006)));
       const cy = h * (0.42 + 0.12 * Math.sin(t * 0.00004 + 2));
+      const NEIGH2 = 165 * 165;   // how far a tetra looks for schoolmates
+      const PERSONAL = 46;        // below this they actively push apart
       for (const f of s.tetras) {
-        f.vx += (cx - f.x) * 0.00045 + (Math.random() - 0.5) * 0.03;
-        f.vy += (cy - f.y) * 0.00045 + (Math.random() - 0.5) * 0.02;
+        let sepX = 0, sepY = 0, aliX = 0, aliY = 0, cohX = 0, cohY = 0, n = 0;
+        for (const o of s.tetras) {
+          if (o === f) continue;
+          const dx = o.x - f.x, dy = o.y - f.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 > NEIGH2) continue;
+          const d = Math.sqrt(d2) || 0.0001;
+          if (d < PERSONAL) {          // crowding — shove away, hardest when closest
+            const push = (PERSONAL - d) / PERSONAL;
+            sepX -= (dx / d) * push;
+            sepY -= (dy / d) * push;
+          }
+          aliX += o.vx; aliY += o.vy;  // match the neighbours' heading
+          cohX += o.x;  cohY += o.y;   // and stay with their center of mass
+          n++;
+        }
+        if (n) {
+          aliX /= n; aliY /= n; cohX /= n; cohY /= n;
+          f.vx += sepX * 0.115 + (aliX - f.vx) * 0.05 + (cohX - f.x) * 0.00055;
+          f.vy += sepY * 0.115 + (aliY - f.vy) * 0.05 + (cohY - f.y) * 0.00055;
+        }
+        // The wandering center is a hint, not a magnet
+        f.vx += (cx - f.x) * 0.00016 + (Math.random() - 0.5) * 0.05;
+        f.vy += (cy - f.y) * 0.00016 + (Math.random() - 0.5) * 0.04;
+        // Keep the shoal off the glass
+        const M = 26;
+        if (f.x < M) f.vx += (M - f.x) * 0.004;
+        if (f.x > w - M) f.vx -= (f.x - (w - M)) * 0.004;
+        if (f.y < h * 0.16) f.vy += (h * 0.16 - f.y) * 0.004;
+        if (f.y > sandTop - 20) f.vy -= (f.y - (sandTop - 20)) * 0.006;
+
         f.vx *= 0.985; f.vy *= 0.985;
-        const sp = Math.hypot(f.vx, f.vy);
-        if (sp > 1.4) { f.vx *= 1.4 / sp; f.vy *= 1.4 / sp; }
+        let sp = Math.hypot(f.vx, f.vy);
+        if (sp > 1.5) { f.vx *= 1.5 / sp; f.vy *= 1.5 / sp; sp = 1.5; }
+        if (sp < 0.32) {                // never fully stall mid-water
+          const a = Math.atan2(f.vy, f.vx || 0.001);
+          f.vx = Math.cos(a) * 0.32; f.vy = Math.sin(a) * 0.32;
+        }
         f.x += f.vx; f.y += f.vy;
         if (Math.abs(f.vx) > 0.15) f.dir = f.vx > 0 ? 1 : -1;
         f.wob += 0.1;
@@ -4287,6 +4509,276 @@
         ctx.fillStyle = '#10151a';
         ctx.beginPath();
         ctx.arc(L * 0.34, -L * 0.03, L * 0.06, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Harlequin rasboras — same flocking rules as the tetras but a looser,
+      // slower shoal that hangs a little higher in the water
+      const rcx = w * (0.5 - 0.3 * Math.tanh(3 * Math.sin(t * 0.00005 + 1.4)));
+      const rcy = h * (0.4 + 0.1 * Math.sin(t * 0.000035 + 0.6));
+      for (const f of s.rasboras) {
+        let sepX = 0, sepY = 0, aliX = 0, aliY = 0, cohX = 0, cohY = 0, n = 0;
+        for (const o of s.rasboras) {
+          if (o === f) continue;
+          const dx = o.x - f.x, dy = o.y - f.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 > 180 * 180) continue;
+          const d = Math.sqrt(d2) || 0.0001;
+          if (d < 54) {
+            const push = (54 - d) / 54;
+            sepX -= (dx / d) * push; sepY -= (dy / d) * push;
+          }
+          aliX += o.vx; aliY += o.vy; cohX += o.x; cohY += o.y; n++;
+        }
+        if (n) {
+          aliX /= n; aliY /= n; cohX /= n; cohY /= n;
+          f.vx += sepX * 0.1 + (aliX - f.vx) * 0.035 + (cohX - f.x) * 0.00045;
+          f.vy += sepY * 0.1 + (aliY - f.vy) * 0.035 + (cohY - f.y) * 0.00045;
+        }
+        f.vx += (rcx - f.x) * 0.00013 + (Math.random() - 0.5) * 0.04;
+        f.vy += (rcy - f.y) * 0.00013 + (Math.random() - 0.5) * 0.03;
+        const RM = 28;
+        if (f.x < RM) f.vx += (RM - f.x) * 0.004;
+        if (f.x > w - RM) f.vx -= (f.x - (w - RM)) * 0.004;
+        if (f.y < h * 0.18) f.vy += (h * 0.18 - f.y) * 0.004;
+        if (f.y > sandTop - 30) f.vy -= (f.y - (sandTop - 30)) * 0.006;
+        f.vx *= 0.986; f.vy *= 0.986;
+        let rsp = Math.hypot(f.vx, f.vy);
+        if (rsp > 1.15) { f.vx *= 1.15 / rsp; f.vy *= 1.15 / rsp; rsp = 1.15; }
+        if (rsp < 0.26) {
+          const a = Math.atan2(f.vy, f.vx || 0.001);
+          f.vx = Math.cos(a) * 0.26; f.vy = Math.sin(a) * 0.26;
+        }
+        f.x += f.vx; f.y += f.vy;
+        if (Math.abs(f.vx) > 0.15) f.dir = f.vx > 0 ? 1 : -1;
+        f.wob += 0.09;
+
+        const L = f.size;
+        ctx.save();
+        ctx.translate(f.x, f.y + Math.sin(f.wob) * 0.7);
+        ctx.scale(f.dir, 1);
+        ctx.fillStyle = '#d98a4a';                 // warm copper body
+        ctx.beginPath();
+        ctx.ellipse(0, 0, L * 0.46, L * 0.27, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(240, 170, 110, 0.75)';
+        ctx.beginPath();                           // forked tail
+        ctx.moveTo(-L * 0.42, 0);
+        ctx.lineTo(-L * 0.68, -L * 0.2);
+        ctx.lineTo(-L * 0.56, 0);
+        ctx.lineTo(-L * 0.68, L * 0.2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#22262b';                 // the signature black wedge
+        ctx.beginPath();
+        ctx.moveTo(-L * 0.04, -L * 0.16);
+        ctx.lineTo(-L * 0.42, -L * 0.05);
+        ctx.lineTo(-L * 0.42, L * 0.06);
+        ctx.lineTo(-L * 0.16, L * 0.2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255, 214, 150, 0.5)';
+        ctx.beginPath();                           // dorsal
+        ctx.moveTo(0, -L * 0.25);
+        ctx.lineTo(L * 0.12, -L * 0.4);
+        ctx.lineTo(-L * 0.1, -L * 0.24);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#10151a';
+        ctx.beginPath();
+        ctx.arc(L * 0.32, -L * 0.04, L * 0.06, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Zebra danios — twitchy top-water sprinters, wall to wall
+      for (const d of s.danios) {
+        d.dashTimer -= 16;
+        if (d.dashTimer <= 0) {                    // sudden bursts of speed
+          d.dash = Math.random() * 260 + 120;
+          d.dashTimer = Math.random() * 1600 + 700;
+        }
+        if (d.dash > 0) d.dash -= 16;
+        const boost = d.dash > 0 ? 2.1 : 1;
+        d.x += d.speed * d.dir * boost;
+        d.wob += d.dash > 0 ? 0.42 : 0.26;
+        if (d.x > w + 40) { d.x = w + 40; d.dir = -1; }
+        if (d.x < -40) { d.x = -40; d.dir = 1; }
+
+        const L = d.size;
+        const yy = d.y + Math.sin(d.wob * 0.5) * 2.5;
+        ctx.save();
+        ctx.translate(d.x, yy);
+        ctx.scale(d.dir, 1);
+        ctx.fillStyle = '#c8d2d6';                 // slim silver torpedo
+        ctx.beginPath();
+        ctx.ellipse(0, 0, L * 0.5, L * 0.17, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.save();                                // the horizontal zebra stripes
+        ctx.beginPath();
+        ctx.ellipse(0, 0, L * 0.5, L * 0.17, 0, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.strokeStyle = 'rgba(52, 92, 130, 0.85)';
+        ctx.lineWidth = L * 0.045;
+        for (let i = -2; i <= 2; i++) {
+          ctx.beginPath();
+          ctx.moveTo(-L * 0.5, i * L * 0.062);
+          ctx.lineTo(L * 0.5, i * L * 0.062 + L * 0.02);
+          ctx.stroke();
+        }
+        ctx.restore();
+        ctx.fillStyle = 'rgba(228, 238, 243, 0.7)';
+        ctx.beginPath();                           // tail, beating hard on a dash
+        const tf = Math.sin(d.wob) * L * 0.1;
+        ctx.moveTo(-L * 0.46, 0);
+        ctx.lineTo(-L * 0.72, -L * 0.16 + tf);
+        ctx.lineTo(-L * 0.72, L * 0.16 + tf);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#10151a';
+        ctx.beginPath();
+        ctx.arc(L * 0.36, -L * 0.025, L * 0.05, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Dwarf gourami — the calm centrepiece, feelers trailing underneath
+      {
+        const g = s.gourami;
+        g.turnTimer -= 16;
+        if (g.turnTimer <= 0) {                    // picks a new depth, sometimes turns
+          g.targetY = h * (0.3 + Math.random() * 0.35);
+          if (Math.random() < 0.45) g.dir *= -1;
+          g.turnTimer = Math.random() * 3400 + 2200;
+        }
+        g.vy += (g.targetY - g.y) * 0.0006;
+        g.vy *= 0.94;
+        g.y += g.vy;
+        g.x += g.speed * g.dir;
+        g.wob += 0.045;
+        if (g.x > w - 50) { g.x = w - 50; g.dir = -1; }
+        if (g.x < 50) { g.x = 50; g.dir = 1; }
+
+        const L = g.size;
+        const yy = g.y + Math.sin(g.wob) * 1.6;
+        ctx.save();
+        ctx.translate(g.x, yy);
+        ctx.scale(g.dir, 1);
+        // tall, laterally compressed body
+        const bg = ctx.createLinearGradient(0, -L * 0.42, 0, L * 0.42);
+        bg.addColorStop(0, '#4aa8d8');
+        bg.addColorStop(0.5, '#3f7fc4');
+        bg.addColorStop(1, '#e07a4a');
+        ctx.fillStyle = bg;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, L * 0.44, L * 0.36, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.save();                                // turquoise banding
+        ctx.beginPath();
+        ctx.ellipse(0, 0, L * 0.44, L * 0.36, 0, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.strokeStyle = 'rgba(230, 130, 80, 0.55)';
+        ctx.lineWidth = L * 0.06;
+        for (let i = -3; i <= 3; i++) {
+          ctx.beginPath();
+          ctx.moveTo(i * L * 0.14 - L * 0.1, -L * 0.4);
+          ctx.lineTo(i * L * 0.14 + L * 0.1, L * 0.4);
+          ctx.stroke();
+        }
+        ctx.restore();
+        ctx.fillStyle = 'rgba(90, 170, 210, 0.6)';
+        ctx.beginPath();                           // dorsal sail
+        ctx.moveTo(-L * 0.28, -L * 0.3);
+        ctx.quadraticCurveTo(0, -L * 0.56, L * 0.24, -L * 0.26);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();                           // anal fin
+        ctx.moveTo(-L * 0.3, L * 0.28);
+        ctx.quadraticCurveTo(0, L * 0.56, L * 0.2, L * 0.24);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();                           // tail
+        ctx.moveTo(-L * 0.4, 0);
+        ctx.lineTo(-L * 0.66, -L * 0.24);
+        ctx.lineTo(-L * 0.66, L * 0.24);
+        ctx.closePath();
+        ctx.fill();
+        // the two thread-like pelvic feelers, drifting out of sync
+        ctx.strokeStyle = 'rgba(240, 150, 90, 0.85)';
+        ctx.lineWidth = L * 0.035;
+        ctx.lineCap = 'round';
+        for (let i = 0; i < 2; i++) {
+          const ph = g.wob * 1.3 + i * 1.1;
+          ctx.beginPath();
+          ctx.moveTo(L * 0.1, L * 0.28);
+          ctx.quadraticCurveTo(
+            L * 0.02 + Math.sin(ph) * L * 0.1, L * 0.55,
+            -L * 0.12 + Math.sin(ph + 0.6) * L * 0.16, L * 0.72);
+          ctx.stroke();
+        }
+        ctx.fillStyle = '#10151a';
+        ctx.beginPath();
+        ctx.arc(L * 0.3, -L * 0.08, L * 0.055, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.beginPath();
+        ctx.arc(L * 0.315, -L * 0.095, L * 0.02, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Otocinclus — park on the glass, rasp, scoot to the next patch
+      for (const o of s.otos) {
+        o.restTimer -= 16;
+        if (o.restTimer <= 0) {
+          o.moving = !o.moving;
+          o.restTimer = o.moving ? Math.random() * 700 + 350 : Math.random() * 2200 + 1100;
+          if (o.moving && Math.random() < 0.4) o.dir *= -1;
+        }
+        if (o.moving) {
+          o.vx += (o.dir * 0.7 - o.vx) * 0.06;
+          o.vy += ((Math.random() - 0.5) * 0.5 - o.vy) * 0.05;
+        } else {
+          o.vx *= 0.86; o.vy *= 0.86;
+          o.rasp += 0.3;                           // little grazing wiggle
+        }
+        o.x += o.vx; o.y += o.vy;
+        if (o.x < 18) { o.x = 18; o.dir = 1; }
+        if (o.x > w - 18) { o.x = w - 18; o.dir = -1; }
+        if (o.y < h * 0.2) o.y = h * 0.2;
+        if (o.y > sandTop - 12) o.y = sandTop - 12;
+
+        const L = o.size;
+        ctx.save();
+        ctx.translate(o.x, o.y + (o.moving ? 0 : Math.sin(o.rasp) * 0.5));
+        ctx.scale(o.dir, 1);
+        ctx.fillStyle = '#8f8674';                 // drab, flat-bellied little thing
+        ctx.beginPath();
+        ctx.ellipse(0, 0, L * 0.48, L * 0.15, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#4b4438';                 // dark lateral band
+        ctx.fillRect(-L * 0.42, -L * 0.035, L * 0.82, L * 0.07);
+        ctx.fillStyle = 'rgba(190, 182, 165, 0.75)';
+        ctx.beginPath();                           // small dorsal
+        ctx.moveTo(-L * 0.02, -L * 0.13);
+        ctx.lineTo(L * 0.1, -L * 0.3);
+        ctx.lineTo(-L * 0.14, -L * 0.12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();                           // tail
+        ctx.moveTo(-L * 0.44, 0);
+        ctx.lineTo(-L * 0.66, -L * 0.15);
+        ctx.lineTo(-L * 0.66, L * 0.15);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#2c2820';                 // sucker mouth
+        ctx.beginPath();
+        ctx.arc(L * 0.45, L * 0.02, L * 0.075, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#10151a';
+        ctx.beginPath();
+        ctx.arc(L * 0.3, -L * 0.05, L * 0.05, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }
@@ -7339,6 +7831,7 @@
     const EFFECTS = {
       'theme-sakura': new PetalSystem('sakuraCanvas', 55, makeSakuraPetal),
       'theme-retro': new PetalSystem('vaporwavePetals', 80, makeVaporPetal),
+      'theme-retro-dark': new PetalSystem('vaporwavePetals', 80, makeVaporPetalDark),
       'theme-pink': new PetalSystem('pinkCanvas', 60, makeHeartSpark),
       'theme-green': new PetalSystem('luckyCanvas', 45, makeShamrock),
       'theme-red': new PetalSystem('redCanvas', 55, makeBatEmber),
