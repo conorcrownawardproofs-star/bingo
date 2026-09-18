@@ -2138,6 +2138,76 @@
       select.btn-theme-toggle { top: 12px; right: 16px; }
       .bottom-credit { bottom: 12px; left: 16px; }
     }
+
+    /* ---- Fit mode -------------------------------------------------------
+       The player keeps the proportions it has at 100% on a desktop and the
+       whole unit is scaled to fit whatever viewport it is handed. That
+       replaces the old behaviour, where a narrow window pulled every
+       vw-based clamp down to its minimum and tripped the stacked mobile
+       layout, so the card looked nothing like it does at full size. Every
+       rule below pins a viewport-relative value to the 100% end of its
+       clamp; the scaling itself is one transform applied in script. ----- */
+    body.fit-scaled .app-container {
+      flex-direction: row;
+      gap: 40px;
+      max-width: none;
+      transform-origin: top left;
+      will-change: transform;
+    }
+    body.fit-scaled .bingo-card {
+      width: 420px;
+      border-radius: 22px;
+      padding: 20px;
+    }
+    body.fit-scaled .controls { width: 196px; }
+    body.fit-scaled .header {
+      font-size: 3.2rem;
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+    }
+    body.fit-scaled .grid { gap: 4px; border-width: 4px; }
+    body.fit-scaled .cell { font-size: 2rem; }
+    body.fit-scaled .cell.free { font-size: 1.25rem; }
+    body.fit-scaled .cell.target { box-shadow: inset 0 0 0 4.5px var(--target-color); }
+    body.fit-scaled[data-dabber="star"] .cell.marked::after,
+    body.fit-scaled[data-dabber="heart"] .cell.marked::after,
+    body.fit-scaled[data-dabber="diamond"] .cell.marked::after {
+      font-size: calc(2.8rem * var(--dabber-scale));
+    }
+    body.fit-scaled[data-dabber="crosshair"] .cell.marked::after {
+      font-size: calc(2.2rem * var(--dabber-scale));
+    }
+    /* Body padding would otherwise eat a large slice of a small window. */
+    body.fit-scaled { padding: 8px; }
+
+    /* ---- Collapsible side controls ------------------------------------- */
+    body.controls-hidden .controls { display: none; }
+    .btn-controls-toggle {
+      position: fixed;
+      bottom: 100px;
+      right: 24px;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff !important;
+      font-size: 0.8rem !important;
+      border-radius: 50%;
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      z-index: 10;
+      opacity: 0.32;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: opacity 0.3s ease, transform 0.2s ease, background 0.2s ease;
+    }
+    .btn-controls-toggle:hover { opacity: 1; transform: scale(1.08); }
+    .btn-controls-toggle.active { opacity: 0.9; background: rgba(255, 255, 255, 0.22); }
+    body.ui-hidden .btn-controls-toggle { opacity: 0.18; }
   </style>
 <style>
   /* Shared return-to-hub control — scoped so it won't collide with app styles */
@@ -2464,6 +2534,7 @@
 
   <div class="bottom-credit">Made by Conor in his free time, August 2026.</div>
 
+  <button class="btn-controls-toggle" id="controlsToggleBtn" onclick="toggleControls()" title="Hide the side controls" aria-label="Hide the side controls">◨</button>
   <button class="btn-hide-ui" id="hideUiBtn" onclick="toggleUIVisibility()" title="Hide bingo card & controls" aria-label="Hide bingo card and controls">👁️</button>
   <button class="btn-victory" onclick="triggerVictory(true)">🏆 Victory</button>
 
@@ -2870,7 +2941,10 @@
         const rect = panel.getBoundingClientRect();
         panel.style.position = 'fixed';
         panel.style.margin = '0';
-        panel.style.width = rect.width + 'px';
+        // offsetWidth is the layout width; rect.width is the painted width,
+        // which fit-mode has already scaled down. Freezing the painted value
+        // here would shrink the panel again on every pickup.
+        panel.style.width = panel.offsetWidth + 'px';
         panel.style.maxWidth = 'none';
         panel.style.right = 'auto';
         panel.style.bottom = 'auto';
@@ -2973,7 +3047,7 @@
           const preRect = panel.getBoundingClientRect();
           panel.style.position = 'fixed';
           panel.style.margin = '0';
-          panel.style.width = preRect.width + 'px';
+          panel.style.width = panel.offsetWidth + 'px';
           panel.style.maxWidth = 'none';
           panel.style.right = 'auto';
           panel.style.bottom = 'auto';
@@ -2989,6 +3063,103 @@
       }
     })();
 
+
+    // ---- Fit-to-viewport ------------------------------------------------
+    // The player is laid out at its full desktop size and then scaled as a
+    // single unit, so a 300px-wide window shows exactly the same card as a
+    // maximised one, just smaller. Previously a narrow viewport dragged every
+    // vw-based clamp to its minimum and flipped the panel into the stacked
+    // mobile layout, which is why an embedded copy needed to be scaled from
+    // the outside. It now handles that itself.
+    //
+    // transform-origin is the top-left corner and the layout box is pulled
+    // back in by negative margins, so the element's layout position and its
+    // painted position stay the same. That keeps getBoundingClientRect
+    // honest for the drag code, which positions the panel in viewport
+    // coordinates.
+    (function setupFitScale() {
+      const panel = document.querySelector('.app-container');
+      if (!panel) return;
+      document.body.classList.add('fit-scaled');
+
+      let design = null;          // natural size at 100%, in CSS pixels
+      let scale = 1;
+
+      function measure() {
+        const prev = {
+          transform: panel.style.transform,
+          width: panel.style.width,
+          mr: panel.style.marginRight,
+          mb: panel.style.marginBottom
+        };
+        panel.style.transform = 'none';
+        panel.style.width = 'max-content';
+        panel.style.marginRight = '0px';
+        panel.style.marginBottom = '0px';
+        const box = { w: panel.offsetWidth, h: panel.offsetHeight };
+        panel.style.transform = prev.transform;
+        panel.style.width = prev.width;
+        panel.style.marginRight = prev.mr;
+        panel.style.marginBottom = prev.mb;
+        return (box.w > 0 && box.h > 0) ? box : null;
+      }
+
+      function apply() {
+        const fresh = measure();
+        if (fresh) design = fresh;
+        if (!design) return;
+
+        // A dragged panel is pinned to a corner, so it only needs to fit from
+        // that corner onward; an undragged one is centred and has the whole
+        // viewport, minus the body padding, to work with.
+        const pad = 16;
+        const availW = Math.max(80, window.innerWidth - pad);
+        const availH = Math.max(80, window.innerHeight - pad);
+
+        scale = Math.min(1, availW / design.w, availH / design.h);
+        panel.style.width = design.w + 'px';
+        panel.style.transform = scale < 1 ? 'scale(' + scale + ')' : '';
+        // Collapse the layout box down to the painted size so the flex
+        // centring on <body> still centres what you actually see.
+        panel.style.marginRight = scale < 1 ? -(design.w * (1 - scale)) + 'px' : '';
+        panel.style.marginBottom = scale < 1 ? -(design.h * (1 - scale)) + 'px' : '';
+        panel.dataset.fitScale = String(scale);
+      }
+
+      // Exposed so the drag code can convert between painted and layout px.
+      window.bingoFitScale = function () { return scale || 1; };
+      window.bingoApplyFit = apply;
+
+      let raf = null;
+      function schedule() {
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(function () { raf = null; apply(); });
+      }
+      window.addEventListener('resize', schedule);
+      window.addEventListener('orientationchange', schedule);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+      apply();
+    })();
+
+    // ---- Hide/unhide just the side controls ----
+    let controlsHidden = false;
+    function toggleControls() {
+      controlsHidden = !controlsHidden;
+      document.body.classList.toggle('controls-hidden', controlsHidden);
+      const btn = document.getElementById('controlsToggleBtn');
+      btn.textContent = controlsHidden ? '◧' : '◨';
+      btn.classList.toggle('active', controlsHidden);
+      const label = controlsHidden ? 'Show the side controls' : 'Hide the side controls';
+      btn.title = label;
+      btn.setAttribute('aria-label', label);
+      localStorage.setItem('bingoControlsHidden', controlsHidden ? '1' : '0');
+      // The panel just got narrower or wider, so refit around the new size.
+      if (window.bingoApplyFit) window.bingoApplyFit();
+    }
+    (function restoreControlsHidden() {
+      if (localStorage.getItem('bingoControlsHidden') === '1') toggleControls();
+    })();
+
     // ---- Hide/unhide toggle for the card + controls panel ----
     let uiHidden = false;
     function toggleUIVisibility() {
@@ -3001,6 +3172,7 @@
       btn.title = label;
       btn.setAttribute('aria-label', label);
       localStorage.setItem('bingoUiHidden', uiHidden ? '1' : '0');
+      if (window.bingoApplyFit) window.bingoApplyFit();
     }
     (function restoreUiHiddenState() {
       if (localStorage.getItem('bingoUiHidden') === '1') toggleUIVisibility();
