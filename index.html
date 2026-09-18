@@ -2177,8 +2177,11 @@
     body.fit-scaled[data-dabber="crosshair"] .cell.marked::after {
       font-size: calc(2.2rem * var(--dabber-scale));
     }
-    /* Body padding would otherwise eat a large slice of a small window. */
+    /* Body padding would otherwise eat a large slice of a small window, and
+       the panel's own top margin was pushing it past the bottom edge — the
+       body already centres vertically, so the margin is not needed. */
     body.fit-scaled { padding: 8px; }
+    body.fit-scaled .app-container { margin-top: 0; }
 
     /* ---- Collapsible side controls ------------------------------------- */
     body.controls-hidden .controls { display: none; }
@@ -3038,27 +3041,43 @@
         localStorage.removeItem('bingoPanelPos');
       };
 
-      // Restore a dropped position from a previous visit, clamped in case
-      // the viewport is now smaller than it was.
+      // Restore a dropped position from a previous visit — but only if it
+      // still makes sense here. A position saved from a large window used to
+      // be restored verbatim into a small one, which pinned the panel to an
+      // edge (or mostly off-screen) instead of letting it centre. If the
+      // panel now fits the viewport comfortably, or the saved point would
+      // push it outside, the drop is discarded and normal centred layout
+      // wins.
       const saved = localStorage.getItem('bingoPanelPos');
       if (saved) {
         try {
           const pos = JSON.parse(saved);
-          const preRect = panel.getBoundingClientRect();
-          panel.style.position = 'fixed';
-          panel.style.margin = '0';
-          panel.style.width = panel.offsetWidth + 'px';
-          panel.style.maxWidth = 'none';
-          panel.style.right = 'auto';
-          panel.style.bottom = 'auto';
-          panel.style.zIndex = '5';
-          panel.style.left = pos.left;
-          panel.style.top = pos.top;
-          const [left, top] = clamp(parseFloat(pos.left) || 0, parseFloat(pos.top) || 0);
-          panel.style.left = left + 'px';
-          panel.style.top = top + 'px';
+          const wantLeft = parseFloat(pos.left) || 0;
+          const wantTop = parseFloat(pos.top) || 0;
+          const box = panel.getBoundingClientRect();
+          const fitsHere =
+            wantLeft >= 0 && wantTop >= 0 &&
+            wantLeft + box.width <= window.innerWidth &&
+            wantTop + box.height <= window.innerHeight;
+          if (!fitsHere) {
+            // The window this was dropped in is gone. Start centred rather
+            // than jam the panel against an edge.
+            localStorage.removeItem('bingoPanelPos');
+          } else {
+            panel.style.position = 'fixed';
+            panel.style.margin = '0';
+            panel.style.width = panel.offsetWidth + 'px';
+            panel.style.maxWidth = 'none';
+            panel.style.right = 'auto';
+            panel.style.bottom = 'auto';
+            panel.style.zIndex = '5';
+            const [left, top] = clamp(wantLeft, wantTop);
+            panel.style.left = left + 'px';
+            panel.style.top = top + 'px';
+          }
         } catch (e) {
           console.error('Failed to restore panel position', e);
+          localStorage.removeItem('bingoPanelPos');
         }
       }
     })();
@@ -3109,12 +3128,13 @@
         if (fresh) design = fresh;
         if (!design) return;
 
-        // A dragged panel is pinned to a corner, so it only needs to fit from
-        // that corner onward; an undragged one is centred and has the whole
-        // viewport, minus the body padding, to work with.
-        const pad = 16;
-        const availW = Math.max(80, window.innerWidth - pad);
-        const availH = Math.max(80, window.innerHeight - pad);
+        // Read the real padding rather than assume it, so a theme that changes
+        // it cannot silently push the panel off the bottom of the window.
+        const bs = getComputedStyle(document.body);
+        const padX = (parseFloat(bs.paddingLeft) || 0) + (parseFloat(bs.paddingRight) || 0);
+        const padY = (parseFloat(bs.paddingTop) || 0) + (parseFloat(bs.paddingBottom) || 0);
+        const availW = Math.max(80, window.innerWidth - padX);
+        const availH = Math.max(80, window.innerHeight - padY);
 
         scale = Math.min(1, availW / design.w, availH / design.h);
         panel.style.width = design.w + 'px';
