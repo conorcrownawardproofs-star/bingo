@@ -2211,6 +2211,50 @@
     .btn-controls-toggle:hover { opacity: 1; transform: scale(1.08); }
     .btn-controls-toggle.active { opacity: 0.9; background: rgba(255, 255, 255, 0.22); }
     body.ui-hidden .btn-controls-toggle { opacity: 0.18; }
+
+    /* ---- Compact mode (small windows, e.g. the 425px pop-out) ------------
+       The floating chrome is not part of the scaled panel, so in a small
+       window it landed on top of it: both round toggles sat over Clear Dabs
+       and Reset Card, and the Victory button overlapped the HUB button. In
+       compact mode the chrome is gathered into a thin band at the top and one
+       at the bottom, and those bands are reserved as body padding. The fit
+       calculation reads that padding, so the panel is scaled to sit between
+       them and can never be covered. */
+    body.fit-scaled.fit-compact { padding: 40px 8px 54px; }
+    body.fit-compact .top-date { top: 12px; left: 10px; font-size: 0.62rem; }
+    body.fit-compact select.btn-theme-toggle {
+      top: 6px; right: 8px;
+      transform: scale(0.8); transform-origin: top right;
+    }
+    body.fit-compact .btn-controls-toggle,
+    body.fit-compact .btn-hide-ui {
+      right: auto; bottom: 12px; width: 28px; height: 28px;
+    }
+    body.fit-compact .btn-controls-toggle { left: 10px; }
+    body.fit-compact .btn-hide-ui { left: 44px; }
+    /* Centred along the bottom, clear of the HUB button in the corner.
+       "translate" is its own property, so hover transforms still work. */
+    body.fit-compact .btn-victory {
+      right: auto; left: 50%; bottom: 12px; translate: -50% 0;
+    }
+    /* The credit line shares the bottom-left corner with the toggles, and
+       there is no room for both in a window this size. */
+    body.fit-compact .bottom-credit { display: none; }
+
+    /* Victory used to sit at bottom:24px right:24px, directly under the
+       shared HUB button (bottom:12px right:12px) — they overlapped at every
+       window size, including in the original file. Moved left of the HUB. */
+    body.fit-scaled .btn-victory { right: 96px; }
+
+    /* Below ~360px the bottom edge cannot hold the toggles, Victory and HUB
+       side by side (they need ~260px), so the toggles move up into the top
+       band in place of the date, and Victory takes the bottom-left. */
+    @media (max-width: 360px) {
+      body.fit-compact .top-date { display: none; }
+      body.fit-compact .btn-controls-toggle,
+      body.fit-compact .btn-hide-ui { bottom: auto; top: 6px; }
+      body.fit-compact .btn-victory { left: 10px; right: auto; translate: none; }
+    }
   </style>
 <style>
   /* Shared return-to-hub control — scoped so it won't collide with app styles */
@@ -3124,6 +3168,10 @@
       }
 
       function apply() {
+        // Small windows get the compact chrome layout before anything is
+        // measured, because it changes the body padding read below.
+        const compact = window.innerWidth < 700 || window.innerHeight < 600;
+        document.body.classList.toggle('fit-compact', compact);
         const fresh = measure();
         if (fresh) design = fresh;
         if (!design) return;
